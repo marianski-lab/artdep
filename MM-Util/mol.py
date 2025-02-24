@@ -2,9 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import sys
-
-from Cython.Shadow import nonecheck
-
+import re
 
 class Mol():
 
@@ -35,9 +33,177 @@ class Mol():
         self.rmsd = []
         self.rmsf = []
 
+    def element_symbol(A):
 
+        """ A dictionary for atomic number and atomic symbol
+        :param A: either atomic number or atomic symbol for Hydrogen, Carbon, Nitrogen, Oxygen, Fluorine and Silicon
+        :return: the corresponding atomic symbol or atomic number
+        """
 
-class reaction():
+        periodic_table = {'1': 'H', '2': 'He',
+                          '3': 'Li', '4': 'Be', '5': 'B', '6': 'C', '7': 'N', '8': 'O', '9': 'F', '10': 'Ne',
+                          '11': 'Na', '12': 'Mg', '13': 'Al', '14': 'Si', '15': 'P', '16': 'S', '17': 'Cl', '18': 'Ar',
+                          '19': 'K', '20': 'Ca', '35': 'Br'
+                          }
+
+    def gaussian(self, path=None):
+        flags = {'freq_flag': False, 'nmr_flag': False, 'opt_flag': False, 'jcoup_flag': False, 'normal_mode': False,
+                 'read_geom': False}
+        job_type = None
+
+        # temprorary variables to hold the data
+        freq = [];
+        ints = [];
+        vibs = [];
+        geom = [];
+        atoms = [];
+        nmr = []
+        self.NAtoms = None
+
+        for line in open("/".join([self.path, "input.log"]), 'r').readlines():
+
+            if not job_type and re.search('^ #', line):
+
+                if "opt" in line:
+                    if "freq" in line:
+                        job_type = 'optfreq'
+                    else:
+                        job_type = 'opt'
+                elif "freq" in line:
+                    if "opt" in line:
+                        job_type = 'optfreq'
+                    else:
+                        job_type = 'freq'
+                        flags["freq_flag"] = True
+                elif "nmr" in line:
+                    job_type = 'nmr'
+                else:
+                    job_type = 'sp'
+
+            if self.NAtoms is None and re.search('^ NAtoms=', line):
+                self.NAtoms = int(line.split()[1])
+
+            if job_type == 'optfreq' or job_type == "freq":
+
+                if flags['freq_flag'] == False and re.search('Normal termination', line): flags['freq_flag'] = True
+                # We skip the opt part of optfreq job, all info is in the freq part
+
+                if flags['freq_flag'] == True:
+
+                    if re.search('SCF Done', line):
+                        self.E = float(line.split()[4])
+                    elif re.search('Sum of electronic and zero-point Energies', line):
+                        self.Ezpe = float(line.split()[6])
+                    elif re.search('Sum of electronic and thermal Enthalpies', line):
+                        self.H = float(line.split()[6])
+                    elif re.search('Sum of electronic and thermal Free Energies', line):
+                        self.F = float(line.split()[7])
+
+                    elif re.search('Coordinates', line) and len(geom) == 0:
+                        flags['read_geom'] = True
+
+                    elif flags['read_geom'] == True and re.search('^\s*.\d', line):
+                        geom.append([float(x) for x in line.split()[3:6]])
+                        atoms.append(Mol.element_symbol(line.split()[1]))
+                        if int(line.split()[0]) == self.NAtoms:
+                            flags['read_geom'] = False
+
+                    elif re.search('Deg. of freedom', line):
+                        self.NVibs = int(line.split()[3])
+
+                    elif re.search('^ Frequencies', line):
+                        freq_line = line.strip()
+                        for f in freq_line.split()[2:5]: freq.append(float(f))
+                        flags['normal_mode'] = False
+
+                    elif re.search('^ IR Inten', line):
+                        ir_line = line.strip()
+                        for i in ir_line.split()[3:6]: ints.append(float(i))
+
+                    elif re.search('^  Atom  AN', line):
+                        flags['normal_mode'] = True  # locating normal modes of a frequency
+                        mode_1 = [];
+                        mode_2 = [];
+                        mode_3 = [];
+                        # continue
+
+                    elif flags['normal_mode'] == True and re.search('^\s*\d*\s*.\d*', line) and len(line.split()) > 3:
+                        mode_1.append([float(x) for x in line.split()[2:5]])
+                        mode_2.append([float(x) for x in line.split()[5:8]])
+                        mode_3.append([float(x) for x in line.split()[8:11]])
+
+                    elif flags['normal_mode'] == True:
+                        flags['normal_mode'] = False
+                        for m in [mode_1, mode_2, mode_3]: vibs.append(np.array(m))
+
+            elif job_type == 'opt':
+
+                if re.search('SCF Done', line): E = float(line.split()[4])
+                if re.search('Optimization completed.', line):
+                    self.E = E;
+                    flags['opt_flag'] = True
+                if flags['opt_flag'] == True:
+                    if re.search('Standard orientation:', line):
+                        flags['read_geom'] = True
+
+                    elif flags['read_geom'] == True and re.search('^\s*.\d', line):
+                        geom.append([float(x) for x in line.split()[3:6]])
+                        atoms.append(Mol.element_symbol(line.split()[1]))
+                        if int(line.split()[0]) == self.NAtoms:
+                            flags['read_geom'] = False
+
+            elif job_type == 'nmr':
+
+                if re.search('SCF Done', line):
+                    self.E = float(line.split()[4])
+                elif re.search('Coordinates', line) and len(geom) == 0:
+                    flags['read_geom'] = True
+
+                elif flags['read_geom'] == True and re.search('^\s*.\d', line):
+                    geom.append([float(x) for x in line.split()[3:6]])
+                    atoms.append(Mol.element_symbol(line.split()[1]))
+                    if int(line.split()[0]) == self.NAtoms:
+                        flags['read_geom'] = False
+
+                elif re.search('Total nuclear spin-spin coupling J', line):
+                    spin = [[] for i in range(self.NAtoms)]
+                    flags['jcoup_flag'] = True
+
+                elif flags['jcoup_flag'] == True and re.search('-?\d\.\d+[Dd][+\-]\d\d?', line):
+                    for x in line.split()[1:]:
+                        spin[int(line.split()[0]) - 1].append(float(x.replace('D', 'E')))
+
+                elif flags['jcoup_flag'] == True and re.search('End of Minotr F.D. properties file', line):
+                    flags['jcoup_flag'] = False
+
+            elif job_type == 'sp':
+
+                if re.search('SCF Done', line):
+                    self.E = float(line.split()[4])
+                elif re.search('Standard orientation:', line):
+                    flags['read_geom'] = True
+                elif flags['read_geom'] == True and re.search('^\s*.\d', line):
+                    geom.append([float(x) for x in line.split()[3:6]])
+                    atoms.append(Mol.element_symbol(line.split()[1]))
+                    if int(line.split()[0]) == self.NAtoms:
+                        flags['read_geom'] = False
+
+        # postprocessing:
+        if job_type == 'freq' or job_type == 'optfreq':
+            self.Freq = np.array(freq)
+            self.Ints = np.array(ints)
+            self.Vibs = np.zeros((self.NVibs, self.NAtoms, 3))
+            for i in range(self.NVibs): self.Vibs[i, :, :] = vibs[i]
+
+        if job_type == 'nmr':
+            for at in spin:
+                while len(at) < self.NAtoms: at.append(0)
+            self.nmr = np.tril(spin)
+
+        self.xyz = np.array(geom)
+        self.atoms = atoms
+
+class Reaction():
 
     """
     A class that organizes several molecules into a reaction
