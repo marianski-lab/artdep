@@ -3,6 +3,11 @@ import matplotlib.pyplot as plt
 import os
 import sys
 import re
+import networkx as nx
+from networkx.utils.misc import flatten
+
+from utilities import *
+
 
 class Mol():
 
@@ -24,14 +29,6 @@ class Mol():
         self.xyz = None #Nx3 array containg the xyz coords for all atoms
         self.conn_mat = None
         self.atoms = None
-
-        self.E = None
-        self.F = None
-        self.H = None
-
-        self.coupling = None
-        self.rmsd = []
-        self.rmsf = []
 
     def element_symbol(A):
 
@@ -69,8 +66,7 @@ class Mol():
 
         for line in open("/".join([self.path, "input.log"]), 'r').readlines():
 
-            if not job_type and re.search('^ #', line):
-
+            if job_type is None and line is not "\n":
                 if "opt" in line:
                     if "freq" in line:
                         job_type = 'optfreq'
@@ -94,17 +90,16 @@ class Mol():
 
                 if flags['freq_flag'] == False and re.search('Normal termination', line): flags['freq_flag'] = True
                 # We skip the opt part of optfreq job, all info is in the freq part
-
                 if flags['freq_flag'] == True:
 
                     if re.search('SCF Done', line):
-                        self.E = float(line.split()[4])
+                        self.E = float(line.split()[3])
                     elif re.search('Sum of electronic and zero-point Energies', line):
-                        self.Ezpe = float(line.split()[6])
+                        self.Ezpe = float(line.split()[-1])
                     elif re.search('Sum of electronic and thermal Enthalpies', line):
-                        self.H = float(line.split()[6])
+                        self.H = float(line.split()[-1])
                     elif re.search('Sum of electronic and thermal Free Energies', line):
-                        self.F = float(line.split()[7])
+                        self.F = float(line.split()[-1])
 
                     elif re.search('Coordinates', line) and len(geom) == 0:
                         flags['read_geom'] = True
@@ -115,8 +110,9 @@ class Mol():
                         if int(line.split()[0]) == self.NAtoms:
                             flags['read_geom'] = False
 
+
                     elif re.search('Deg. of freedom', line):
-                        self.NVibs = int(line.split()[3])
+                        self.NVibs = int(line.split()[-1])
 
                     elif re.search('^ Frequencies', line):
                         freq_line = line.strip()
@@ -210,6 +206,92 @@ class Mol():
         self.xyz = np.array(geom)
         self.atoms = atoms
 
+    def connectivity_matrix(self, distXX=1.65, distXH=1.15):
+
+        """ Creates a connectivity matrix of the molecule. A connectivity matrix holds the information of which atoms are bonded and to what.
+
+        :param distXX: The max distance between two atoms (not hydrogen) to be considered a bond
+        :param distXH: The max distance between any atom and a hydrogen atom to be considered a bond
+        """
+
+        Nat = self.NAtoms
+        self.conn_mat = np.zeros((Nat, Nat))
+
+        for at1 in range(Nat):
+            for at2 in range(Nat):
+
+                dist = get_distance(self.xyz[at1], self.xyz[at2])
+
+                if at1 == at2: pass
+
+                elif (self.atoms[at1] == 'H' or self.atoms[at2] == 'H') and dist < distXH:
+                    self.conn_mat[at1,at2] = 1; self.conn_mat[at2,at1] = 1
+                elif (self.atoms[at1] != 'H' and self.atoms[at2] != 'H') and dist < distXX:
+                    self.conn_mat[at1,at2] = 1; self.conn_mat[at2,at1] = 1
+
+        #Remove bifurcated Hs:
+        for at1 in range(Nat):
+            if self.atoms[at1] == 'H' and np.sum(self.conn_mat[at1,:]) > 1:
+
+                    at2list = np.where(self.conn_mat[at1,:] == 1)
+                    at2list = at2list[0].tolist()
+
+                    at2dist = [ round(get_distance(self.xyz[at1], self.xyz[at2x]), 3) for at2x in at2list]
+                    for at,dist in zip(at2list, at2dist):
+                        if self.atoms[at] == 'H':
+                            at2list.remove(at)
+                            at2dist.remove(dist)
+
+                    at2 = at2list[at2dist.index(min(at2dist))]
+                    for at2x in at2list:
+                        if at2x != at2:
+                            print('remove', self._id, at2x, at1, at2)
+                            self.conn_mat[at1, at2x] = 0 ; self.conn_mat[at2x, at1] = 0
+
+        graph = nx.graph.Graph(self.conn_mat)
+        self.Nmols = nx.number_connected_components(graph)
+        self.graph = graph
+
+class Reaction():
+
+    """
+    A class that organizes several molecules into a reaction
+    """
+
+    def __init__(self, mol_list, mol_label):
+
+        """
+        Constructs reaction from a list of molecules.
+
+        :param mol_list: (list) List of molecule objects.
+        :param mol_label: (list) List of reaction labels to be used (Reactant, Intermediate, Product, Transition State)
+        """
+
+        self.energies = []
+        self.enthalpies = []
+        self.f_energies = []
+
+        self.mol_list = mol_list
+        self.mol_label = mol_label
+
+    @staticmethod
+    def combiner(mol_list):
+
+        """
+        Adds the energies for multiple molecules and returns a new mol object.
+
+        :param mol_list: (list) List of molecule objects.
+        :return: mol
+        """
+        new_mol = Mol()
+
+        for mol in mol_list:
+
+            new_mol.energy += mol.energy
+            new_mol.enthalpy += mol.enthalpy
+            new_mol.f_Energy += mol.f_Energy
+
+        return new_mol
 class Reaction():
 
     """

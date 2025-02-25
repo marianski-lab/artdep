@@ -2,7 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import sys
-
+from utilities import *
+from mol import *
 
 class Plot():
     """
