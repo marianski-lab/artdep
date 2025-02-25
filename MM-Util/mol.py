@@ -25,9 +25,9 @@ class Mol():
         self.conn_mat = None
         self.atoms = None
 
-        self.energy = None
-        self.f_Energy = None
-        self.enthalpy = None
+        self.E = None
+        self.F = None
+        self.H = None
 
         self.coupling = None
         self.rmsd = []
@@ -47,6 +47,13 @@ class Mol():
                           }
 
     def gaussian(self, path=None):
+
+        """
+        Creates a mol object from a Gaussian 16 log file.
+        :param path: Path to the directory containing the log file.
+        :return: Mol Object
+        """
+
         flags = {'freq_flag': False, 'nmr_flag': False, 'opt_flag': False, 'jcoup_flag': False, 'normal_mode': False,
                  'read_geom': False}
         job_type = None
