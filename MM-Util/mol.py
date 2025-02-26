@@ -6,7 +6,7 @@ import re
 import networkx as nx
 from networkx.utils.misc import flatten
 
-from utilities import *
+from .utilities import *
 
 
 class Mol():
@@ -251,6 +251,78 @@ class Mol():
         graph = nx.graph.Graph(self.conn_mat)
         self.Nmols = nx.number_connected_components(graph)
         self.graph = graph
+        
+    def cp2k(self, job_type='md', colvar=None, timestep=None, traj_file='PROJECT-pos-1.xyz', input_file='input.inp', output_file='input.out'):
+        
+        """ Parses information from CP2K. Right now only works for AIMD Trajectories, plan to implement opt compatability later.
+
+        :param job_type: (string) Currently only md is supported. Should be manually specified.
+        :param colvar: (list) A list containing the atom numbers that define your collective variable.
+        :param timestep: (float) Timestep of your MD calculation. The function will attempt to extract this from your input file if present. 
+        :param traj_file: (string) File containing the CP2K trajectory.
+        :param input_file: (string) File containing your CP2K inputs.
+        :param output_file: (string) File containing your CP2K output.
+        """
+
+        with open(f"{self.path}/{traj_file}", 'r') as geom:
+            first_line = geom.readline()
+            NAtoms = int(first_line.split()[0])
+
+            raw_coords = geom.readlines()[-NAtoms:]
+
+            coords = np.array([line.split()[1:] for line in raw_coords], dtype=float)
+            atoms = np.array([line.split()[0] for line in raw_coords])
+
+            geom.close()
+            
+        self.NAtoms = NAtoms
+        self.xyz = coords
+        self.atoms = atoms
+
+        if job_type == 'md':
+            
+            if colvar==None:
+                raise ValueError('Specify the atoms for your collective variables.')
+
+            if timestep==None:
+                try:
+                    with open(f"{self.path}/{input_file}", 'r') as f:
+                        for line in f.readlines():
+                            if re.search('TIMESTEP', line):
+                                timestep = float(line.split()[-1])
+                        f.close()
+
+                        timestep
+
+                except:
+                    raise ValueError('Error: Input file not found! Specify timestep for reading CP2K trajectories.')
+
+            colvar_data = read_coordinates(f"{self.path}/{traj_file}", colvar)
+            time = [i / (1/timestep) for i in range(len(colvar_data))]
+
+            data = np.array(list(zip(time, colvar_data)))
+            self.data = data
+            
+    def gromacs(self, traj_file = None):
+        """ Parses information from gromacs *.xvg file
+
+        :param xvg_file: (string) File containing the gromacs trajectory.
+        """
+        
+        # I don't use Gromacs enough to know how the output looks like. Right now, I am just reading the .xvg file:
+        
+        time = []; colvar_data = []
+
+        with open(f"{self.path}/{traj_file}", 'r') as f:
+            for line in f.readlines():
+                if not re.search('#', line) and not re.search('@', line):
+                    x = line.split()[0]; y = line.split()[1]
+                    time.append(float(x)); colvar_data.append(float(y))
+            f.close()
+        
+        data = np.array(list(zip(time, colvar_data)))    
+        self.data = data
+
 
 class Reaction():
 
