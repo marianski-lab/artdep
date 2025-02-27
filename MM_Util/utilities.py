@@ -137,3 +137,61 @@ def read_coordinates(xyz_file, atom_list):
     
     if len(atom_list) > 4:
         raise ValueError('You have specified too many atoms')
+    
+def hartree_to_kcal(eh):
+        return eh * 627.5095
+
+def proper_minus(value):
+    return f"{value:.1f}".replace("-", "−")
+
+def color_picker():
+        def two_color_sets(c):
+            color_sets = {
+                '1a': ['#1b9e77', '#7570b3'],  # Green, Purple
+                '1b': ['#1b9e77', '#d95f02'],  # Green, Orange
+                '1c': ['#7570b3', '#d95f02'],  # Purple, Orange
+                '2a': ['#7fc97f', '#beaed4'],  # Light Green, Lavender
+                '2b': ['#7fc97f', '#fdc086'],  # Light Green, Peach
+                '2c': ['#beaed4', '#fdc086'],  # Lavender, Peach
+                '3a': ['#a6cee3', '#1f78b4'],  # Sky Blue, Dark Blue
+                '3b': ['#a6cee3', '#b2df8a'],  # Sky Blue, Lime Green
+                '3c': ['#1f78b4', '#b2df8a'],  # Dark Blue, Lime Green
+                '4a': ['#fbb4ae', '#b3cde3'],  # Pink, Light Blue
+                '4b': ['#fbb4ae', '#ccebc5'],  # Pink, Mint Green
+                '4c': ['#b3cde3', '#ccebc5'],  # Light Blue, Mint Green
+                '5a': ['#b3e2cd', '#fdcdac'],  # Teal, Soft Orange
+                '5b': ['#b3e2cd', '#cbd5e8'],  # Teal, Light Purple
+                '5c': ['#fdcdac', '#cbd5e8'],  # Soft Orange, Light Purple
+                '6a': ['#e41a1c', '#377eb8'],  # Red, Blue
+                '6b': ['#e41a1c', '#4daf4a'],  # Red, Green
+                '6c': ['#377eb8', '#4daf4a'],  # Blue, Green
+                '7a': ['#66c2a5', '#fc8d62'],  # Turquoise, Salmon
+                '7b': ['#66c2a5', '#8da0cb'],  # Turquoise, Periwinkle
+                '7c': ['#fc8d62', '#8da0cb'],  # Salmon, Periwinkle
+                '8a': ['#8dd3c7', '#ffffb3'],  # Aqua, Yellow
+                '8b': ['#8dd3c7', '#bebada'],  # Aqua, Lavender
+                '8c': ['#ffffb3', '#bebada']   # Yellow, Lavender
+            }
+            return color_sets
+
+        def three_color_sets():
+            return {
+                '1': ['#1b9e77', '#7570b3', '#d95f02'],  # Green, Purple, Orange
+                '2': ['#7fc97f', '#beaed4', '#fdc086'],  # Light Green, Lavender, Peach
+                '3': ['#a6cee3', '#1f78b4', '#b2df8a'],  # Sky Blue, Dark Blue, Lime Green
+                '4': ['#fbb4ae', '#b3cde3', '#ccebc5'],  # Pink, Light Blue, Mint Green
+                '5': ['#b3e2cd', '#fdcdac', '#cbd5e8'],  # Teal, Soft Orange, Light Purple
+                '6': ['#e41a1c', '#377eb8', '#4daf4a'],  # Red, Blue, Green
+                '7': ['#66c2a5', '#fc8d62', '#8da0cb'],  # Turquoise, Salmon, Periwinkle
+                '8': ['#8dd3c7', '#ffffb3', '#bebada']   # Aqua, Yellow, Lavender
+            }
+
+        return two_color_sets, three_color_sets
+
+        ''' Example usage:
+        two_colors, three_colors = color_picker()
+        print(two_colors()['3b'])  # Output: ['#a6cee3', '#b2df8a']
+        print(three_colors()['6'])  # Output: ['#e41a1c', '#377eb8', '#4daf4a']
+        '''
+
+    
