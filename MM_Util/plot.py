@@ -12,7 +12,7 @@ class Plot():
     Free energy plots, Scatter Plots, and SNFG Figures.
     """
 
-    def __init__(self, data):
+    def __init__(self, data=None):
         """
         Constructs a plot object.
         :param data: (array) a numpy array containing the data to be plotted.
@@ -24,14 +24,14 @@ class Plot():
         self.ax = None
         self.path = None
 
-    def trajectory(self, var_name = 'colvar'):
+    def trajectory(self, molecule, var_name = 'colvar'):
         """ Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
-
+        :param molecule: (Mol) Class Mol. 
         :param var_name: (list) Name of the collective variable you are plotting on your y-axis.
         """
         
-        time = self.data[:, 0]
-        colvar = self.data[:, 1]
+        time = molecule.data[:, 0]
+        colvar = molecule.data[:, 1]
         
         timestep = np.abs(time[0] - time[1])
 
@@ -55,4 +55,4 @@ class Plot():
 
         plt.tight_layout()
         
-        return fig, ax
+        self.fig = fig, self.ax = ax
