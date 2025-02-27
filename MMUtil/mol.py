@@ -83,7 +83,7 @@ class Mol():
                 else:
                     job_type = 'sp'
 
-            if self.NAtoms is None and re.search('^ NAtoms=', line):
+            if self.NAtoms is None and re.search('NAtoms=', line):
                 self.NAtoms = int(line.split()[1])
 
             if job_type == 'optfreq' or job_type == "freq":
@@ -196,7 +196,10 @@ class Mol():
             self.Freq = np.array(freq)
             self.Ints = np.array(ints)
             self.Vibs = np.zeros((self.NVibs, self.NAtoms, 3))
-            for i in range(self.NVibs): self.Vibs[i, :, :] = vibs[i]
+
+            print(self.Vibs)
+            for i in range(self.NVibs):
+                self.Vibs[i, :, :] = vibs[i]
 
         if job_type == 'nmr':
             for at in spin:
