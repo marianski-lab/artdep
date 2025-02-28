@@ -42,14 +42,9 @@ class Mol():
                           '11': 'Na', '12': 'Mg', '13': 'Al', '14': 'Si', '15': 'P', '16': 'S', '17': 'Cl', '18': 'Ar',
                           '19': 'K', '20': 'Ca', '35': 'Br'
                           }
+        return periodic_table[A]
 
-    def gaussian(self, path=None):
-
-        """
-        Creates a mol object from a Gaussian 16 log file.
-        :param path: Path to the directory containing the log file.
-        :return: Mol Object
-        """
+    def gaussian(self):
 
         flags = {'freq_flag': False, 'nmr_flag': False, 'opt_flag': False, 'jcoup_flag': False, 'normal_mode': False,
                  'read_geom': False}
@@ -63,11 +58,11 @@ class Mol():
         atoms = [];
         nmr = []
         self.NAtoms = None
-        self.path = path
 
         for line in open("/".join([self.path, "input.log"]), 'r').readlines():
 
-            if job_type is None and line is not "\n":
+            if not job_type and re.search('^ #', line):
+
                 if "opt" in line:
                     if "freq" in line:
                         job_type = 'optfreq'
@@ -91,16 +86,17 @@ class Mol():
 
                 if flags['freq_flag'] == False and re.search('Normal termination', line): flags['freq_flag'] = True
                 # We skip the opt part of optfreq job, all info is in the freq part
+
                 if flags['freq_flag'] == True:
 
                     if re.search('SCF Done', line):
-                        self.E = float(line.split()[3])
+                        self.E = float(line.split()[4])
                     elif re.search('Sum of electronic and zero-point Energies', line):
-                        self.Ezpe = float(line.split()[-1])
+                        self.Ezpe = float(line.split()[6])
                     elif re.search('Sum of electronic and thermal Enthalpies', line):
-                        self.H = float(line.split()[-1])
+                        self.H = float(line.split()[6])
                     elif re.search('Sum of electronic and thermal Free Energies', line):
-                        self.F = float(line.split()[-1])
+                        self.F = float(line.split()[7])
 
                     elif re.search('Coordinates', line) and len(geom) == 0:
                         flags['read_geom'] = True
@@ -111,9 +107,8 @@ class Mol():
                         if int(line.split()[0]) == self.NAtoms:
                             flags['read_geom'] = False
 
-
                     elif re.search('Deg. of freedom', line):
-                        self.NVibs = int(line.split()[-1])
+                        self.NVibs = int(line.split()[3])
 
                     elif re.search('^ Frequencies', line):
                         freq_line = line.strip()
