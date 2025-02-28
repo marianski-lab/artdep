@@ -115,5 +115,7 @@ class Plot():
             ax.scatter(data_x, data_y, marker='.', label=desc[col-1], color = colors[col-1])
             ax.plot(data_x, val, label=f"R2 = {r2_val:.2f}", color = colors[col-1])
 
+        fig.tight_layout()
+        ax.legend(loc='best')
         self.fig = fig
         self.ax = ax
