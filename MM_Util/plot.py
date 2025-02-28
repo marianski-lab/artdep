@@ -17,6 +17,7 @@ class Plot():
     """
 
     def __init__(self, data, labels:list = None, desc:list = None, xtick:int = None, ytick:int = None, xrange:list = None, yrange:list = None, colors:list = None) :
+
         """
         Constructs a plot object.
         :param data: (array) a numpy array containing the data to be plotted.
@@ -32,14 +33,14 @@ class Plot():
         self.yrange = yrange
         self.colors = colors
 
-    def trajectory(self, var_name = 'colvar'):
+    def trajectory(self, molecule, var_name = 'colvar'):
         """ Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
-
+        :param molecule: (Mol) Class Mol. 
         :param var_name: (list) Name of the collective variable you are plotting on your y-axis.
         """
         
-        time = self.data[:, 0]
-        colvar = self.data[:, 1]
+        time = molecule.data[:, 0]
+        colvar = molecule.data[:, 1]
         
         timestep = np.abs(time[0] - time[1])
 
@@ -62,7 +63,6 @@ class Plot():
         ax[1].set_xlabel('structures')
 
         plt.tight_layout()
-        
         return fig, ax
 
     def scatter(self, r2:bool=False):
@@ -117,7 +117,3 @@ class Plot():
 
         self.fig = fig
         self.ax = ax
-
-
-
-
