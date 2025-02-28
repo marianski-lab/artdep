@@ -63,6 +63,7 @@ class Mol():
         atoms = [];
         nmr = []
         self.NAtoms = None
+        self.path = path
 
         for line in open("/".join([self.path, "input.log"]), 'r').readlines():
 
@@ -323,6 +324,17 @@ class Mol():
         data = np.array(list(zip(time, colvar_data)))    
         self.data = data
 
+    def csv(self, path:str, header:bool=False, delimiter:str=',', ):
+
+        """
+        Parses a csv file into a numpy array
+        :param path: path to the csv file
+        """
+        if header:
+            self.data = np.genfromtxt(path, delimiter=delimiter, skip_header=1, dtype=float)
+        else:
+            self.data = np.genfromtxt(path, delimiter=delimiter, dtype=float)
+
 
 class Reaction():
 
@@ -338,10 +350,6 @@ class Reaction():
         :param mol_list: (list) List of molecule objects.
         :param mol_label: (list) List of reaction labels to be used (Reactant, Intermediate, Product, Transition State)
         """
-
-        self.energies = []
-        self.enthalpies = []
-        self.f_energies = []
 
         self.mol_list = mol_list
         self.mol_label = mol_label
@@ -359,48 +367,8 @@ class Reaction():
 
         for mol in mol_list:
 
-            new_mol.energy += mol.energy
-            new_mol.enthalpy += mol.enthalpy
-            new_mol.f_Energy += mol.f_Energy
-
-        return new_mol
-class Reaction():
-
-    """
-    A class that organizes several molecules into a reaction
-    """
-
-    def __init__(self, mol_list, mol_label):
-
-        """
-        Constructs reaction from a list of molecules.
-
-        :param mol_list: (list) List of molecule objects.
-        :param mol_label: (list) List of reaction labels to be used (Reactant, Intermediate, Product, Transition State)
-        """
-
-        self.energies = []
-        self.enthalpies = []
-        self.f_energies = []
-
-        self.mol_list = mol_list
-        self.mol_label = mol_label
-
-    @staticmethod
-    def combiner(mol_list):
-
-        """
-        Adds the energies for multiple molecules and returns a new mol object.
-
-        :param mol_list: (list) List of molecule objects.
-        :return: mol
-        """
-        new_mol = Mol()
-
-        for mol in mol_list:
-
-            new_mol.energy += mol.energy
-            new_mol.enthalpy += mol.enthalpy
-            new_mol.f_Energy += mol.f_Energy
+            new_mol.E += mol.energy
+            new_mol.H += mol.enthalpy
+            new_mol.F += mol.f_Energy
 
         return new_mol
