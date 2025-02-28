@@ -1,4 +1,3 @@
 .ipynb_checkpoints/
-*.ipynb
 # sample_data/
 !example.ipynb
