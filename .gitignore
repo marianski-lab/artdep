@@ -1,3 +1,5 @@
 .ipynb_checkpoints/
 # sample_data/
-!example.ipynb
+!trajectories_CP2K_Gromacs.ipynb
+!gaussian.ipynb
+!scatterplot.ipynb
