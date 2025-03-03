@@ -396,11 +396,12 @@ class Reaction():
         :return: mol
         """
         new_mol = Mol()
+        new_mol.E = 0; new_mol.F = 0; new_mol.H = 0
 
         for mol in mol_list:
 
-            new_mol.energy += mol.energy
-            new_mol.enthalpy += mol.enthalpy
-            new_mol.f_Energy += mol.f_Energy
+            new_mol.E += mol.E
+            # new_mol.H += mol.H
+            # new_mol.F += mol.F
 
         return new_mol
