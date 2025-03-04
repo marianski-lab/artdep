@@ -107,7 +107,7 @@ class Mol():
                         if int(line.split()[0]) == self.NAtoms:
                             flags['read_geom'] = False
 
-                    elif re.search('Deg. of freedom', line):
+                    elif re.search(' Deg. of freedom', line):
                         self.NVibs = int(line.split()[3])
 
                     elif re.search('^ Frequencies', line):
@@ -374,7 +374,7 @@ class Reaction():
         Calculates the energy differences for a reaction
         """
 
-        for num, mol in enumerate.(self.mol_list):
+        for num, mol in enumerate(self.mol_list):
             self.mol_list[num].delta_E = mol.E - self.mol_list[0].E
             self.mol_list[num].delta_H = mol.H - self.mol_list[0].H
             self.mol_list[num].delta_F = mol.F - self.mol_list[0].F
