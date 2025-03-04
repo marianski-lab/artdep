@@ -4,8 +4,7 @@ import os
 import sys
 import colormaps
 
-from contourpy.util import data
-from matplotlib import colors
+from matplotlib.ticker import FormatStrFormatter
 
 from .utilities import *
 from .mol import *
@@ -17,7 +16,9 @@ class Plot():
     Free energy plots, Scatter Plots, and SNFG Figures.
     """
 
-    def __init__(self, data, labels:list = None, desc:list = None, xtick:int = None, ytick:int = None, xrange:list = None, yrange:list = None, colors:list = None) :
+    def __init__(self, data, labels:list = None, desc:list = None,
+                 xtick = None, ytick = None, xrange:list = None, yrange:list = None,
+                 colors:list = None, x_extend:float=0, y_extend:float=0) :
 
         """
         Constructs a plot object.
@@ -33,6 +34,8 @@ class Plot():
         self.xrange = xrange
         self.yrange = yrange
         self.colors = colors
+        self.x_extend = x_extend
+        self.y_extend = y_extend
 
     def cmap(self, color_num: int = 256, offset: float = 0, map: str = 'ice'):
         """
@@ -116,7 +119,7 @@ class Plot():
         plt.tight_layout()
         return fig, ax
 
-    def scatter(self, r2:bool=False):
+    def scatter(self):
 
         """
         Generates a scatter plot from data
@@ -145,8 +148,23 @@ class Plot():
 
         if xtick is not None: ax.set_xticks(xtick)
         if ytick is not None: ax.set_yticks(ytick)
-        if xrange is not None: ax.set_xlim(xrange)
-        if yrange is not None: ax.set_ylim(yrange)
+        if xrange is not None:
+            xrange[0] -= self.x_extend
+            xrange[1] += self.x_extend
+            ax.set_xlim(xrange)
+        if yrange is not None:
+            yrange[0] -= self.y_extend
+            yrange[1] += self.y_extend
+            ax.set_ylim(yrange)
+
+        ax.tick_params(axis='both', which='both', bottom=True, top=False, labelbottom=True, right=False, left=True,
+                       labelleft=True)
+        for s in ['top', 'right', 'left', 'bottom']: ax.spines[s].set_visible(False)
+
+        ax.xaxis.set_tick_params(direction='out');
+        ax.yaxis.set_tick_params(direction='out')
+        ax.xaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+        ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
 
         for col in range(1, len(data[0,:])):
 
@@ -156,16 +174,12 @@ class Plot():
             fit = np.polyfit(data_x, data_y, 1)
             val = np.polyval(fit, data_x)
 
-            if r2:
-                corr = np.corrcoef(data_x, data_y)[0,1]
-                r2_val = corr**2
-            else:
-                r2_val = None
-
             ax.scatter(data_x, data_y, marker='.', label=desc[col-1], color = colors[col-1])
-            ax.plot(data_x, val, label=f"R2 = {r2_val:.2f}", color = colors[col-1])
+
+        xrange = ax.get_xlim() if xrange is None else xrange
+        yrange = ax.get_ylim() if yrange is None else yrange
 
         fig.tight_layout()
-        ax.legend(loc='best')
+        ax.legend(bbox_to_anchor=(-0.5, 0.5), loc='center left', borderaxespad=0, frameon=False)
         self.fig = fig
         self.ax = ax
