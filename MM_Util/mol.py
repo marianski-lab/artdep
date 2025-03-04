@@ -367,3 +367,14 @@ class Reaction():
             new_mol.F += mol.f_Energy
 
         return new_mol
+
+    def delta(self):
+
+        """
+        Calculates the energy differences for a reaction
+        """
+
+        for num, mol in enumerate.(self.mol_list):
+            self.mol_list[num].delta_E = mol.E - self.mol_list[0].E
+            self.mol_list[num].delta_H = mol.H - self.mol_list[0].H
+            self.mol_list[num].delta_F = mol.F - self.mol_list[0].F
