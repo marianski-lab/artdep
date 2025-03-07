@@ -5,6 +5,7 @@ import sys
 import colormaps
 import copy
 
+from matplotlib.ticker import NullFormatter
 from matplotlib.ticker import FormatStrFormatter
 
 from .utilities import *
@@ -106,11 +107,11 @@ class Plot():
         ax[0].set_ylabel(var_name)
         # ax1.set_title(f"file: {xyz_file}", fontsize = 10)
 
-        midpt = int(np.round(len(colvar) / 2))
-
-
-        ax[1].hist(colvar[0:midpt], bins='rice', fc=(0, 0, 1, 0.3), orientation="horizontal") # First half shown in blue
-        ax[1].hist(colvar[midpt:-1], bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal") # Second half shown in red
+        ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal") 
+        
+        # midpt = int(np.round(len(colvar) / 2))
+        # ax[1].hist(colvar[0:midpt], bins='rice', fc=(0, 0, 1, 0.3), orientation="horizontal") # First half shown in blue
+        # ax[1].hist(colvar[midpt:-1], bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal") # Second half shown in red
         # ax2.axhline(y=np.average(colvar), color='b', linewidth=2)
 
         ax[1].set_title(f"average = {np.round(np.average(colvar), 3)}", fontsize = 10)
@@ -123,6 +124,10 @@ class Plot():
         self.ax = ax
     
     def puckers_hist(self, mol_pucker, mol_fem):
+        """ Plots ring pucker free energy surface. Requires 2 mol objects to run.
+        :param mol_pucker: (Mol) Class Mol containing the .xvg file for your ring pucker determination.
+        :param mol_fem: (Mol) Class Mol containing the .xvg file for your free energy surface.
+        """
         
         def ring_pucker_determination(mol):
 
@@ -211,7 +216,7 @@ class Plot():
                     '1E', 'E1', '2E', 'E2', '3E', 'E3', '4E', 'E4', '5E', 'E5', '6E', 'E6']
 
             return pucker_table[_id]
-        
+
         pucker = ring_pucker_determination(mol_pucker)
         puck = [puck_to_id(p) for p in pucker]
         puckers_sum = np.zeros((38,))
@@ -284,7 +289,56 @@ class Plot():
         
         self.fig = fig
         self.ax = axes
+        
+    def rdf(self, mol):
     
+        data = mol.data
+        data[:,0] = mol.data[:,0] * 10
+
+        blues  = ['#deebf7','#9ecae1','#3182bd']
+        reds   = ['#fee0d2','#fc9272','#de2d26']
+        greens = ['#e5f5e0','#a1d99b','#31a354']
+
+        fig, ax = plt.subplots(figsize=(6,2))
+
+        xmin = 0; xmax=10
+
+        ax.tick_params(axis='both', which='both', bottom=True, top=False, labelbottom=True, right=False, left=False, labelleft=False)
+        ax.spines['top'].set_visible(False) ; ax.spines['right'].set_visible(False) ; ax.spines['left'].set_visible(False)
+        ax.xaxis.set_tick_params(direction='out')
+        ax.yaxis.set_major_formatter(NullFormatter())
+        ax.set_ylim(0,1.5)
+
+        xticks = np.linspace(xmin,xmax,int((xmax-xmin/10)+1))
+        ax.set_xticks(xticks)
+        ax.set_xticklabels([int(x) for x in xticks], fontsize=10)
+        ax.set_xlim(xmin, xmax)
+
+        #TYR
+        div = np.amax(data[:,3]) 
+        if div == 0: div = 1
+
+        ax.plot(data[:, 0],  np.convolve(data[:,3], np.ones(5)/5, mode='same')/div, color=greens[2])
+        ax.fill_between(data[:, 0],  np.convolve(data[:,3], np.ones(5)/5, mode='same')/div, color=greens[0])
+
+        #D or E
+        div = np.amax(data[:,2]) 
+        if div == 0: div = 1
+
+        ax.plot(data[:, 0],  np.convolve(data[:,2], np.ones(5)/5, mode='same')/div, color=blues[2])
+        ax.fill_between(data[:, 0],  np.convolve(data[:,2], np.ones(5)/5, mode='same')/div, color=blues[0])
+
+        #HIS
+        div = np.amax(data[:,1]) 
+        if div == 0: div = 1
+
+        ax.plot(data[:, 0],  np.convolve(data[:,1], np.ones(5)/5, mode='same')/div, color=reds[2])
+        ax.fill_between(data[:, 0],  np.convolve(data[:,1], np.ones(5)/5, mode='same')/div, color=reds[0])
+        
+        fig.tight_layout()
+
+        self.fig = fig
+        self.ax = ax
 
     def scatter(self):
 
