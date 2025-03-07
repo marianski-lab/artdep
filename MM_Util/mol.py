@@ -248,7 +248,7 @@ class Mol():
         self.Nmols = nx.number_connected_components(graph)
         self.graph = graph
         
-    def cp2k(self, job_type='md', colvar=None, timestep=None, traj_file='PROJECT-pos-1.xyz', input_file='input.inp', output_file='input.out'):
+    def cp2k(self, file=None, job_type='md', colvar=None, timestep=None):
         
         """ Parses information from CP2K. Right now only works for AIMD Trajectories, plan to implement opt compatability later.
 
@@ -259,45 +259,47 @@ class Mol():
         :param input_file: (string) File containing your CP2K inputs.
         :param output_file: (string) File containing your CP2K output.
         """
+        
+        if job_type == 'opt':
 
-        with open(f"{self.path}/{traj_file}", 'r') as geom:
-            first_line = geom.readline()
-            NAtoms = int(first_line.split()[0])
+            with open(f"{self.path}/{file}", 'r') as geom:
+                first_line = geom.readline()
+                NAtoms = int(first_line.split()[0])
 
-            raw_coords = geom.readlines()[-NAtoms:]
+                raw_coords = geom.readlines()[-NAtoms:]
 
-            coords = np.array([line.split()[1:] for line in raw_coords], dtype=float)
-            atoms = np.array([line.split()[0] for line in raw_coords])
+                coords = np.array([line.split()[1:] for line in raw_coords], dtype=float)
+                atoms = np.array([line.split()[0] for line in raw_coords])
 
-            geom.close()
-            
-        self.NAtoms = NAtoms
-        self.xyz = coords
-        self.atoms = atoms
+                geom.close()
+
+            self.NAtoms = NAtoms
+            self.xyz = coords
+            self.atoms = atoms
 
         if job_type == 'md':
+            if re.search('.xyz', str(file)):
+                # Reads colvars straight from the xyz file. Requires specification of timestep and colvar coordinate.
             
-            if colvar==None:
-                raise ValueError('Specify the atoms for your collective variables.')
+                if colvar==None:
+                    raise ValueError('Error: Specify the atoms for your collective variables.')
 
-            if timestep==None:
-                try:
-                    with open(f"{self.path}/{input_file}", 'r') as f:
-                        for line in f.readlines():
-                            if re.search('TIMESTEP', line):
-                                timestep = float(line.split()[-1])
-                        f.close()
+                if timestep==None:
+                    raise ValueError('Error: Specify timestep for reading CP2K trajectories.')
 
-                        timestep
+                colvar_data = read_coordinates(f"{self.path}/{file}", colvar)
+                time = [i / (1/timestep) for i in range(len(colvar_data))]
 
-                except:
-                    raise ValueError('Error: Input file not found! Specify timestep for reading CP2K trajectories.')
-
-            colvar_data = read_coordinates(f"{self.path}/{traj_file}", colvar)
-            time = [i / (1/timestep) for i in range(len(colvar_data))]
-
-            data = np.array(list(zip(time, colvar_data)))
-            self.data = data
+                data = np.array(list(zip(time, colvar_data)))
+                self.data = data
+                self.software = 'cp2k'
+                
+            if re.search('.metadynLog', file):
+                # Reads colvars from the metadynLog file.
+                
+                data = np.loadtxt(f"{self.path}/{file}")
+                self.data = data
+                self.software = 'cp2k'
             
     def gromacs(self, file = None):
         """ Parses information from gromacs *.xvg file
@@ -319,6 +321,7 @@ class Mol():
             data = np.loadtxt(f"{self.path}/{file}", skiprows=i)
 
             self.data = data
+            self.software = 'gromacs'
             
         if re.search('.xpm', file):
             
@@ -347,6 +350,7 @@ class Mol():
                     matrix[grid-i-1,j]= matrix_dict[matrix_lett[i][j]]
                     
             self.data = matrix
+            self.software = 'gromacs'
 
     def csv(self, path:str, header:bool=False, delimiter:str=',', ):
 

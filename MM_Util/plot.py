@@ -7,6 +7,7 @@ import copy
 
 from matplotlib.ticker import NullFormatter
 from matplotlib.ticker import FormatStrFormatter
+from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 
 from .utilities import *
 from .mol import *
@@ -89,21 +90,30 @@ class Plot():
         discrete_colors = np.linspace(0, len(colormap_colors) - 1, color_num, dtype=int)
         self.colors = [colormap_colors[i] for i in discrete_colors]
 
-    def trajectory(self, molecule, var_name = 'colvar'):
+    def trajectory(self, mol, var_name = 'colvar', col = 1):
         """ Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
         :param molecule: (Mol) Class Mol. 
         :param var_name: (list) Name of the collective variable you are plotting on your y-axis.
+        :param col: (int) Index of the column containing your colvar data, in the case that you have multiple.
         """
         
-        time = molecule.data[:, 0]
-        colvar = molecule.data[:, 1]
+        time = mol.data[:, 0]
+        colvar = mol.data[:, col]
         
         timestep = np.abs(time[0] - time[1])
-
+        
+        # CP2K default timestep unit is in fs, Gromacs is in ps:
+        
+        if mol.software == 'cp2k':
+            time_unit = 'fs'
+            
+        elif mol.software == 'gromacs':
+            time_unit = 'ps'
+            
         fig, ax = plt.subplots(1,2, figsize=(11,3), gridspec_kw={'width_ratios': [3.5, 1]})
 
         ax[0].plot(time, colvar, linewidth=0.2)
-        ax[0].set_xlabel(f"time (fs); stepsize = {timestep}fs")
+        ax[0].set_xlabel(f"time ({time_unit}); stepsize = {timestep}{time_unit}")
         ax[0].set_ylabel(var_name)
         # ax1.set_title(f"file: {xyz_file}", fontsize = 10)
 
@@ -119,6 +129,60 @@ class Plot():
         ax[1].set_xlabel('structures')
 
         plt.tight_layout()
+        
+        self.fig = fig
+        self.ax = ax
+        
+    def fes(self, mol, cols=[1,2]):
+        """ Plots MD FES. Takes in data for CP2K or Gromacs via Mol.
+        :param mol: (Mol) Class Mol.
+        :param cols: (int) Index of the 2 columns containing your colvar data, in the case that you have more than 2.
+        """
+        
+        Temp = 300 ; R = 8.314 # J/K mol
+
+        colvar1 = mol.data[:, cols[0]]
+        colvar2 = mol.data[:, cols[1]]
+
+        Hall, x_edges, y_edges = np.histogram2d(colvar1, colvar2, bins=72)
+        Hall = Hall / np.sum(Hall)
+        Hall[Hall == 0] = np.nan
+
+        Hall = - R * Temp * np.log(Hall) / 1000
+
+        vmin, vmax = np.nanmin(Hall), np.nanmax(Hall)
+        
+        fig, ax = plt.subplots(figsize=(6, 6))
+        ax.set_aspect('equal', adjustable='box')
+        
+        # colors = self.colors
+        # cmap = ListedColormap(colors)
+
+        num_levels = 8
+        plot = ax.contourf(x_edges[:-1], y_edges[:-1], Hall.T, cmap='Blues_r', zorder=1, levels=num_levels)
+        # plot = ax.contourf(x_edges[:-1], y_edges[:-1], Hall.T, cmap=cmap, zorder=1, levels=num_levels)
+
+        num_ticks = 8
+        x_ticks = np.linspace(x_edges[0], x_edges[-1], num_ticks)
+        y_ticks = np.linspace(y_edges[0], y_edges[-1], num_ticks)
+        ax.set_xticks(x_ticks)
+        ax.set_yticks(y_ticks)
+        ax.set_xticklabels([f"{tick:.1f}" for tick in x_ticks], fontsize=12)
+        ax.set_yticklabels([f"{tick:.1f}" for tick in y_ticks], fontsize=12)
+
+        cb_ticks = np.linspace(vmin, vmax, 6)
+        cb = fig.colorbar(plot, ax=ax, ticks=cb_ticks, pad=0.05, shrink=0.78)
+        cb.ax.set_yticklabels([f"{tick:.1f}" for tick in cb_ticks], fontsize=12)
+        cb.set_label("\n Free energy [kJ]", fontsize=14)
+
+        # Enable grid that aligns with ticks
+        ax.grid(True, ls='--', zorder=10.0)
+
+        # Axis labels and title
+        ax.set_xlabel("colvar1", fontsize=14)
+        ax.set_ylabel("colvar2", fontsize=14)
+
+        # fig.tight_layout()
         
         self.fig = fig
         self.ax = ax
