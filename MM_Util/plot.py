@@ -6,6 +6,7 @@ import colormaps
 import copy
 
 from matplotlib.ticker import FormatStrFormatter
+from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 
 from .utilities import *
 from .mol import *
@@ -19,7 +20,7 @@ class Plot():
 
     def __init__(self, data=None, labels:list = None, desc:list = None,
                  xtick = None, ytick = None, xrange:list = None, yrange:list = None,
-                 colors:list = None, x_extend:float=0, y_extend:float=0) :
+                 colors:list = ['b', 'r', 'g', 'c', 'm', 'y', 'k'], x_extend:float=0, y_extend:float=0) :
 
         """
         Constructs a plot object.
@@ -249,8 +250,6 @@ class Plot():
         Mat = [MHall, MHpuck1, MHpuck2]
 
         fig, axes = plt.subplots(1,len(Mat), figsize=(4*len(Mat) + (len(Mat)-1)*1,  4), sharex=True, sharey=True)
-        color_bar = ['Blues_r', 'Blues_r', 'Blues_r', 
-                'rainbow', 'rainbow', 'Blues_r', 'Blues_r', 'Blues_r']
 
         for n, ax in enumerate(axes):
 
@@ -272,8 +271,10 @@ class Plot():
 
           if n==0:  ax.set_ylabel(r'$\psi$', fontsize=14)
 
+          colors = self.colors
+          cmap = ListedColormap(colors)
           #plot = ax.imshow(Mat[n],  aspect='auto', interpolation='none', cmap=color_bar[n], vmin=vmin, vmax=vmax)
-          plot = ax.contourf(Mat[n],  vmin=0, vmax=limit, cmap=color_bar[n], zorder=1, levels=8)
+          plot = ax.contourf(Mat[n],  vmin=0, vmax=limit, cmap=cmap, zorder=1, levels=8)
           plot.set_clim(0,limit)
           cb_ticks = np.linspace(0, limit,  int(limit/2)+1)
           #f n == len(Mat)-1: 
