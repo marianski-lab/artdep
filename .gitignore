@@ -1,5 +1,4 @@
 .ipynb_checkpoints/
-*.ipynb
 # sample_data/
 !trajectories_CP2K_Gromacs.ipynb
 !gaussian.ipynb
