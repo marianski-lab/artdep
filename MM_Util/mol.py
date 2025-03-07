@@ -299,24 +299,23 @@ class Mol():
             data = np.array(list(zip(time, colvar_data)))
             self.data = data
             
-    def gromacs(self, traj_file = None):
+    def gromacs(self, xvg_file = None):
         """ Parses information from gromacs *.xvg file
 
         :param xvg_file: (string) File containing the gromacs trajectory.
         """
         
         # I don't use Gromacs enough to know how the output looks like. Right now, I am just reading the .xvg file:
-        
-        time = []; colvar_data = []
-
-        with open(f"{self.path}/{traj_file}", 'r') as f:
+            
+        with open(f"{self.path}/{xvg_file}", 'r') as f:
+            i = 0
             for line in f.readlines():
-                if not re.search('#', line) and not re.search('@', line):
-                    x = line.split()[0]; y = line.split()[1]
-                    time.append(float(x)); colvar_data.append(float(y))
+                if re.search('#', line) or re.search('@', line):
+                    i = i + 1
             f.close()
+
+        data = np.loadtxt(f"{self.path}/{xvg_file}", skiprows=i)
         
-        data = np.array(list(zip(time, colvar_data)))    
         self.data = data
 
     def csv(self, path:str, header:bool=False, delimiter:str=',', ):
