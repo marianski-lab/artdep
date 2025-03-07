@@ -299,24 +299,54 @@ class Mol():
             data = np.array(list(zip(time, colvar_data)))
             self.data = data
             
-    def gromacs(self, xvg_file = None):
+    def gromacs(self, file = None):
         """ Parses information from gromacs *.xvg file
 
-        :param xvg_file: (string) File containing the gromacs trajectory.
+        :param file: (string) File containing the gromacs data.
         """
         
         # I don't use Gromacs enough to know how the output looks like. Right now, I am just reading the .xvg file:
-            
-        with open(f"{self.path}/{xvg_file}", 'r') as f:
-            i = 0
-            for line in f.readlines():
-                if re.search('#', line) or re.search('@', line):
-                    i = i + 1
-            f.close()
-
-        data = np.loadtxt(f"{self.path}/{xvg_file}", skiprows=i)
         
-        self.data = data
+        if re.search('.xvg', file):
+            
+            with open(f"{self.path}/{file}", 'r') as f:
+                i = 0
+                for line in f.readlines():
+                    if re.search('#', line) or re.search('@', line):
+                        i = i + 1
+                f.close()
+
+            data = np.loadtxt(f"{self.path}/{file}", skiprows=i)
+
+            self.data = data
+            
+        if re.search('.xpm', file):
+            
+            f = open(f"{self.path}/{file}", 'r')
+            pattern = None ; matrix_lett = []; matrix_dict = {}
+            grid = None
+            for line in f.readlines():
+
+                if re.search(r'(\d\s\d\b)', line) and grid is None:
+                    grid = int(line.split()[1])
+                    pattern = grid * '[A-Z]'
+
+                if pattern and re.search(pattern, line):
+                    replL1 = line.replace('",','')
+                    replL2 = line.replace('"','')
+                    matrix_lett.append( '\n'.join(replL2.split()))
+
+                if re.search('((".*")[0-9])', line):
+                    replL1 = line.replace('"', ' ')
+                    letters, energy = values = str(replL1.split()[0]) , float(replL1.split()[4])
+                    matrix_dict.update(dict.fromkeys(letters,energy))
+
+            matrix = np.zeros( [grid, grid ] )
+            for i in range(grid):
+                for j in range(grid):
+                    matrix[grid-i-1,j]= matrix_dict[matrix_lett[i][j]]
+                    
+            self.data = matrix
 
     def csv(self, path:str, header:bool=False, delimiter:str=',', ):
 
