@@ -471,7 +471,6 @@ class Plot():
 
         """
         Generates a scatter plot from data
-        :return fig, ax: Matplotlib figure and axis objects.
         """
 
         data = self.data
