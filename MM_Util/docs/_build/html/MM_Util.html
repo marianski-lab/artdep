@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="_static/javascripts/modernizr.js"></script>
+  
+  
+  
+    <title>MM_Util package &#8212; MM Core 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e7352e39" />
+    <link rel="stylesheet" type="text/css" href="_static/material.css?v=79c92029" />
+    <script src="_static/documentation_options.js?v=01f34227"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="MM_Util" href="modules.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=dark-blue data-md-color-accent=blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#MM_Util" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="index.html" title="MM Core 0.1.0 documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">MM Core</span>
+          <span class="md-header-nav__topic"> MM_Util package </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="search.html" method="get" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder=""Search""
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/marianski-lab/artdep" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    artdep
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = ""versions.json"",
+        target_loc = "../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">MM Core 0.1.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="modules.html" class="md-tabs__link">MM_Util</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="index.html" title="MM Core 0.1.0 documentation" class="md-nav__button md-logo">
+      
+        <img src="_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="index.html"
+       title="MM Core 0.1.0 documentation">MM Core</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/marianski-lab/artdep" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    artdep
+  </div>
+</a>
+    </div>
+  
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">"Contents"</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#mm-util--page-root" class="md-nav__link">MM_Util package</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#submodules" class="md-nav__link">Submodules</a>
+        </li>
+        <li class="md-nav__item"><a href="#module-MM_Util.mol" class="md-nav__link">MM_Util.mol module</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#MM_Util.mol.Mol" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Mol</span></code></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#MM_Util.mol.Mol.connectivity_matrix" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Mol.connectivity_matrix()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.mol.Mol.cp2k" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Mol.cp2k()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.mol.Mol.csv" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Mol.csv()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.mol.Mol.element_symbol" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Mol.element_symbol()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.mol.Mol.gaussian" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Mol.gaussian()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.mol.Mol.gromacs" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Mol.gromacs()</span></code></a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.mol.Reaction" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Reaction</span></code></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#MM_Util.mol.Reaction.combiner" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Reaction.combiner()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.mol.Reaction.delta" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Reaction.delta()</span></code></a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#module-MM_Util.plot" class="md-nav__link">MM_Util.plot module</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#MM_Util.plot.Plot" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Plot</span></code></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#MM_Util.plot.Plot.cmap" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Plot.cmap()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.plot.Plot.contour" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Plot.contour()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.plot.Plot.fes" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Plot.fes()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.plot.Plot.puckers_hist" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Plot.puckers_hist()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.plot.Plot.rdf" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Plot.rdf()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.plot.Plot.scatter" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Plot.scatter()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.plot.Plot.trajectory" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Plot.trajectory()</span></code></a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#module-MM_Util.utilities" class="md-nav__link">MM_Util.utilities module</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#MM_Util.utilities.get_distance" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">get_distance()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#MM_Util.utilities.read_coordinates" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">read_coordinates()</span></code></a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="_sources/MM_Util.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="mm-util-package">
+<h1 id="mm-util--page-root">MM_Util package<a class="headerlink" href="#mm-util--page-root" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2 id="submodules">Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-MM_Util.mol">
+<span id="mm-util-mol-module"></span><h2 id="module-MM_Util.mol">MM_Util.mol module<a class="headerlink" href="#module-MM_Util.mol" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="MM_Util.mol.Mol">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">MM_Util.mol.</span></span><span class="sig-name descname"><span class="pre">Mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/mol.html#Mol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.mol.Mol" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class that can parse log files from different Computational Software.
+It can parse log files from Gaussian 16, xvg files from Gromacs, out files from ORCA, and log files from CP2K.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.mol.Mol.connectivity_matrix">
+<span class="sig-name descname"><span class="pre">connectivity_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distXX</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.65</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distXH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.15</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/mol.html#Mol.connectivity_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.mol.Mol.connectivity_matrix" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a connectivity matrix of the molecule. A connectivity matrix holds the information of which atoms are bonded and to what.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distXX</strong> – The max distance between two atoms (not hydrogen) to be considered a bond</p></li>
+<li><p><strong>distXH</strong> – The max distance between any atom and a hydrogen atom to be considered a bond</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.mol.Mol.cp2k">
+<span class="sig-name descname"><span class="pre">cp2k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'md'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colvar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/mol.html#Mol.cp2k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.mol.Mol.cp2k" title="Link to this definition">¶</a></dt>
+<dd><p>Parses information from CP2K. Right now only works for AIMD Trajectories, plan to implement opt compatability later.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_type</strong> – (string) Currently only md is supported. Should be manually specified.</p></li>
+<li><p><strong>colvar</strong> – (list) A list containing the atom numbers that define your collective variable.</p></li>
+<li><p><strong>timestep</strong> – (float) Timestep of your MD calculation. The function will attempt to extract this from your input file if present.</p></li>
+<li><p><strong>traj_file</strong> – (string) File containing the CP2K trajectory.</p></li>
+<li><p><strong>input_file</strong> – (string) File containing your CP2K inputs.</p></li>
+<li><p><strong>output_file</strong> – (string) File containing your CP2K output.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.mol.Mol.csv">
+<span class="sig-name descname"><span class="pre">csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">','</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/mol.html#Mol.csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.mol.Mol.csv" title="Link to this definition">¶</a></dt>
+<dd><p>Parses a csv file into a numpy array
+:param path: path to the csv file</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.mol.Mol.element_symbol">
+<span class="sig-name descname"><span class="pre">element_symbol</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/mol.html#Mol.element_symbol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.mol.Mol.element_symbol" title="Link to this definition">¶</a></dt>
+<dd><p>A dictionary for atomic number and atomic symbol
+:param A: either atomic number or atomic symbol for Hydrogen, Carbon, Nitrogen, Oxygen, Fluorine and Silicon
+:return: the corresponding atomic symbol or atomic number</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.mol.Mol.gaussian">
+<span class="sig-name descname"><span class="pre">gaussian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/mol.html#Mol.gaussian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.mol.Mol.gaussian" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.mol.Mol.gromacs">
+<span class="sig-name descname"><span class="pre">gromacs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/mol.html#Mol.gromacs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.mol.Mol.gromacs" title="Link to this definition">¶</a></dt>
+<dd><p>Parses information from gromacs <a href="#id1"><span class="problematic" id="id2">*</span></a>.xvg file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> – (string) File containing the gromacs data.</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="MM_Util.mol.Reaction">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">MM_Util.mol.</span></span><span class="sig-name descname"><span class="pre">Reaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/mol.html#Reaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.mol.Reaction" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class that organizes several molecules into a reaction</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.mol.Reaction.combiner">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">combiner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/mol.html#Reaction.combiner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.mol.Reaction.combiner" title="Link to this definition">¶</a></dt>
+<dd><p>Adds the energies for multiple molecules and returns a new mol object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mol_list</strong> – (list) List of molecule objects.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mol</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.mol.Reaction.delta">
+<span class="sig-name descname"><span class="pre">delta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/mol.html#Reaction.delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.mol.Reaction.delta" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the energy differences for a reaction</p>
+</dd></dl>
+</dd></dl>
+</section>
+<section id="module-MM_Util.plot">
+<span id="mm-util-plot-module"></span><h2 id="module-MM_Util.plot">MM_Util.plot module<a class="headerlink" href="#module-MM_Util.plot" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="MM_Util.plot.Plot">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">MM_Util.plot.</span></span><span class="sig-name descname"><span class="pre">Plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtick</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ytick</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xrange</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yrange</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['b',</span> <span class="pre">'r',</span> <span class="pre">'g',</span> <span class="pre">'c',</span> <span class="pre">'m',</span> <span class="pre">'y',</span> <span class="pre">'k']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_extend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_extend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/plot.html#Plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.plot.Plot" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class that creates plots from a numpy array.
+It can make reaction coordinate diagrams, RMSD and RMSF trajectory plots,
+Free energy plots, Scatter Plots, and SNFG Figures.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.plot.Plot.cmap">
+<span class="sig-name descname"><span class="pre">cmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ice'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/plot.html#Plot.cmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.plot.Plot.cmap" title="Link to this definition">¶</a></dt>
+<dd><p>Generates and processes a colormap with optional offsetting logic.
+:param color_num: (int) Number of discrete colors.
+:param offset: (float) Fractional offset to shift the colormap.
+:param map: (str) Name of the colormap from the colormaps library.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.plot.Plot.contour">
+<span class="sig-name descname"><span class="pre">contour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xpm_mol1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpm_mol2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpm_mol3</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/plot.html#Plot.contour"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.plot.Plot.contour" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.plot.Plot.fes">
+<span class="sig-name descname"><span class="pre">fes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">2]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/plot.html#Plot.fes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.plot.Plot.fes" title="Link to this definition">¶</a></dt>
+<dd><p>Plots MD FES. Takes in data for CP2K or Gromacs via Mol.
+:param mol: (Mol) Class Mol.
+:param cols: (int) Index of the 2 columns containing your colvar data, in the case that you have more than 2.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.plot.Plot.puckers_hist">
+<span class="sig-name descname"><span class="pre">puckers_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_pucker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_fem</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/plot.html#Plot.puckers_hist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.plot.Plot.puckers_hist" title="Link to this definition">¶</a></dt>
+<dd><p>Plots ring pucker free energy surface. Requires 2 mol objects to run.
+:param mol_pucker: (Mol) Class Mol containing the .xvg file for your ring pucker determination.
+:param mol_fem: (Mol) Class Mol containing the .xvg file for your free energy surface.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.plot.Plot.rdf">
+<span class="sig-name descname"><span class="pre">rdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/plot.html#Plot.rdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.plot.Plot.rdf" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.plot.Plot.scatter">
+<span class="sig-name descname"><span class="pre">scatter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/plot.html#Plot.scatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.plot.Plot.scatter" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a scatter plot from data
+:return fig, ax: Matplotlib figure and axis objects.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MM_Util.plot.Plot.trajectory">
+<span class="sig-name descname"><span class="pre">trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'colvar'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/plot.html#Plot.trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.plot.Plot.trajectory" title="Link to this definition">¶</a></dt>
+<dd><p>Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
+:param molecule: (Mol) Class Mol.
+:param var_name: (list) Name of the collective variable you are plotting on your y-axis.
+:param col: (int) Index of the column containing your colvar data, in the case that you have multiple.</p>
+</dd></dl>
+</dd></dl>
+</section>
+<section id="module-MM_Util.utilities">
+<span id="mm-util-utilities-module"></span><h2 id="module-MM_Util.utilities">MM_Util.utilities module<a class="headerlink" href="#module-MM_Util.utilities" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="MM_Util.utilities.get_distance">
+<span class="sig-prename descclassname"><span class="pre">MM_Util.utilities.</span></span><span class="sig-name descname"><span class="pre">get_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">at1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/utilities.html#get_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.utilities.get_distance" title="Link to this definition">¶</a></dt>
+<dd><p>Finds the distance between two atoms
+:param at1: (list) a list of xyz coordinates of atom1
+:param at2: (list) a list of xyz coordinates of atom2
+:return: (float) the distance between 2 atoms</p>
+</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="MM_Util.utilities.read_coordinates">
+<span class="sig-prename descclassname"><span class="pre">MM_Util.utilities.</span></span><span class="sig-name descname"><span class="pre">read_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MM_Util/utilities.html#read_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MM_Util.utilities.read_coordinates" title="Link to this definition">¶</a></dt>
+<dd><p>Extracts collective variables from an xyz file containing an MD trajectory (CP2K).
+:param xyz_file: (string) The xyz file containing your MD trajectory.
+:param atom_list: (list) a list of atoms that defines your collective variable.
+:return: (list) Distances / Angles / Dihedrals, corresponding with your specified colvar.</p>
+</dd></dl>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="modules.html" title="MM_Util"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> "Previous" </span> MM_Util </span>
+              </div>
+            </a>
+          
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 2025, Eugene Chung, Ryan Kwok, Murat Yaman, Hillel Lerner, Mateusz Marianski.
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>
