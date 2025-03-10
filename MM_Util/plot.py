@@ -318,6 +318,8 @@ class Plot():
         Mat = [MHall, MHpuck1, MHpuck2]
 
         fig, axes = plt.subplots(1,len(Mat), figsize=(4*len(Mat) + (len(Mat)-1)*1,  4), sharex=True, sharey=True)
+        colors = self.colors
+        colors.reverse()
 
         for n, ax in enumerate(axes):
 
@@ -339,7 +341,6 @@ class Plot():
 
           if n==0:  ax.set_ylabel(r'$\psi$', fontsize=14)
 
-          colors = self.colors
           cmap = ListedColormap(colors)
           #plot = ax.imshow(Mat[n],  aspect='auto', interpolation='none', cmap=color_bar[n], vmin=vmin, vmax=vmax)
           plot = ax.contourf(Mat[n],  vmin=0, vmax=limit, cmap=cmap, zorder=1, levels=8)
