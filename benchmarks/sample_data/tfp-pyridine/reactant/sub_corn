@@ -1,0 +1,16 @@
+#! /bin/bash 
+#$ -cwd
+#$ -j y
+#$ -S /bin/bash
+#$ -q core-16.q
+#$ -pe smp 16
+#$ -N NAME
+#$ -l h_rt=960:00:00
+
+#echo $HOSTNAME > test-file 
+source /home/matma/.bashrc
+export PGI_FASTMATH_CPU=sandybridge
+
+g16 input.com &> input.log
+
+
