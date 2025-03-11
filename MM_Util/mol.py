@@ -395,9 +395,9 @@ class Reaction():
 
         for mol in mol_list:
 
-            new_mol.E += mol.energy
-            new_mol.H += mol.enthalpy
-            new_mol.F += mol.f_Energy
+            new_mol.E += mol.E
+            new_mol.H += mol.H
+            new_mol.F += mol.F
 
         return new_mol
 
