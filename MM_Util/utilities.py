@@ -137,3 +137,8 @@ def read_coordinates(xyz_file, atom_list):
     
     if len(atom_list) > 4:
         raise ValueError('You have specified too many atoms')
+
+def proper_minus(value):
+    return f"{value:.1f}".replace("-", "−")
+def proper_minus(value):
+    return f"{value:.1f}".replace("-", "−")
