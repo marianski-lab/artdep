@@ -393,6 +393,10 @@ class Reaction():
         """
         new_mol = Mol()
 
+        new_mol.E = 0
+        new_mol.F = 0
+        new_mol.H = 0
+
         for mol in mol_list:
 
             new_mol.E += mol.E

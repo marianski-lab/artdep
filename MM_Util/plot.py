@@ -557,9 +557,7 @@ class Plot():
             else:
                 print("Unsupported Energy Type")
                 return  
-            
              
-       
         if not energies:
             raise ValueError("No energies found. Check the input data.")
 
@@ -571,7 +569,7 @@ class Plot():
 
         relative_energies = [hartree_to_kcal(e - energies[0]) for e in energies]
 
-        annotation_offset = 0.1
+        annotation_offset = 0.13
 
         for j, energy in enumerate(relative_energies):
             # Draw Horizontal Bars at Each Energy Level
@@ -604,15 +602,15 @@ class Plot():
         ax.set_ylabel(f'{reaction_type}', fontsize=16)
         ax.yaxis.set_major_formatter(FuncFormatter(lambda x, _: proper_minus(x)))
 
-        # Customize X-axis Ticks
+        
         ax.set_xticks(range(1, len(energies) + 1))
         ax.set_xticklabels(labels) 
             
-        # Make bottom and left borders thicker and visible
+        
         ax.spines['bottom'].set_visible(True)
         ax.spines['left'].set_visible(True)
-        ax.spines['bottom'].set_linewidth(1.5)  # Thicker bottom border
-        ax.spines['left'].set_linewidth(1.5)    # Thicker left border
+        ax.spines['bottom'].set_linewidth(1.5)  
+        ax.spines['left'].set_linewidth(1.5)    
 
         # Final Formatting
         ax.tick_params(labelsize=14)
