@@ -4,12 +4,17 @@ import matplotlib as mpl
 from matplotlib.ticker import FuncFormatter
 import os
 import sys
+<<<<<<< Updated upstream
 
 from contourpy.util import data
 from matplotlib import colors
 
 from .utilities import *
 from .mol import *
+=======
+import MM_Util as mm
+from MM_Util.utilities import hartree_to_kcal, proper_minus
+>>>>>>> Stashed changes
 
 class Plot():
     """
@@ -68,28 +73,37 @@ class Plot():
         self.fig = fig, self.ax = ax
 
 
-    def reaction_profile(self, reaction,type='delta E', linewidth=3, scale=0.32, annotate=True, color='black'):
+    def reaction_profile(self, Reaction, type, linewidth=3, scale=0.32, annotate=True, color='black'):
         """
         Plots a reaction coordinate diagram.
         """
-        mol_list= reaction.mol_list
-        labels = reaction.mol_label
+        mol_list= Reaction.mol_list
+        labels = Reaction.mol_label
 
+        
         energies = []
-        # labels = []
+        # type = 'delta E' or 'delta F' or 'delta H'
+
 
         for mol in mol_list:
-            energy = mol.E  # Access the 'E' attribute which stores the energy
-            energies.append(energy)
-        
-        # for mol in mol_label:
-        #     label = mol.label
-        #     labels.append(label)
+            if type=='delta E':
+                energy = mol.E  
+                energies.append(energy)
+            elif type=='delta F':
+                energy = mol.F
+            elif type == 'delta H':
+                energy = mol.H
+            else:
+                print("Unsupported Energy Type")
+       
 
-        fig, ax = plt.subplots(figsize=(8, 6))
+        # Dynamic Figure Size Based on Number of Reaction Steps
+        num_steps = len(mol_list)
+        fig_width = max(6, num_steps * 2)  # Adjust width based on number of steps
+        fig, ax = plt.subplots(figsize=(fig_width, 6))
         
+
         relative_energies = [hartree_to_kcal(e - energies[0]) for e in energies]
-        print (relative_energies)
 
         annotation_offset=0.05
         
@@ -109,22 +123,41 @@ class Plot():
                         linestyle=":", color=color, linewidth=linewidth)
 
 
+        
 
         # Set Y-axis Label
         if type == 'delta E':
             reaction_type = '$\\Delta E$ (kcal $\\cdot$ mol${}^{-1}$)' 
         elif type == 'delta F':
             reaction_type = '$\\Delta F$ (kcal $\\cdot$'
+        elif type == 'delta H':
+            reaction_type = '$\\Delta H$ (kcal $\\cdot$ mol${}^{-1}$)' 
 
         # Invisible plot for the legend label
-        ax.plot([], [], color=color, linewidth=linewidth, label=reaction_type)
+        ax.plot([], [], color=color, linewidth=linewidth)
+
+        # Add X-axis Guide Line at the halfway point
+        ax.axhline(0, color="black", linestyle=":", linewidth=1.5, zorder=-4)
         
+        ax.set_ylabel(f'{reaction_type}', fontsize=16)
+        ax.yaxis.set_major_formatter(FuncFormatter(lambda x, _: proper_minus(x)))
+
         # Customize X-axis Ticks
         ax.set_xticks(range(1, len(energies) + 1))
         # ax.set_xticklabels(labels[i] for i in mol_label)
         ax.set_xticklabels(i for i in labels)
         # Add Legend
+        # Make bottom and left borders thicker and visible
+        ax.spines['bottom'].set_visible(True)
+        ax.spines['left'].set_visible(True)
+        ax.spines['bottom'].set_linewidth(1.5)  # Thicker bottom border
+        ax.spines['left'].set_linewidth(1.5)    # Thicker left border
+
+        # Final Formatting
+        ax.tick_params(labelsize=14)
         ax.legend(loc="lower left", frameon=False, fontsize=14)
+
+        plt.tight_layout()
 
         self.fig = fig; self.ax = ax
         # return fig, ax
