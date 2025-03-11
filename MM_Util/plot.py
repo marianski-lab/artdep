@@ -133,13 +133,13 @@ class Plot():
         self.fig = fig
         self.ax = ax
         
-    def fes(self, mol, cols=[1,2]):
+    def fes(self, mol, cols=[1,2], temp=300, num_levels = 8, num_ticks = 8):
         """ Plots MD FES. Takes in data for CP2K or Gromacs via Mol.
         :param mol: (Mol) Class Mol.
         :param cols: (int) Index of the 2 columns containing your colvar data, in the case that you have more than 2.
         """
         
-        Temp = 300 ; R = 8.314 # J/K mol
+        Temp = temp ; R = 8.314 # J/K mol
 
         colvar1 = mol.data[:, cols[0]]
         colvar2 = mol.data[:, cols[1]]
@@ -158,11 +158,11 @@ class Plot():
         # colors = self.colors
         # cmap = ListedColormap(colors)
 
-        num_levels = 8
+        num_levels = num_levels
         plot = ax.contourf(x_edges[:-1], y_edges[:-1], Hall.T, cmap='Blues_r', zorder=1, levels=num_levels)
         # plot = ax.contourf(x_edges[:-1], y_edges[:-1], Hall.T, cmap=cmap, zorder=1, levels=num_levels)
 
-        num_ticks = 8
+        num_ticks = num_ticks
         x_ticks = np.linspace(x_edges[0], x_edges[-1], num_ticks)
         y_ticks = np.linspace(y_edges[0], y_edges[-1], num_ticks)
         ax.set_xticks(x_ticks)
@@ -187,7 +187,7 @@ class Plot():
         self.fig = fig
         self.ax = ax
     
-    def puckers_hist(self, mol_pucker, mol_fem):
+    def puckers_hist(self, mol_pucker, mol_fem, puckers=['1C4', '1,4B'], limit=16, temp=300):
         """ Plots ring pucker free energy surface. Requires 2 mol objects to run.
         :param mol_pucker: (Mol) Class Mol containing the .xvg file for your ring pucker determination.
         :param mol_fem: (Mol) Class Mol containing the .xvg file for your free energy surface.
@@ -195,12 +195,12 @@ class Plot():
         
         def ring_pucker_determination(mol):
 
-            data = mol.data
+            data = copy.deepcopy(mol.data)
             
             n = data.shape[1] - 1
             angles = data[:, -n:]
             angles = np.where(angles > 0.0, 180.0 - angles, -angles - 180.0)
-
+            
             data[:, -n:] = angles
             traj_idx = np.array([str(x) for x in data[:, 0]])
 
@@ -283,20 +283,19 @@ class Plot():
 
         pucker = ring_pucker_determination(mol_pucker)
         puck = [puck_to_id(p) for p in pucker]
+
         puckers_sum = np.zeros((38,))
         
         phi, psi  = load_dihedrals(mol_fem)
         
-        limit = 16
-        puck1 = 0 ; puck2 = 2 # See id_to_puck for definitions
-        Temp = 300.0 ; R = 8.314 # J/K mol
+        limit = limit
+        Temp = temp ; R = 8.314 # J/K mol
 
         Hall, x_edge, y_edge = np.histogram2d(phi, psi, bins=72, range=[[-180, 180.0],[-180.0, 180.0]])
         #hmax = max(full_data[:,:])
 
         Hall = - R * Temp * np.log(Hall)
         hmin = np.min(Hall)
-        print(hmin)
 
         Hpuck, edges  = np.histogramdd((phi, psi, puck), bins=[72,72,38], range=[[-180.0, 180.0],[-180.0, 180.0],[0,38]])
         for i in range(38):
@@ -304,58 +303,60 @@ class Plot():
 
         for i in range(38): 
             print("{0:4s}{1:10g}".format(id_to_puck(i), puckers_sum[i]))
-
+            
         Hpuck = - R* Temp * np.log(Hpuck)
+        hmin_puck = np.min(Hpuck)
+        # Hpuck[0,0,] = hmin #To get colorbar right
+        
+        MHall = np.ma.masked_greater(0.001*(Hall.T-hmin), limit-1)
+        Mat = [MHall]
+        
+        for p in puckers:
+            pid = puck_to_id(p)
+            MHpuck = np.ma.masked_greater(0.001*(Hpuck[:,:,pid].T - hmin_puck), limit-1)
+            # MHpuck[0,0] = hmin #To get colorbar right
 
-
-        MHall   = np.ma.masked_greater(0.001*(Hall.T-hmin), limit-1)
-        MHpuck1 = np.ma.masked_greater(0.001*(Hpuck[:,:,puck1].T-hmin), limit-1)
-
-        Hpuck[0,0,puck2] = hmin #To get colorbar right
-        MHpuck2 = np.ma.masked_greater(0.001*(Hpuck[:,:,puck2].T-hmin), limit-1)
-
-        #Mat = [MHall, MHpuck1]
-        Mat = [MHall, MHpuck1, MHpuck2]
+            Mat.append(MHpuck)
 
         fig, axes = plt.subplots(1,len(Mat), figsize=(4*len(Mat) + (len(Mat)-1)*1,  4), sharex=True, sharey=True)
-        colors = self.colors
-        colors.reverse()
+
+        color_bar = ['Blues_r']*len(Mat)
+        levels = np.linspace(0, limit, 9)  # 8 levels between 0 and limit
 
         for n, ax in enumerate(axes):
+            ax.set_aspect('equal', adjustable='box')
+            ax.grid(True, ls='--', zorder=10.0)
 
-          vmin = 0 ; vmax = limit #np.amax(Mat[n])
-          ax.set_aspect('equal', adjustable='box')
-          ax.grid(True, ls='--', zorder=10.0)
+            # Set x-axis ticks and labels
+            xmin, xmax = -180.0, 180.0
+            xticks = np.linspace(xmin, xmax, 7)
+            ax.set_xticks(np.linspace(0, 71, 7))
+            ax.set_xticklabels(['{0:d}'.format(int(x)) for x in xticks], fontsize=12)
+            ax.set_xlabel(r'$\phi$', fontsize=14)
 
-          xmin=-180.0; xmax=180.0 
-          xticks = np.linspace(xmin, xmax, 7)
-          ax.set_xticks(np.linspace(0, 71, 7))
-          ax.set_xticklabels(['{0:d}'.format(int(x)) for x in xticks], fontsize=12) #rotation=45, ha="right", rotation_mode="anchor")
-          ax.set_xlabel(r'$\phi$', fontsize=14)
+            # Set y-axis ticks and labels
+            ymin, ymax = -180.0, 180.0
+            yticks = np.linspace(ymax, ymin, 7)[::-1]
+            ax.set_yticks(np.linspace(0, 71, 7))
+            ax.set_yticklabels(['{0:d}'.format(int(x)) for x in yticks], fontsize=12)
 
-          ymin=-180.0; ymax=180.0 
-          yticks = np.linspace(ymax, ymin, 7)
-          yticks = yticks[::-1]
-          ax.set_yticks(np.linspace(0, 71, 7))
-          ax.set_yticklabels(['{0:d}'.format(int(x)) for x in yticks], fontsize=12) #rotation=45, ha="right", rotation_mode="anchor")
+            if n == 0:
+                ax.set_ylabel(r'$\psi$', fontsize=14)
 
-          if n==0:  ax.set_ylabel(r'$\psi$', fontsize=14)
+            # Create the contourf plot with consistent levels
+            plot = ax.contourf(Mat[n], levels=levels, cmap=color_bar[n], zorder=1)
 
-          cmap = ListedColormap(colors)
-          #plot = ax.imshow(Mat[n],  aspect='auto', interpolation='none', cmap=color_bar[n], vmin=vmin, vmax=vmax)
-          plot = ax.contourf(Mat[n],  vmin=0, vmax=limit, cmap=cmap, zorder=1, levels=8)
-          plot.set_clim(0,limit)
-          cb_ticks = np.linspace(0, limit,  int(limit/2)+1)
-          #f n == len(Mat)-1: 
-          cb = fig.colorbar(plot, ax=axes[n], ticks=cb_ticks, pad=0.025, aspect=20)
-          cb.ax.set_yticklabels([ "{0:3.1f}".format(x) for x in cb_ticks], fontsize=12)
+            # Add a color bar with consistent boundaries and ticks
+            cb = fig.colorbar(plot, ax=ax, pad=0.025, aspect=20, ticks=levels)
+            cb.set_ticklabels(["{0:3.1f}".format(x) for x in levels])
+
 
         fig.tight_layout()
         
         self.fig = fig
         self.ax = axes
         
-    def rdf(self, mol):
+    def rdf(self, mol, xmin = 0, xmax=10):
     
         data = mol.data
         data[:,0] = mol.data[:,0] * 10
@@ -366,7 +367,7 @@ class Plot():
 
         fig, ax = plt.subplots(figsize=(6,2))
 
-        xmin = 0; xmax=10
+        xmin = xmin; xmax = xmax
 
         ax.tick_params(axis='both', which='both', bottom=True, top=False, labelbottom=True, right=False, left=False, labelleft=False)
         ax.spines['top'].set_visible(False) ; ax.spines['right'].set_visible(False) ; ax.spines['left'].set_visible(False)
@@ -405,9 +406,10 @@ class Plot():
         self.fig = fig
         self.ax = ax
         
-    def contour(self, xpm_mol1=None, xpm_mol2=None, xpm_mol3=None):
-        limit = 16
+    def contour(self, xpm_mol1=None, xpm_mol2=None, xpm_mol3=None, limit = 16):
 
+        limit = limit
+        
         if xpm_mol1 != None and xpm_mol2 != None and xpm_mol3 != None: 
             M1 = xpm_mol1.data
             M2 = xpm_mol2.data
