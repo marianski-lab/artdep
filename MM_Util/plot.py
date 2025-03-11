@@ -4,17 +4,12 @@ import matplotlib as mpl
 from matplotlib.ticker import FuncFormatter
 import os
 import sys
-<<<<<<< Updated upstream
 
 from contourpy.util import data
 from matplotlib import colors
 
 from .utilities import *
 from .mol import *
-=======
-import MM_Util as mm
-from MM_Util.utilities import hartree_to_kcal, proper_minus
->>>>>>> Stashed changes
 
 class Plot():
     """
@@ -77,25 +72,30 @@ class Plot():
         """
         Plots a reaction coordinate diagram.
         """
-        mol_list= Reaction.mol_list
+        mol_list = Reaction.mol_list
         labels = Reaction.mol_label
-
         
         energies = []
-        # type = 'delta E' or 'delta F' or 'delta H'
 
+        '''
+        type = 'delta E' or 'delta F' or 'delta H'
+        '''
 
         for mol in mol_list:
-            if type=='delta E':
+            if type == 'delta E':
                 energy = mol.E  
-                energies.append(energy)
-            elif type=='delta F':
+            elif type == 'delta F':
                 energy = mol.F
             elif type == 'delta H':
                 energy = mol.H
             else:
                 print("Unsupported Energy Type")
+                return  
+            
+            energies.append(energy)  
        
+        if not energies:
+            raise ValueError("No energies found. Check the input data.")
 
         # Dynamic Figure Size Based on Number of Reaction Steps
         num_steps = len(mol_list)
@@ -122,14 +122,11 @@ class Plot():
                         [energy, relative_energies[j + 1]], 
                         linestyle=":", color=color, linewidth=linewidth)
 
-
-        
-
         # Set Y-axis Label
         if type == 'delta E':
             reaction_type = '$\\Delta E$ (kcal $\\cdot$ mol${}^{-1}$)' 
         elif type == 'delta F':
-            reaction_type = '$\\Delta F$ (kcal $\\cdot$'
+            reaction_type = '$\\Delta F$ (kcal $\\cdot$ mol${}^{-1}$)'
         elif type == 'delta H':
             reaction_type = '$\\Delta H$ (kcal $\\cdot$ mol${}^{-1}$)' 
 
@@ -144,9 +141,8 @@ class Plot():
 
         # Customize X-axis Ticks
         ax.set_xticks(range(1, len(energies) + 1))
-        # ax.set_xticklabels(labels[i] for i in mol_label)
-        ax.set_xticklabels(i for i in labels)
-        # Add Legend
+        ax.set_xticklabels(labels) 
+            
         # Make bottom and left borders thicker and visible
         ax.spines['bottom'].set_visible(True)
         ax.spines['left'].set_visible(True)
