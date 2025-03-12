@@ -531,14 +531,6 @@ class Plot():
 
         if xtick is not None: ax.set_xticks(xtick)
         if ytick is not None: ax.set_yticks(ytick)
-        if xrange is not None:
-            xrange[0] -= self.x_extend
-            xrange[1] += self.x_extend
-            ax.set_xlim(xrange)
-        if yrange is not None:
-            yrange[0] -= self.y_extend
-            yrange[1] += self.y_extend
-            ax.set_ylim(yrange)
 
         ax.tick_params(axis='both', which='both', bottom=True, top=False, labelbottom=True, right=False, left=True,
                        labelleft=True)
@@ -546,7 +538,7 @@ class Plot():
 
         ax.xaxis.set_tick_params(direction='out');
         ax.yaxis.set_tick_params(direction='out')
-        ax.xaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+        ax.xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
         ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
 
         for col in range(1, len(data[0,:])):
@@ -559,8 +551,32 @@ class Plot():
 
             ax.scatter(data_x, data_y, marker='.', label=desc[col-1], color = colors[col-1])
 
-        xrange = ax.get_xlim() if xrange is None else xrange
-        yrange = ax.get_ylim() if yrange is None else yrange
+        xrange = list(ax.get_xlim()) if xrange is None else xrange
+        yrange = list(ax.get_ylim()) if yrange is None else yrange
+
+
+
+        if xrange is not None:
+            xrange[0] -= self.x_extend
+            xrange[1] += self.x_extend
+            ax.set_xlim(xrange)
+        if yrange is not None:
+            yrange[0] -= self.y_extend
+            yrange[1] += self.y_extend
+            ax.set_ylim(yrange)
+
+        xtick = list(ax.get_xticks())
+        ytick = list(ax.get_yticks())
+
+        minx = round(xtick[1], 1)
+        maxx = round(xtick[-2], 1)
+        miny = round(ytick[1] ,1)
+        maxy = round(ytick[-2] ,1)
+
+        print(minx, maxx, miny, maxy)
+
+        ax.plot([minx-0.05, maxx+0.05], [yrange[0], yrange[0]], color='k')
+        ax.plot([xrange[0], xrange[0]], [miny-0.05, maxy+0.05], color='k')
 
         fig.tight_layout()
         ax.legend(bbox_to_anchor=(-0.5, 0.5), loc='center left', borderaxespad=0, frameon=False)
