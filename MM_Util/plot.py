@@ -408,66 +408,72 @@ class Plot():
         self.fig = fig
         self.ax = ax
         
-    def contour(self, xpm_mol1=None, xpm_mol2=None, xpm_mol3=None, limit = 16):
+    def contour(self, xpm_mols, limit = 16):
 
         limit = limit
         
-        if xpm_mol1 != None and xpm_mol2 != None and xpm_mol3 != None: 
-            M1 = xpm_mol1.data
-            M2 = xpm_mol2.data
-            M3 = xpm_mol3.data
-            MM1 = np.ma.masked_greater(M1, limit-1)
-            MM2 = np.ma.masked_greater(M2, limit-1) 
-            MM3 = np.ma.masked_greater(M3, limit-1) 
-            Mat = [MM1, MM2, MM3]
+        Mat = []
+        
+        for xpm_mol in xpm_mols:
+            M = xpm_mol.data
+            MM = np.ma.masked_greater(M, limit-1)
+            Mat.append(MM)
+        
+#         if xpm_mol1 != None and xpm_mol2 != None and xpm_mol3 != None: 
+#             M1 = xpm_mol1.data
+#             M2 = xpm_mol2.data
+#             M3 = xpm_mol3.data
+#             MM1 = np.ma.masked_greater(M1, limit-1)
+#             MM2 = np.ma.masked_greater(M2, limit-1) 
+#             MM3 = np.ma.masked_greater(M3, limit-1) 
+#             Mat = [MM1, MM2, MM3]
 
-        elif xpm_mol1 != None and xpm_mol2 != None:
-            M1 = xpm_mol1.data
-            M2 = xpm_mol2.data
-             #DiffM = M1-M2
-            MM1 = np.ma.masked_greater(M1, limit-1)
-            MM2 = np.ma.masked_greater(M2, limit-1)  
-            Mat = [MM1, MM2]
+#         elif xpm_mol1 != None and xpm_mol2 != None:
+#             M1 = xpm_mol1.data
+#             M2 = xpm_mol2.data
+#              #DiffM = M1-M2
+#             MM1 = np.ma.masked_greater(M1, limit-1)
+#             MM2 = np.ma.masked_greater(M2, limit-1)  
+#             Mat = [MM1, MM2]
 
-        else:
-            raise ValueError("Give me a correct number of some chunky matrices")
-
-        fig, axes = plt.subplots(1,len(Mat), figsize=(4*len(Mat) + 1.5, 4), sharex=True, sharey=True)
-        color_bar = ['Blues_r', 'Blues_r', 'Blues_r', 
-                'rainbow', 'rainbow', 'Blues_r', 'Blues_r', 'Blues_r']
-
+#         else:
+#             raise ValueError("Give me a correct number of some chunky matrices")
+        fig, axes = plt.subplots(1,len(Mat), figsize=(4*len(Mat) + (len(Mat)-1)*1,  4), sharex=True, sharey=True)
+        # fig, axes = plt.subplots(1,len(Mat), figsize=(4*len(Mat) + 1.5, 4), sharex=True, sharey=True)
+        
+        color_bar = ['Blues_r']*len(Mat)
+        
+        levels = np.linspace(0, limit, 9)  # 8 levels between 0 and limit
 
         for n, ax in enumerate(axes):
+            ax.set_aspect('equal', adjustable='box')
+            ax.grid(True, ls='--', zorder=10.0)
 
-          vmin = 0 ; vmax = limit #np.amax(Mat[n])
-          ax.set_aspect('equal', adjustable='box')
-          ax.grid(True, ls='--', zorder=10.0)
+            # Set x-axis ticks and labels
+            xmin, xmax = -180.0, 180.0
+            xticks = np.linspace(xmin, xmax, 7)
+            ax.set_xticks(np.linspace(0, 71, 7))
+            ax.set_xticklabels(['{0:d}'.format(int(x)) for x in xticks], fontsize=12)
+            ax.set_xlabel(r'$\phi$', fontsize=14)
 
-          xmin=-180.0; xmax=180.0 
-          xticks = np.linspace(xmin, xmax, 7)
-          ax.set_xticks(np.linspace(0, 71, 7))
-          ax.set_xticklabels(['{0:d}'.format(int(x)) for x in xticks], fontsize=12) #rotation=45, ha="right", rotation_mode="anchor")
-          ax.set_xlabel(r'$\phi$', fontsize=14)
+            # Set y-axis ticks and labels
+            ymin, ymax = -180.0, 180.0
+            yticks = np.linspace(ymax, ymin, 7)[::-1]
+            ax.set_yticks(np.linspace(0, 71, 7))
+            ax.set_yticklabels(['{0:d}'.format(int(x)) for x in yticks], fontsize=12)
 
-          ymin=-180.0; ymax=180.0 
-          yticks = np.linspace(ymax, ymin, 7)
-          yticks = yticks[::-1]
-          ax.set_yticks(np.linspace(0, 71, 7))
-          ax.set_yticklabels(['{0:d}'.format(int(x)) for x in yticks], fontsize=12) #rotation=45, ha="right", rotation_mode="anchor")
+            if n == 0:
+                ax.set_ylabel(r'$\psi$', fontsize=14)
 
-          if n==0:  ax.set_ylabel(r'$\psi$', fontsize=14)
+            # Create the contourf plot with consistent levels
+            plot = ax.contourf(Mat[n], levels=levels, cmap=color_bar[n], zorder=1)
 
-          plot = ax.contourf(Mat[n],  vmin=0, vmax=limit, cmap=color_bar[n], zorder=1, levels=8)
-          plot.set_clim(0,limit)
-          cb_ticks = np.linspace(0, limit,  int(limit/2)+1)
-          #f n == len(Mat)-1: 
-          cb = fig.colorbar(plot, ax=axes[n], ticks=cb_ticks, pad=0.025, aspect=20)
-          cb.ax.set_yticklabels([ "{0:3.1f}".format(x) for x in cb_ticks], fontsize=12)
+            # Add a color bar with consistent boundaries and ticks
+            cb = fig.colorbar(plot, ax=ax, pad=0.025, aspect=20, ticks=levels)
+            cb.set_ticklabels(["{0:3.1f}".format(x) for x in levels])
 
         fig.tight_layout()
-        # plt.savefig('Dih_Cont.pdf', dpi=300)
-        # plt.savefig('Dih_Cont.png', dpi=300)
-
+        
         self.fig = fig
         self.ax = axes
 
