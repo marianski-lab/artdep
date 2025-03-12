@@ -21,7 +21,7 @@ class Plot():
 
     def __init__(self, data=None, labels:list = None, desc:list = None,
                  xtick = None, ytick = None, xrange:list = None, yrange:list = None,
-                 colors:list = None, x_extend:float=0, y_extend:float=0) :
+                 colors:list = ['b', 'r', 'g', 'c', 'm', 'y', 'k'], x_extend:float=0, y_extend:float=0) :
 
         """
         Constructs a plot object.
@@ -328,10 +328,8 @@ class Plot():
             Mat.append(MHpuck)
 
         fig, axes = plt.subplots(1,len(Mat), figsize=(4*len(Mat) + (len(Mat)-1)*1,  4), sharex=True, sharey=True)
-        
-        
+
         color_bar = ['Blues_r']*len(Mat)
-        
         levels = np.linspace(0, limit, 9)  # 8 levels between 0 and limit
 
         for n, ax in enumerate(axes):
@@ -360,6 +358,7 @@ class Plot():
             # Add a color bar with consistent boundaries and ticks
             cb = fig.colorbar(plot, ax=ax, pad=0.025, aspect=20, ticks=levels)
             cb.set_ticklabels(["{0:3.1f}".format(x) for x in levels])
+
 
         fig.tight_layout()
         
@@ -498,7 +497,6 @@ class Plot():
 
         """
         Generates a scatter plot from data
-        :return fig, ax: Matplotlib figure and axis objects.
         """
 
         data = self.data
@@ -557,4 +555,63 @@ class Plot():
         fig.tight_layout()
         ax.legend(bbox_to_anchor=(-0.5, 0.5), loc='center left', borderaxespad=0, frameon=False)
         self.fig = fig
+        self.ax = ax
+
+    def reaction_profile(self, reaction, type='delta E', linewidth=3, scale=0.32, annotate=True, color='black'):
+        """
+        Plots a reaction coordinate diagram.
+        """
+        mol_list = reaction.mol_list
+        labels = reaction.mol_label
+
+        energies = []
+        # labels = []
+
+        for mol in mol_list:
+            energy = mol.E  # Access the 'E' attribute which stores the energy
+            energies.append(energy)
+
+        # for mol in mol_label:
+        #     label = mol.label
+        #     labels.append(label)
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        relative_energies = [hartree_to_kcal(e - energies[0]) for e in energies]
+        print(relative_energies)
+
+        annotation_offset = 0.05
+
+        for j, energy in enumerate(relative_energies):
+            # Draw Horizontal Bars at Each Energy Level
+            ax.plot([(j + 1 - scale), (j + 1 + scale)], [energy, energy],
+                    color=color, linewidth=linewidth)
+
+            # Annotate Energy Values
+            if annotate and j != 0:
+                ax.text(j + 1, energy + annotation_offset, f"{energy:.2f}", fontsize=12, ha='center', color='black')
+
+            # Draw Dashed Connecting Lines
+            if j < len(relative_energies) - 1:
+                ax.plot([(j + 1 + scale), (j + 2 - scale)],
+                        [energy, relative_energies[j + 1]],
+                        linestyle=":", color=color, linewidth=linewidth)
+
+        # Set Y-axis Label
+        if type == 'delta E':
+            reaction_type = '$\\Delta E$ (kcal $\\cdot$ mol${}^{-1}$)'
+        elif type == 'delta F':
+            reaction_type = '$\\Delta F$ (kcal $\\cdot$'
+
+        # Invisible plot for the legend label
+        ax.plot([], [], color=color, linewidth=linewidth, label=reaction_type)
+
+        # Customize X-axis Ticks
+        ax.set_xticks(range(1, len(energies) + 1))
+        # ax.set_xticklabels(labels[i] for i in mol_label)
+        ax.set_xticklabels(i for i in labels)
+        # Add Legend
+        ax.legend(loc="lower left", frameon=False, fontsize=14)
+
+        self.fig = fig;
         self.ax = ax
