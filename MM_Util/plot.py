@@ -151,7 +151,7 @@ class Plot():
         
         Hall_rel = 0.001*(Hall.T-hmin)
 
-        vmin, vmax = 0, np.nanmax(Hall_rel[~np.isinf(Hall_rel)])
+        vmin, vmax = 0, np.ceil(np.nanmax(Hall_rel[~np.isinf(Hall_rel)]))
         MHall = np.ma.masked_greater(Hall_rel, vmax)
 
         fig, ax = plt.subplots(figsize=(6, 6))
@@ -289,8 +289,7 @@ class Plot():
         puckers_sum = np.zeros((38,))
         
         phi, psi  = load_dihedrals(mol_fem)
-        
-        limit = limit
+    
         Temp = temp ; R = 8.314 # J/K mol
 
         Hall, x_edge, y_edge = np.histogram2d(phi, psi, bins=72, range=[[-180, 180.0],[-180.0, 180.0]])
@@ -298,6 +297,13 @@ class Plot():
 
         Hall = - R * Temp * np.log(Hall)
         hmin = np.min(Hall)
+        
+        if limit == None:
+            Hall_rel = 0.001*(Hall.T-hmin)
+            limit = np.ceil(np.nanmax(Hall_rel[~np.isinf(Hall_rel)]))
+            
+        else:
+            limit = limit
 
         Hpuck, edges  = np.histogramdd((phi, psi, puck), bins=[72,72,38], range=[[-180.0, 180.0],[-180.0, 180.0],[0,38]])
         for i in range(38):
@@ -309,6 +315,7 @@ class Plot():
         Hpuck = - R* Temp * np.log(Hpuck)
         hmin_puck = np.min(Hpuck)
         # Hpuck[0,0,] = hmin #To get colorbar right
+        
         
         MHall = np.ma.masked_greater(0.001*(Hall.T-hmin), limit-1)
         Mat = [MHall]
@@ -359,8 +366,13 @@ class Plot():
         self.ax = axes
         
     def rdf(self, mol, xmin = 0, xmax=10):
+        """ Plots radial distribution function.
+        :param mol: (Mol) Class Mol generated from xvg file
+        :param xmin: (Int) Minimum x value for rdf plot
+        :param xmax: (Int) Maximum x value for rdf plot
+        """
     
-        data = mol.data
+        data = copy.deepcopy(mol.data)
         data[:,0] = mol.data[:,0] * 10
 
         blues  = ['#deebf7','#9ecae1','#3182bd']
@@ -409,7 +421,11 @@ class Plot():
         self.ax = ax
         
     def contour(self, xpm_mols, limit = 16):
-
+        """ Plots contour maps for a provided list of moles from xpm files.
+        :param xpm_mols: (List) List of mol objects generated from xpm files.
+        :param limit: (Int) The upper limit on your energy scale
+        """
+        
         limit = limit
         
         Mat = []
