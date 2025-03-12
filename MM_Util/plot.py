@@ -102,6 +102,7 @@ class Plot():
         :param col: (int) Index of the column containing your colvar data, in the case that you have multiple.
         """
         
+        self.path = mol.path
         time = mol.data[:, 0]
         colvar = mol.data[:, col]
         
@@ -145,6 +146,7 @@ class Plot():
         :param cols: (int) Index of the 2 columns containing your colvar data, in the case that you have more than 2.
         """
         
+        self.path = mol.path
         Temp = temp ; R = 8.314 # J/K mol
 
         colvar1 = mol.data[:, cols[0]]
@@ -200,6 +202,8 @@ class Plot():
         :param mol_pucker: (Mol) Class Mol containing the .xvg file for your ring pucker determination.
         :param mol_fem: (Mol) Class Mol containing the .xvg file for your free energy surface.
         """
+        
+        self.path = mol_fem.path
         
         def ring_pucker_determination(mol):
 
@@ -385,6 +389,7 @@ class Plot():
         :param xmax: (Int) Maximum x value for rdf plot
         """
     
+        self.path = mol.path
         data = copy.deepcopy(mol.data)
         data[:,0] = mol.data[:,0] * 10
 
@@ -439,6 +444,7 @@ class Plot():
         :param limit: (Int) The upper limit on your energy scale
         """
         
+        self.path = xpm_mols[0].path
         limit = limit
         
         Mat = []
@@ -644,3 +650,7 @@ class Plot():
 
         self.fig = fig;
         self.ax = ax
+        
+    def savefig(self, filename='fig'):
+        self.fig.savefig(f"{self.path}/{filename}.pdf", dpi=300)
+        self.fig.savefig(f"{self.path}/{filename}.png", dpi=300)
