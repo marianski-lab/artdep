@@ -145,13 +145,15 @@ class Plot():
         colvar2 = mol.data[:, cols[1]]
 
         Hall, x_edges, y_edges = np.histogram2d(colvar1, colvar2, bins=72)
-        Hall = Hall / np.sum(Hall)
-        Hall[Hall == 0] = np.nan
 
-        Hall = - R * Temp * np.log(Hall) / 1000
-
-        vmin, vmax = np.nanmin(Hall), np.nanmax(Hall)
+        Hall = - R * Temp * np.log(Hall)
+        hmin = np.min(Hall)
         
+        Hall_rel = 0.001*(Hall.T-hmin)
+
+        vmin, vmax = 0, np.nanmax(Hall_rel[~np.isinf(Hall_rel)])
+        MHall = np.ma.masked_greater(Hall_rel, vmax)
+
         fig, ax = plt.subplots(figsize=(6, 6))
         ax.set_aspect('equal', adjustable='box')
         
@@ -159,7 +161,7 @@ class Plot():
         # cmap = ListedColormap(colors)
 
         num_levels = num_levels
-        plot = ax.contourf(x_edges[:-1], y_edges[:-1], Hall.T, cmap='Blues_r', zorder=1, levels=num_levels)
+        plot = ax.contourf(x_edges[:-1], y_edges[:-1], MHall, cmap='Blues_r', zorder=1, levels=num_levels)
         # plot = ax.contourf(x_edges[:-1], y_edges[:-1], Hall.T, cmap=cmap, zorder=1, levels=num_levels)
 
         num_ticks = num_ticks
