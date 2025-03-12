@@ -21,7 +21,7 @@ class Plot():
 
     def __init__(self, data=None, labels:list = None, desc:list = None,
                  xtick = None, ytick = None, xrange:list = None, yrange:list = None,
-                 colors:list = None, x_extend:float=0, y_extend:float=0) :
+                 colors:list = ['b', 'r', 'g', 'c', 'm', 'y', 'k'], x_extend:float=0, y_extend:float=0) :
 
         """
         Constructs a plot object.
@@ -40,7 +40,7 @@ class Plot():
         self.x_extend = x_extend
         self.y_extend = y_extend
 
-    def cmap(self, color_num: int = 256, offset: float = 0, map: str = 'ice'):
+    def cmap(self, color_num: int = None, offset: float = 0, map: str = 'ice'):
         """
         Generates and processes a colormap with optional offsetting logic.
         :param color_num: (int) Number of discrete colors.
@@ -53,7 +53,9 @@ class Plot():
 
         # Fetch colormap
         colors_obj = getattr(colormaps, map)
-        color_num += 1
+
+        if color_num is not None:
+            color_num += 1
         # Ensure the colormap has an array of colors
         if not hasattr(colors_obj, 'colors'):
             raise ValueError(f"The selected colormap '{map}' does not have a valid 'colors' attribute!")
@@ -87,8 +89,11 @@ class Plot():
             colormap_colors = new_colors
 
         # Discretize the colormap to the required number of colors
-        discrete_colors = np.linspace(0, len(colormap_colors) - 1, color_num, dtype=int)
-        self.colors = [colormap_colors[i] for i in discrete_colors]
+        if color_num is not None:
+            discrete_colors = np.linspace(0, len(colormap_colors) - 1, color_num, dtype=int)
+            self.colors = [colormap_colors[i] for i in discrete_colors]
+        else:
+            self.colors = colormap_colors.tolist()
 
     def trajectory(self, mol, var_name = 'colvar', col = 1):
         """ Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
@@ -111,13 +116,14 @@ class Plot():
             time_unit = 'ps'
             
         fig, ax = plt.subplots(1,2, figsize=(11,3), gridspec_kw={'width_ratios': [3.5, 1]})
+        color = self.colors
 
-        ax[0].plot(time, colvar, linewidth=0.2)
+        ax[0].plot(time, colvar, linewidth=0.2, color=color[0])
         ax[0].set_xlabel(f"time ({time_unit}); stepsize = {timestep}{time_unit}")
         ax[0].set_ylabel(var_name)
         # ax1.set_title(f"file: {xyz_file}", fontsize = 10)
 
-        ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal") 
+        ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal", color=color[1])
         
         # midpt = int(np.round(len(colvar) / 2))
         # ax[1].hist(colvar[0:midpt], bins='rice', fc=(0, 0, 1, 0.3), orientation="horizontal") # First half shown in blue
@@ -330,11 +336,13 @@ class Plot():
             Mat.append(MHpuck)
 
         fig, axes = plt.subplots(1,len(Mat), figsize=(4*len(Mat) + (len(Mat)-1)*1,  4), sharex=True, sharey=True)
-        
-        
+
         color_bar = ['Blues_r']*len(Mat)
-        
         levels = np.linspace(0, limit, 9)  # 8 levels between 0 and limit
+
+        color = self.colors
+        color.reverse()
+        cmap = ListedColormap(color)
 
         for n, ax in enumerate(axes):
             ax.set_aspect('equal', adjustable='box')
@@ -358,11 +366,12 @@ class Plot():
                 ax.set_ylabel(r'$\psi$', fontsize=14)
 
             # Create the contourf plot with consistent levels
-            plot = ax.contourf(Mat[n], levels=levels, cmap=color_bar[n], zorder=1)
+            plot = ax.contourf(Mat[n], levels=levels, cmap=cmap, zorder=1)
 
             # Add a color bar with consistent boundaries and ticks
             cb = fig.colorbar(plot, ax=ax, pad=0.025, aspect=20, ticks=levels)
             cb.set_ticklabels(["{0:3.1f}".format(x) for x in levels])
+
 
         fig.tight_layout()
         
@@ -501,7 +510,6 @@ class Plot():
 
         """
         Generates a scatter plot from data
-        :return fig, ax: Matplotlib figure and axis objects.
         """
 
         data = self.data
@@ -526,14 +534,6 @@ class Plot():
 
         if xtick is not None: ax.set_xticks(xtick)
         if ytick is not None: ax.set_yticks(ytick)
-        if xrange is not None:
-            xrange[0] -= self.x_extend
-            xrange[1] += self.x_extend
-            ax.set_xlim(xrange)
-        if yrange is not None:
-            yrange[0] -= self.y_extend
-            yrange[1] += self.y_extend
-            ax.set_ylim(yrange)
 
         ax.tick_params(axis='both', which='both', bottom=True, top=False, labelbottom=True, right=False, left=True,
                        labelleft=True)
@@ -541,7 +541,7 @@ class Plot():
 
         ax.xaxis.set_tick_params(direction='out');
         ax.yaxis.set_tick_params(direction='out')
-        ax.xaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+        ax.xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
         ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
 
         for col in range(1, len(data[0,:])):
@@ -554,10 +554,93 @@ class Plot():
 
             ax.scatter(data_x, data_y, marker='.', label=desc[col-1], color = colors[col-1])
 
-        xrange = ax.get_xlim() if xrange is None else xrange
-        yrange = ax.get_ylim() if yrange is None else yrange
+        xrange = list(ax.get_xlim()) if xrange is None else xrange
+        yrange = list(ax.get_ylim()) if yrange is None else yrange
+
+
+
+        if xrange is not None:
+            xrange[0] -= self.x_extend
+            xrange[1] += self.x_extend
+            ax.set_xlim(xrange)
+        if yrange is not None:
+            yrange[0] -= self.y_extend
+            yrange[1] += self.y_extend
+            ax.set_ylim(yrange)
+
+        xtick = list(ax.get_xticks())
+        ytick = list(ax.get_yticks())
+
+        minx = round(xtick[1], 1)
+        maxx = round(xtick[-2], 1)
+        miny = round(ytick[1] ,1)
+        maxy = round(ytick[-2] ,1)
+
+        print(minx, maxx, miny, maxy)
+
+        ax.plot([minx-0.05, maxx+0.05], [yrange[0], yrange[0]], color='k')
+        ax.plot([xrange[0], xrange[0]], [miny-0.05, maxy+0.05], color='k')
 
         fig.tight_layout()
         ax.legend(bbox_to_anchor=(-0.5, 0.5), loc='center left', borderaxespad=0, frameon=False)
         self.fig = fig
+        self.ax = ax
+
+    def reaction_profile(self, reaction, type='delta E', linewidth=3, scale=0.32, annotate=True, color='black'):
+        """
+        Plots a reaction coordinate diagram.
+        """
+        mol_list = reaction.mol_list
+        labels = reaction.mol_label
+
+        energies = []
+        # labels = []
+
+        for mol in mol_list:
+            energy = mol.E  # Access the 'E' attribute which stores the energy
+            energies.append(energy)
+
+        # for mol in mol_label:
+        #     label = mol.label
+        #     labels.append(label)
+
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        relative_energies = [hartree_to_kcal(e - energies[0]) for e in energies]
+        print(relative_energies)
+
+        annotation_offset = 0.05
+
+        for j, energy in enumerate(relative_energies):
+            # Draw Horizontal Bars at Each Energy Level
+            ax.plot([(j + 1 - scale), (j + 1 + scale)], [energy, energy],
+                    color=color, linewidth=linewidth)
+
+            # Annotate Energy Values
+            if annotate and j != 0:
+                ax.text(j + 1, energy + annotation_offset, f"{energy:.2f}", fontsize=12, ha='center', color='black')
+
+            # Draw Dashed Connecting Lines
+            if j < len(relative_energies) - 1:
+                ax.plot([(j + 1 + scale), (j + 2 - scale)],
+                        [energy, relative_energies[j + 1]],
+                        linestyle=":", color=color, linewidth=linewidth)
+
+        # Set Y-axis Label
+        if type == 'delta E':
+            reaction_type = '$\\Delta E$ (kcal $\\cdot$ mol${}^{-1}$)'
+        elif type == 'delta F':
+            reaction_type = '$\\Delta F$ (kcal $\\cdot$'
+
+        # Invisible plot for the legend label
+        ax.plot([], [], color=color, linewidth=linewidth, label=reaction_type)
+
+        # Customize X-axis Ticks
+        ax.set_xticks(range(1, len(energies) + 1))
+        # ax.set_xticklabels(labels[i] for i in mol_label)
+        ax.set_xticklabels(i for i in labels)
+        # Add Legend
+        ax.legend(loc="lower left", frameon=False, fontsize=14)
+
+        self.fig = fig;
         self.ax = ax
