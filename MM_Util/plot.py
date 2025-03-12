@@ -118,10 +118,15 @@ class Plot():
         fig, ax = plt.subplots(1,2, figsize=(11,3), gridspec_kw={'width_ratios': [3.5, 1]})
         color = self.colors
 
+
+
         ax[0].plot(time, colvar, linewidth=0.2, color=color[0])
         ax[0].set_xlabel(f"time ({time_unit}); stepsize = {timestep}{time_unit}")
         ax[0].set_ylabel(var_name)
         # ax1.set_title(f"file: {xyz_file}", fontsize = 10)
+
+        xmax = ax[0].get_xlim()[1]
+        ax[0].set_xlim(0, xmax)
 
         ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal", color=color[1])
         
