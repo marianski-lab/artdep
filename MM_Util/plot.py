@@ -325,9 +325,11 @@ class Plot():
         
         MHall = np.ma.masked_greater(0.001*(Hall.T-hmin), limit-1)
         Mat = [MHall]
+        titles = ['All Puckers']
         
         for p in puckers:
             pid = puck_to_id(p)
+            titles.append(p)
             MHpuck = np.ma.masked_greater(0.001*(Hpuck[:,:,pid].T - hmin_puck), limit-1)
             # MHpuck[0,0] = hmin #To get colorbar right
 
@@ -344,6 +346,7 @@ class Plot():
 
         for n, ax in enumerate(axes):
             ax.set_aspect('equal', adjustable='box')
+            ax.set_title(titles[n])
             ax.grid(True, ls='--', zorder=10.0)
 
             # Set x-axis ticks and labels
