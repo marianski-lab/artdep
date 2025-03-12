@@ -352,16 +352,20 @@ class Mol():
             self.data = matrix
             self.software = 'gromacs'
 
-    def csv(self, path:str, header:bool=False, delimiter:str=',', ):
+#     def csv(self, path:str, header:bool=False, delimiter:str=','):
 
-        """
-        Parses a csv file into a numpy array
-        :param path: path to the csv file
-        """
-        if header:
-            self.data = np.genfromtxt(path, delimiter=delimiter, skip_header=1, dtype=float)
-        else:
-            self.data = np.genfromtxt(path, delimiter=delimiter, dtype=float)
+#         """
+#         Parses a csv file into a numpy array
+#         :param path: path to the csv file
+#         """
+#         if header:
+#             self.data = np.genfromtxt(path, delimiter=delimiter, skip_header=1, dtype=float)
+#         else:
+#             self.data = np.genfromtxt(path, delimiter=delimiter, dtype=float)
+
+    def csv(self, file, skiprows=1, dtype=float, delimiter:str=','):
+        
+        self.data = np.loadtxt(f"{self.path}/{file}", skiprows=skiprows, dtype=str)
 
 
 class Reaction():
