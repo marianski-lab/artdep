@@ -393,6 +393,71 @@ class Plot():
         self.fig = fig
         self.ax = axes
         
+    def puckers_scatter(self, mol, puckers=['1C4', '1,4B']):
+        scatter_data = mol.data
+
+        ncol = len(scatter_data[0])
+
+        pucker_data = scatter_data[:, ncol - 1] # Puckers are always last.
+        energy = scatter_data[:, ncol - 2].astype(float) # E is always 2nd last.
+        psi_phi = scatter_data[:, 1:ncol - 2].astype(float) # Psi_Phi is everything in between. 
+        conf = scatter_data[:, 0] # _id is always first.
+
+        psi = psi_phi[:, 1::2]
+        phi = psi_phi[:, ::2]
+
+        no_datasets = int(np.shape(psi[1])[0])
+        
+        puckers.insert(0, 'All Puckers')
+        filters = []
+
+        for desired_pucker in puckers:
+            if desired_pucker == 'All Puckers':
+                pucker_filter = np.full(np.shape(pucker_data), True)
+                filters.append(pucker_filter)
+
+            else:
+                pucker_filter = np.where(pucker_data == desired_pucker, True, False)
+                filters.append(pucker_filter)
+
+        cmaps = ['summer','autumn']
+
+        fig, axes = plt.subplots(1,len(puckers), figsize=(4*len(puckers) + (len(puckers)-1)*1,  4), sharex=True, sharey=True)
+
+        for n, ax in enumerate(axes):
+            ax.set_aspect('equal', adjustable='box')
+            ax.set_title(puckers[n])
+            ax.grid(True, ls='--', zorder=10.0)
+
+            # Set x-axis ticks and labels
+            xmin, xmax = -180.0, 180.0
+            xticks = np.arange(xmin, xmax + 60, 60)  # Ticks every 60 degrees
+            ax.set_xticks(xticks)
+            ax.set_xticklabels([f'{int(tick)}' for tick in xticks], fontsize=12)
+            ax.set_xlabel(r'$\phi$', fontsize=14)
+
+            # Set y-axis ticks and labels
+            ymin, ymax = -180.0, 180.0
+            yticks = np.arange(ymin, ymax + 60, 60)  # Ticks every 60 degrees
+            ax.set_yticks(yticks)
+            ax.set_yticklabels([f'{int(tick)}' for tick in yticks], fontsize=12)
+
+            if n == 0:
+                ax.set_ylabel(r'$\psi$', fontsize=14)
+
+            for i in range(no_datasets):
+                x = psi[:, i][filters[n]]
+                y = phi[:, i][filters[n]]
+                z = energy[filters[n]]
+                ax.scatter(x, y, c=z, cmap=cmaps[i])
+
+            # Set axis limits
+            ax.set_xlim(xmin, xmax)
+            ax.set_ylim(ymin, ymax)
+
+        self.fig = fig
+        self.ax = axes
+
     def rdf(self, mol, xmin = 0, xmax=10):
         """ Plots radial distribution function.
         :param mol: (Mol) Class Mol generated from xvg file
