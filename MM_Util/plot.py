@@ -652,5 +652,5 @@ class Plot():
         self.ax = ax
         
     def savefig(self, filename='fig'):
-        self.fig.savefig(f"{self.path}/{filename}.pdf", dpi=300)
-        self.fig.savefig(f"{self.path}/{filename}.png", dpi=300)
+        self.fig.savefig(f"{self.path}/{filename}.pdf", dpi=300, bbox_inches='tight')
+        self.fig.savefig(f"{self.path}/{filename}.png", dpi=300, bbox_inches='tight')
