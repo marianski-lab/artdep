@@ -40,7 +40,7 @@ class Plot():
         self.x_extend = x_extend
         self.y_extend = y_extend
 
-    def cmap(self, color_num: int = 256, offset: float = 0, map: str = 'ice'):
+    def cmap(self, color_num: int = None, offset: float = 0, map: str = 'ice'):
         """
         Generates and processes a colormap with optional offsetting logic.
         :param color_num: (int) Number of discrete colors.
@@ -53,7 +53,9 @@ class Plot():
 
         # Fetch colormap
         colors_obj = getattr(colormaps, map)
-        color_num += 1
+
+        if color_num is not None:
+            color_num += 1
         # Ensure the colormap has an array of colors
         if not hasattr(colors_obj, 'colors'):
             raise ValueError(f"The selected colormap '{map}' does not have a valid 'colors' attribute!")
@@ -87,8 +89,11 @@ class Plot():
             colormap_colors = new_colors
 
         # Discretize the colormap to the required number of colors
-        discrete_colors = np.linspace(0, len(colormap_colors) - 1, color_num, dtype=int)
-        self.colors = [colormap_colors[i] for i in discrete_colors]
+        if color_num is not None:
+            discrete_colors = np.linspace(0, len(colormap_colors) - 1, color_num, dtype=int)
+            self.colors = [colormap_colors[i] for i in discrete_colors]
+        else:
+            self.colors = colormap_colors
 
     def trajectory(self, mol, var_name = 'colvar', col = 1):
         """ Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
@@ -111,13 +116,14 @@ class Plot():
             time_unit = 'ps'
             
         fig, ax = plt.subplots(1,2, figsize=(11,3), gridspec_kw={'width_ratios': [3.5, 1]})
+        color = self.colors
 
-        ax[0].plot(time, colvar, linewidth=0.2)
+        ax[0].plot(time, colvar, linewidth=0.2, color=color[0])
         ax[0].set_xlabel(f"time ({time_unit}); stepsize = {timestep}{time_unit}")
         ax[0].set_ylabel(var_name)
         # ax1.set_title(f"file: {xyz_file}", fontsize = 10)
 
-        ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal") 
+        ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal", color=color[1])
         
         # midpt = int(np.round(len(colvar) / 2))
         # ax[1].hist(colvar[0:midpt], bins='rice', fc=(0, 0, 1, 0.3), orientation="horizontal") # First half shown in blue
@@ -332,6 +338,10 @@ class Plot():
         color_bar = ['Blues_r']*len(Mat)
         levels = np.linspace(0, limit, 9)  # 8 levels between 0 and limit
 
+        color = self.colors
+        color.reverse()
+        cmap = ListedColormap(color)
+
         for n, ax in enumerate(axes):
             ax.set_aspect('equal', adjustable='box')
             ax.grid(True, ls='--', zorder=10.0)
@@ -353,7 +363,7 @@ class Plot():
                 ax.set_ylabel(r'$\psi$', fontsize=14)
 
             # Create the contourf plot with consistent levels
-            plot = ax.contourf(Mat[n], levels=levels, cmap=color_bar[n], zorder=1)
+            plot = ax.contourf(Mat[n], levels=levels, cmap=cmap, zorder=1)
 
             # Add a color bar with consistent boundaries and ticks
             cb = fig.colorbar(plot, ax=ax, pad=0.025, aspect=20, ticks=levels)
