@@ -8,6 +8,7 @@ import copy
 from matplotlib.ticker import NullFormatter
 from matplotlib.ticker import FormatStrFormatter
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
+from numpy.ma.extras import average
 
 from .utilities import *
 from .mol import *
@@ -95,7 +96,7 @@ class Plot():
         else:
             self.colors = colormap_colors.tolist()
 
-    def trajectory(self, mol, var_name = 'colvar', col = 1):
+    def trajectory(self, mol, var_name = 'colvar', col = 1, average:int = 0):
         """ Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
         :param molecule: (Mol) Class Mol. 
         :param var_name: (list) Name of the collective variable you are plotting on your y-axis.
@@ -103,8 +104,8 @@ class Plot():
         """
         
         self.path = mol.path
-        time = mol.data[:, 0]
-        colvar = mol.data[:, col]
+        time = mol.data[:, 0].tolist()
+        colvar = mol.data[:, col].tolist()
         
         timestep = np.abs(time[0] - time[1])
         
@@ -119,7 +120,12 @@ class Plot():
         fig, ax = plt.subplots(1,2, figsize=(11,3), gridspec_kw={'width_ratios': [3.5, 1]})
         color = self.colors
 
+        if average > 0:
+            array_len =  len(colvar)
+            conv_kernel = np.ones(average)/array_len
+            colvar = np.convolve(colvar, conv_kernel, mode='valid').tolist()
 
+            time = time[:-1*average + 1]
 
         ax[0].plot(time, colvar, linewidth=0.2, color=color[0])
         ax[0].set_xlabel(f"time ({time_unit}); stepsize = {timestep}{time_unit}")
