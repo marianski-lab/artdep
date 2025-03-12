@@ -93,7 +93,7 @@ class Plot():
             discrete_colors = np.linspace(0, len(colormap_colors) - 1, color_num, dtype=int)
             self.colors = [colormap_colors[i] for i in discrete_colors]
         else:
-            self.colors = colormap_colors
+            self.colors = colormap_colors.tolist()
 
     def trajectory(self, mol, var_name = 'colvar', col = 1):
         """ Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
