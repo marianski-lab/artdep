@@ -96,7 +96,7 @@ class Plot():
         else:
             self.colors = colormap_colors.tolist()
 
-    def trajectory(self, mol, var_name = 'colvar', col = 1, average:int = 0):
+    def trajectory(self, mol, var_name = 'colvar', col = 1, average:int = 0, title=None):
         """ Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
         :param molecule: (Mol) Class Mol. 
         :param var_name: (list) Name of the collective variable you are plotting on your y-axis.
@@ -130,7 +130,9 @@ class Plot():
         ax[0].plot(time, colvar, linewidth=0.2, color=color[0])
         ax[0].set_xlabel(f"time ({time_unit}); stepsize = {timestep}{time_unit}")
         ax[0].set_ylabel(var_name)
-        # ax1.set_title(f"file: {xyz_file}", fontsize = 10)
+        
+        if title != None:
+            ax[0].set_title(f"{title}", fontsize = 10)
 
         xmax = ax[0].get_xlim()[1]
         ax[0].set_xlim(0, xmax)
