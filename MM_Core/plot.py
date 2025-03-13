@@ -120,7 +120,7 @@ class Plot():
         fig, ax = plt.subplots(1,2, figsize=(11,3), gridspec_kw={'width_ratios': [3.5, 1]})
         color = self.colors
 
-        if average > 0:
+        if average > 1:
             array_len =  len(colvar)
             conv_kernel = np.ones(average)/array_len
             colvar = np.convolve(colvar, conv_kernel, mode='valid').tolist()
