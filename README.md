@@ -15,5 +15,5 @@ Colormaps
 ## Install Instructions
 To install the package you can run  
 ```
-pip install git+https://github.com/marianski-lab/artdep
+pip install MatmaCore
 ```
