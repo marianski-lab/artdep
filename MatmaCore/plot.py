@@ -1,3 +1,4 @@
+from turtle import color
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -5,9 +6,11 @@ import sys
 import colormaps
 import copy
 
+import matplotlib as mpl
 from matplotlib.ticker import NullFormatter
 from matplotlib.ticker import FormatStrFormatter
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
+from matplotlib.ticker import FuncFormatter
 from numpy.ma.extras import average
 
 from .utilities import *
@@ -670,30 +673,42 @@ class Plot():
         self.fig = fig
         self.ax = ax
 
-    def reaction_profile(self, reaction, type='delta E', linewidth=3, scale=0.32, annotate=True, color='black'):
+    def reaction_profile(self, reaction, type, linewidth=3, scale=0.32, annotate=True, color='blue'):
         """
         Plots a reaction coordinate diagram.
         """
         mol_list = reaction.mol_list
         labels = reaction.mol_label
-
+        
         energies = []
-        # labels = []
+
+        '''
+        type = 'delta E' or 'delta F' or 'delta H'
+        '''
 
         for mol in mol_list:
-            energy = mol.E  # Access the 'E' attribute which stores the energy
-            energies.append(energy)
+            if type == 'delta E':
+                energies.append(mol.E)   
+            elif type == 'delta F':
+                energies.append(mol.F) 
+            elif type == 'delta H':
+                energies.append(mol.H) 
+            else:
+                print("Unsupported Energy Type")
+                return  
+             
+        if not energies:
+            raise ValueError("No energies found. Check the input data.")
 
-        # for mol in mol_label:
-        #     label = mol.label
-        #     labels.append(label)
-
-        fig, ax = plt.subplots(figsize=(8, 6))
+        # Dynamic Figure Size Based on Number of Reaction Steps
+        num_steps = len(mol_list)
+        fig_width = max(6, num_steps * 2)  # Adjust width based on number of steps
+        fig, ax = plt.subplots(figsize=(fig_width, 6))
+        
 
         relative_energies = [hartree_to_kcal(e - energies[0]) for e in energies]
-        print(relative_energies)
 
-        annotation_offset = 0.05
+        annotation_offset = 0.13
 
         for j, energy in enumerate(relative_energies):
             # Draw Horizontal Bars at Each Energy Level
@@ -710,20 +725,34 @@ class Plot():
                         [energy, relative_energies[j + 1]],
                         linestyle=":", color=color, linewidth=linewidth)
 
-        # Set Y-axis Label
         if type == 'delta E':
-            reaction_type = '$\\Delta E$ (kcal $\\cdot$ mol${}^{-1}$)'
+            reaction_type = '$\\Delta E$ (kcal $\\cdot$ mol${}^{-1}$)' 
         elif type == 'delta F':
-            reaction_type = '$\\Delta F$ (kcal $\\cdot$'
+            reaction_type = '$\\Delta F$ (kcal $\\cdot$ mol${}^{-1}$)'
+        elif type == 'delta H':
+            reaction_type = '$\\Delta H$ (kcal $\\cdot$ mol${}^{-1}$)' 
 
-        # Invisible plot for the legend label
-        ax.plot([], [], color=color, linewidth=linewidth, label=reaction_type)
+       # Invisible plot for the legend label
+        ax.plot([], [], color=color, linewidth=linewidth)
 
-        # Customize X-axis Ticks
+        # Add X-axis Guide Line at the halfway point
+        ax.axhline(0, color="black", linestyle=":", linewidth=1.5, zorder=-4)
+        
+        ax.set_ylabel(f'{reaction_type}', fontsize=16)
+        ax.yaxis.set_major_formatter(FuncFormatter(lambda x, _: proper_minus(x)))
+
+        
         ax.set_xticks(range(1, len(energies) + 1))
-        # ax.set_xticklabels(labels[i] for i in mol_label)
-        ax.set_xticklabels(i for i in labels)
-        # Add Legend
+        ax.set_xticklabels(labels) 
+            
+        
+        ax.spines['bottom'].set_visible(True)
+        ax.spines['left'].set_visible(True)
+        ax.spines['bottom'].set_linewidth(1.5)  
+        ax.spines['left'].set_linewidth(1.5)    
+
+        # Final Formatting
+        ax.tick_params(labelsize=14)
         ax.legend(loc="lower left", frameon=False, fontsize=14)
 
         self.fig = fig;
