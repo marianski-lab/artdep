@@ -5,6 +5,8 @@ This is a python package designed for use in the marianski lab to easily create,
 
 Documentation for this project can be found here: https://echung0111.github.io/artdep-docs/index.html 
 
+Documentation for the colors can be found here: https://pratiman-91.github.io/colormaps/docs/Sequential
+
 ## Dependencies
 You need the following python packages to use this package:  
   
