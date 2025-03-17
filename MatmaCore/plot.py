@@ -697,26 +697,25 @@ class Plot():
         self.fig = fig
         self.ax = ax
 
-    def reaction_profile(self, mol_list, mol_label, type, color='blue'):
+    def reaction_profile(self, reaction, type, linewidth=3, scale=0.32, annotate=True, color='blue'):
         """
         Plots a reaction coordinate diagram.
         """
-        linewidth=3
-        scale=0.32
-        annotate=True
-
+        mol_list = reaction.mol_list
+        labels = reaction.mol_label
+        
         energies = []
 
         '''
-        type = 'E' or 'F' or 'H'
+        type = 'delta E' or 'delta F' or 'delta H'
         '''
 
         for mol in mol_list:
-            if type == 'E':
+            if type == 'delta E':
                 energies.append(mol.E)   
-            elif type == 'F':
+            elif type == 'delta F':
                 energies.append(mol.F) 
-            elif type == 'H':
+            elif type == 'delta H':
                 energies.append(mol.H) 
             else:
                 print("Unsupported Energy Type")
@@ -741,8 +740,8 @@ class Plot():
                     color=color, linewidth=linewidth)
 
             # Annotate Energy Values
-            if annotate:
-                ax.text(j + 1, energy + annotation_offset, f"{energy:.1f}", fontsize=12, ha='center', color='black')
+            if annotate and j != 0:
+                ax.text(j + 1, energy + annotation_offset, f"{energy:.2f}", fontsize=12, ha='center', color='black')
 
             # Draw Dashed Connecting Lines
             if j < len(relative_energies) - 1:
@@ -750,11 +749,11 @@ class Plot():
                         [energy, relative_energies[j + 1]],
                         linestyle=":", color=color, linewidth=linewidth)
 
-        if type == 'E':
+        if type == 'delta E':
             reaction_type = '$\\Delta E$ (kcal $\\cdot$ mol${}^{-1}$)' 
-        elif type == 'F':
+        elif type == 'delta F':
             reaction_type = '$\\Delta F$ (kcal $\\cdot$ mol${}^{-1}$)'
-        elif type == 'H':
+        elif type == 'delta H':
             reaction_type = '$\\Delta H$ (kcal $\\cdot$ mol${}^{-1}$)' 
 
        # Invisible plot for the legend label
@@ -768,7 +767,7 @@ class Plot():
 
         
         ax.set_xticks(range(1, len(energies) + 1))
-        ax.set_xticklabels(mol_label) 
+        ax.set_xticklabels(labels) 
             
         
         ax.spines['bottom'].set_visible(True)
@@ -778,7 +777,7 @@ class Plot():
 
         # Final Formatting
         ax.tick_params(labelsize=14)
-        # ax.legend(loc="lower left", frameon=False, fontsize=14)
+        ax.legend(loc="lower left", frameon=False, fontsize=14)
 
         self.fig = fig;
         self.ax = ax
