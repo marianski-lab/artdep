@@ -140,5 +140,6 @@ def read_coordinates(xyz_file, atom_list):
 
 def hartree_to_kcal(energy):
     return energy * 627.5095
+
 def proper_minus(value):
     return f"{value:.1f}".replace("-", "−")
