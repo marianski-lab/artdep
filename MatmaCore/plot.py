@@ -678,7 +678,7 @@ class Plot():
         self.fig = fig
         self.ax = ax
 
-    def reaction_profile(self, mol_list, mol_label, type, color='blue'):
+    def reaction_profile(self, mol_list=[], mol_label=[], type=str, color='c'):
         """
         Plots a reaction coordinate diagram.
         """
@@ -714,7 +714,7 @@ class Plot():
 
         relative_energies = [hartree_to_kcal(e - energies[0]) for e in energies]
 
-        annotation_offset = 0.13
+        annotation_offset = 1
 
         for j, energy in enumerate(relative_energies):
             # Draw Horizontal Bars at Each Energy Level
