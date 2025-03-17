@@ -99,55 +99,74 @@ class Plot():
         else:
             self.colors = colormap_colors.tolist()
 
-    def trajectory(self, mol, var_name = 'colvar', col = 1, average:int = 0, title=None):
+    def trajectory(self, mol_list, var_name = 'colvar', col = 1, average:int = 0, title=None, hist=True):
         """ Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
-        :param molecule: (Mol) Class Mol. 
+        :param molecule: (Mol / List) Either a Mol object, or a list of moles if you want to overlay data. 
         :param var_name: (list) Name of the collective variable you are plotting on your y-axis.
         :param col: (int) Index of the column containing your colvar data, in the case that you have multiple.
         """
         
-        self.path = mol.path
-        time = mol.data[:, 0].tolist()
-        colvar = mol.data[:, col].tolist()
+        if not isinstance(mol_list, list):
+            mol_list = [mol_list]
         
-        timestep = np.abs(time[0] - time[1])
+        self.path = mol_list[0].path
         
         # CP2K default timestep unit is in fs, Gromacs is in ps:
-        
-        if mol.software == 'cp2k':
-            time_unit = 'fs'
-            
-        elif mol.software == 'gromacs':
+        # We convert these to ps and nm respectively:
+
+        if mol_list[0].software == 'cp2k':
             time_unit = 'ps'
-            
+
+        elif mol_list[0].software == 'gromacs':
+            time_unit = 'ns'
+        
         fig, ax = plt.subplots(1,2, figsize=(11,3), gridspec_kw={'width_ratios': [3.5, 1]})
-        color = self.colors
+        
+        i = 1
+        
+        for mol in mol_list:
+            
+            time = (mol.data[:, 0] / 1000).tolist()  # fs -> ps for CP2K, ps -> ns for GROMACS
+            colvar = mol.data[:, col].tolist()
 
-        if average > 1:
-            array_len =  len(colvar)
-            conv_kernel = np.ones(average)/array_len
-            colvar = np.convolve(colvar, conv_kernel, mode='valid').tolist()
+            timestep = np.abs(time[0] - time[1])
+            
+            color = self.colors
 
-            time = time[:-1*average + 1]
+            if average > 1:
+                array_len =  len(colvar)
+                conv_kernel = np.ones(average)/array_len
+                colvar = np.convolve(colvar, conv_kernel, mode='valid').tolist()
 
-        ax[0].plot(time, colvar, linewidth=0.2, color=color[1])
+                time = time[:-1*average + 1]
+
+            ax[0].plot(time, colvar, linewidth=0.2, color=color[i], alpha=0.8)
+            ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal", color=color[i], alpha=0.5)
+            
+            if len(mol_list) == 1:
+                ax[1].set_title(f"average = {np.round(np.average(colvar), 3)}", fontsize = 10)
+
+            else:
+                print(f"mol{i} average = {np.round(np.average(colvar), 3)}")
+
+            i = i+1
+        
         ax[0].set_xlabel(f"time ({time_unit}); stepsize = {timestep}{time_unit}")
         ax[0].set_ylabel(var_name)
         
         if title != None:
             ax[0].set_title(f"{title}", fontsize = 10)
+            
+        if hist == False:
+            fig.delaxes(ax[1])
 
         xmax = ax[0].get_xlim()[1]
         ax[0].set_xlim(0, xmax)
-
-        ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal", color=color[2])
         
         # midpt = int(np.round(len(colvar) / 2))
         # ax[1].hist(colvar[0:midpt], bins='rice', fc=(0, 0, 1, 0.3), orientation="horizontal") # First half shown in blue
         # ax[1].hist(colvar[midpt:-1], bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal") # Second half shown in red
         # ax2.axhline(y=np.average(colvar), color='b', linewidth=2)
-
-        ax[1].set_title(f"average = {np.round(np.average(colvar), 3)}", fontsize = 10)
 
         ax[1].set_xlabel('structures')
 
@@ -678,26 +697,26 @@ class Plot():
         self.fig = fig
         self.ax = ax
 
+    def reaction_profile(self, reaction, type, linewidth=3, scale=0.32, annotate=True, color='blue'):
     def reaction_profile(self, mol_list=[], mol_label=[], type=str, color='c'):
         """
         Plots a reaction coordinate diagram.
         """
-        linewidth=3
-        scale=0.32
-        annotate=True
-
+        mol_list = reaction.mol_list
+        labels = reaction.mol_label
+        
         energies = []
 
         '''
-        type = 'E' or 'F' or 'H'
+        type = 'delta E' or 'delta F' or 'delta H'
         '''
 
         for mol in mol_list:
-            if type == 'E':
+            if type == 'delta E':
                 energies.append(mol.E)   
-            elif type == 'F':
+            elif type == 'delta F':
                 energies.append(mol.F) 
-            elif type == 'H':
+            elif type == 'delta H':
                 energies.append(mol.H) 
             else:
                 print("Unsupported Energy Type")
@@ -722,8 +741,8 @@ class Plot():
                     color=color, linewidth=linewidth)
 
             # Annotate Energy Values
-            if annotate:
-                ax.text(j + 1, energy + annotation_offset, f"{energy:.1f}", fontsize=12, ha='center', color='black')
+            if annotate and j != 0:
+                ax.text(j + 1, energy + annotation_offset, f"{energy:.2f}", fontsize=12, ha='center', color='black')
 
             # Draw Dashed Connecting Lines
             if j < len(relative_energies) - 1:
@@ -731,11 +750,11 @@ class Plot():
                         [energy, relative_energies[j + 1]],
                         linestyle=":", color=color, linewidth=linewidth)
 
-        if type == 'E':
+        if type == 'delta E':
             reaction_type = '$\\Delta E$ (kcal $\\cdot$ mol${}^{-1}$)' 
-        elif type == 'F':
+        elif type == 'delta F':
             reaction_type = '$\\Delta F$ (kcal $\\cdot$ mol${}^{-1}$)'
-        elif type == 'H':
+        elif type == 'delta H':
             reaction_type = '$\\Delta H$ (kcal $\\cdot$ mol${}^{-1}$)' 
 
        # Invisible plot for the legend label
@@ -749,7 +768,7 @@ class Plot():
 
         
         ax.set_xticks(range(1, len(energies) + 1))
-        ax.set_xticklabels(mol_label) 
+        ax.set_xticklabels(labels) 
             
         
         ax.spines['bottom'].set_visible(True)
@@ -759,7 +778,7 @@ class Plot():
 
         # Final Formatting
         ax.tick_params(labelsize=14)
-        # ax.legend(loc="lower left", frameon=False, fontsize=14)
+        ax.legend(loc="lower left", frameon=False, fontsize=14)
 
         self.fig = fig;
         self.ax = ax
