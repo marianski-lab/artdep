@@ -12,7 +12,8 @@ You need the following python packages to use this package:
   
 Numpy  
 Matplotlib  
-Colormaps  
+Colormaps
+Networkx
 
 ## Install Instructions
 To install the package you can run  
