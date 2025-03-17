@@ -697,13 +697,14 @@ class Plot():
         self.fig = fig
         self.ax = ax
 
-    def reaction_profile(self, mol_list=[], labels=[], type=str, color='c'):
+    def reaction_profile(self, mol_list, labels, type=str, color='#6BA7CC'):
         """
         Plots a reaction coordinate diagram.
         """
         linewidth=3
         scale=0.32
-        annotate=True,        
+        annotate=True
+
         energies = []
 
         '''
@@ -730,9 +731,9 @@ class Plot():
         fig, ax = plt.subplots(figsize=(fig_width, 6))
         
 
-        relative_energies = [hartree_to_kcal(e - energies[0]) for e in energies]
+        relative_energies = [627.5095*(e - energies[0]) for e in energies]
 
-        annotation_offset = 1
+        annotation_offset = .4
 
         for j, energy in enumerate(relative_energies):
             # Draw Horizontal Bars at Each Energy Level
@@ -740,7 +741,7 @@ class Plot():
                     color=color, linewidth=linewidth)
 
             # Annotate Energy Values
-            if annotate and j != 0:
+            if annotate:
                 ax.text(j + 1, energy + annotation_offset, f"{energy:.2f}", fontsize=12, ha='center', color='black')
 
             # Draw Dashed Connecting Lines
