@@ -7,7 +7,7 @@ setup(
     install_requires=[
         'numpy',
         'matplotlib',
-        'colormaps '
+        'colormaps ',
         'networkx'
     ],
 )
