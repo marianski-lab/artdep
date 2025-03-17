@@ -697,14 +697,13 @@ class Plot():
         self.fig = fig
         self.ax = ax
 
-    def reaction_profile(self, reaction, type, linewidth=3, scale=0.32, annotate=True, color='blue'):
-    def reaction_profile(self, mol_list=[], mol_label=[], type=str, color='c'):
+    def reaction_profile(self, mol_list=[], labels=[], type=str, color='c'):
         """
         Plots a reaction coordinate diagram.
         """
-        mol_list = reaction.mol_list
-        labels = reaction.mol_label
-        
+        linewidth=3
+        scale=0.32
+        annotate=True,        
         energies = []
 
         '''
@@ -712,11 +711,11 @@ class Plot():
         '''
 
         for mol in mol_list:
-            if type == 'delta E':
-                energies.append(mol.E)   
-            elif type == 'delta F':
+            if type == 'E':
+                energies.append(mol.E)
+            elif type == 'F':
                 energies.append(mol.F) 
-            elif type == 'delta H':
+            elif type == 'H':
                 energies.append(mol.H) 
             else:
                 print("Unsupported Energy Type")
@@ -750,11 +749,11 @@ class Plot():
                         [energy, relative_energies[j + 1]],
                         linestyle=":", color=color, linewidth=linewidth)
 
-        if type == 'delta E':
+        if type == 'E':
             reaction_type = '$\\Delta E$ (kcal $\\cdot$ mol${}^{-1}$)' 
-        elif type == 'delta F':
+        elif type == 'F':
             reaction_type = '$\\Delta F$ (kcal $\\cdot$ mol${}^{-1}$)'
-        elif type == 'delta H':
+        elif type == 'H':
             reaction_type = '$\\Delta H$ (kcal $\\cdot$ mol${}^{-1}$)' 
 
        # Invisible plot for the legend label
@@ -778,7 +777,7 @@ class Plot():
 
         # Final Formatting
         ax.tick_params(labelsize=14)
-        ax.legend(loc="lower left", frameon=False, fontsize=14)
+        # ax.legend(loc="lower left", frameon=False, fontsize=14)
 
         self.fig = fig;
         self.ax = ax
