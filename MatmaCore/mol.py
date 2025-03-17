@@ -407,7 +407,7 @@ class Mol():
                     print(self.energy)
 
                 else:
-                    raise ValueError "I donno what kind of ORCA calculations is this!"
+                    print("Unable to read ORCA log file")
 
 
 class Reaction():

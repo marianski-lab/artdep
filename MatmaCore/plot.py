@@ -504,8 +504,10 @@ class Plot():
         div = np.amax(data[:,2]) 
         if div == 0: div = 1
 
-        ax.plot(data[:, 0],  np.convolve(data[:,2], np.ones(5)/5, mode='same')/div, color=blues[2])
-        ax.fill_between(data[:, 0],  np.convolve(data[:,2], np.ones(5)/5, mode='same')/div, color=blues[0])
+        color = self.colors
+
+        ax.plot(data[:, 0],  np.convolve(data[:,2], np.ones(5)/5, mode='same')/div, color=color[1])
+        ax.fill_between(data[:, 0],  np.convolve(data[:,2], np.ones(5)/5, mode='same')/div, color=color[2])
 
         #HIS
         div = np.amax(data[:,1]) 
@@ -558,7 +560,10 @@ class Plot():
         # fig, axes = plt.subplots(1,len(Mat), figsize=(4*len(Mat) + 1.5, 4), sharex=True, sharey=True)
         
         color_bar = ['Blues_r']*len(Mat)
-        
+        color = self.colors
+        color.reverse()
+        cmap = ListedColormap(color)
+
         levels = np.linspace(0, limit, 9)  # 8 levels between 0 and limit
 
         for n, ax in enumerate(axes):
@@ -582,7 +587,7 @@ class Plot():
                 ax.set_ylabel(r'$\psi$', fontsize=14)
 
             # Create the contourf plot with consistent levels
-            plot = ax.contourf(Mat[n], levels=levels, cmap=color_bar[n], zorder=1)
+            plot = ax.contourf(Mat[n], levels=levels, cmap=cmap, zorder=1)
 
             # Add a color bar with consistent boundaries and ticks
             cb = fig.colorbar(plot, ax=ax, pad=0.025, aspect=20, ticks=levels)
