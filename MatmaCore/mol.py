@@ -368,6 +368,48 @@ class Mol():
         self.data = np.loadtxt(f"{self.path}/{file}", skiprows=skiprows, dtype=str)
 
 
+
+    def orca(self, output_file="input.log", job_type="opt"):
+
+        """ Parses information from ORCA input.log file
+        :param output_file: (string) File containing ORCA output file.
+        :param job_type: (string) The type of calculation ORCA run.
+        """
+
+        with open("/".join([self.path, output_file]), "r") as f:
+            for line in f:
+                if "Geometry Optimization Run" in line:
+                    output_file = "input.orca.xyz"
+
+                    with open ("/".join([self.path,output_file]), "r") as f2:
+                        first_line = f2.readline()
+                        Natoms = int(first_line.split()[0])
+
+                        second_line = f2.readlines()[0:1]
+                        energy = np.array([i.split()[-1] for i in second_line], dtype=float)
+
+
+                        raw_coords = f2.readlines()[-Natoms:]
+
+                        coords = np.array([line.split()[1:] for line in raw_coords], dtype=float)
+                        atoms = np.array([line.split()[0] for line in raw_coords])
+
+                    self.Natoms = Natoms
+                    self.xyz = coords
+                    self.atoms = atoms
+                    self.energy = energy
+
+
+                elif "Single Point Calculation" and "FINAL SINGLE POINT ENERGY" in line:
+                    #print(line.split()[-1])
+                    job_type  = "sp"
+                    energy = np.array(line.split()[-1], dtype=float)
+                    print(self.energy)
+
+                else:
+                    raise ValueError "I donno what kind of ORCA calculations is this!"
+
+
 class Reaction():
 
     """
