@@ -633,16 +633,15 @@ class Plot():
         data = self.data
         desc = self.desc
 
+        x_extend = 0
+        y_extend = 0
+
         for key, val in self.config_dict.items():
             if key == 'x extend' and val is not None:
-                self.x_extend = val
-            else:
-                self.x_extend = None
+                x_extend = val
 
             if key == 'y extend' and val is not None:
-                self.y_extend = val
-            else:
-                self.y_extend = None
+                y_extend = val
 
         colors = self.colors if self.colors is not None else ['b', 'r', 'g', 'c', 'm', 'y', 'k']
 
@@ -674,30 +673,45 @@ class Plot():
 
         xrange = list(ax.get_xlim())
         yrange = list(ax.get_ylim())
-        print(xrange, yrange)
-
-        if xrange is not None and self.x_extend is not None:
-            xrange[0] -= self.x_extend
-            xrange[1] += self.x_extend
-            ax.set_xlim(xrange)
-        if yrange is not None and self.y_extend is not None:
-            yrange[0] -= self.y_extend
-            yrange[1] += self.y_extend
-            ax.set_ylim(yrange)
 
         xtick = list(ax.get_xticks())
         ytick = list(ax.get_yticks())
+
 
         minx = round(xtick[1], 1)
         maxx = round(xtick[-2], 1)
         miny = round(ytick[0] ,1)
         maxy = round(ytick[-1] ,1)
 
-        ax.plot([minx-0.05, maxx+0.05], [yrange[0], yrange[0]], color='k')
+        if xrange is not None and x_extend is not None:
+            xrange[0] -= x_extend
+            xrange[1] += x_extend
+            ax.set_xlim(xrange)
         ax.plot([xrange[0], xrange[0]], [miny-0.05, maxy+0.05], color='k')
+
+        if yrange is not None and y_extend is not None:
+            yrange[0] -= y_extend
+            yrange[1] += y_extend
+            ax.set_ylim(yrange)
+        ax.plot([minx-0.05, maxx+0.05], [yrange[0], yrange[0]], color='k')
+
+        new_xtick = ax.get_xticks().tolist()
+        new_ytick = ax.get_yticks().tolist()
+
+        for tick in new_xtick:
+            if tick < minx or tick > maxx:
+                new_xtick.remove(tick)
+
+        for tick in new_ytick:
+            if tick < miny or tick > maxy:
+                new_ytick.remove(tick)
+
+        ax.set_xticks(new_xtick)
+        ax.set_yticks(new_ytick)
 
         fig.tight_layout()
         ax.legend(bbox_to_anchor=(-0.5, 0.5), loc='center left', borderaxespad=0, frameon=False)
+
         self.fig = fig
         self.ax = ax
 
