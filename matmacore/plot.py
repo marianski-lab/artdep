@@ -807,6 +807,12 @@ class Plot():
         self.colors = colors
 
     def set_conf(self, conf:dict):
+        old_conf = self.config_dict
+
+        for key, value in old_conf.items():
+            if key not in conf.keys():
+                conf[key] = value
+
         self.config_dict = conf
 
     def set_axes(self, ax:matplotlib.pyplot.axes):
