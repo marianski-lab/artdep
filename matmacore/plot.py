@@ -1,4 +1,6 @@
 from turtle import color
+
+import matplotlib
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -23,9 +25,7 @@ class Plot():
     Free energy plots, Scatter Plots, and SNFG Figures.
     """
 
-    def __init__(self, data=None, labels:list = None, desc:list = None,
-                 xtick = None, ytick = None, xrange:list = None, yrange:list = None,
-                 colors:list = ['b', 'r', 'g', 'c', 'm', 'y', 'k'], x_extend:float=0, y_extend:float=0) :
+    def __init__(self, data=None, desc:list = None) :
 
         """
         Constructs a plot object.
@@ -34,15 +34,22 @@ class Plot():
 
         # Constructor Attributes
         self.data = data
-        self.labels = labels
         self.desc = desc
-        self.xtick = xtick
-        self.ytick = ytick
-        self.xrange = xrange
-        self.yrange = yrange
-        self.colors = colors
-        self.x_extend = x_extend
-        self.y_extend = y_extend
+
+        config_dict = {
+            'xrange': None,
+            'yrange': None,
+            'xtick': None,
+            'ytick': None,
+            'xlabel': None,
+            'ylabel': None,
+            'title': None,
+            'font': None,
+            'xextend': None,
+            'yextend': None
+        }
+
+        self.config_dict = config_dict
 
     def cmap(self, color_num: int = None, offset: float = 0, map: str = 'ice'):
         """
@@ -624,13 +631,18 @@ class Plot():
         """
 
         data = self.data
-        xtick = self.xtick
-        ytick = self.ytick
-        xrange = self.xrange
-        yrange = self.yrange
-
-        labels = self.labels
         desc = self.desc
+
+        for key, val in self.config_dict.items():
+            if key == 'x extend' and val is not None:
+                self.x_extend = val
+            else:
+                self.x_extend = None
+
+            if key == 'y extend' and val is not None:
+                self.y_extend = val
+            else:
+                self.y_extend = None
 
         colors = self.colors if self.colors is not None else ['b', 'r', 'g', 'c', 'm', 'y', 'k']
 
@@ -638,13 +650,8 @@ class Plot():
         data_ys = []
 
         fig, ax = plt.subplots(1,1, figsize=(5,5))
-        ax.set_title(labels[0] if labels is not None else "Scatter Plot")
-        ax.set_xlabel(labels[1] if labels is not None else "")
-        ax.set_ylabel(labels[2] if labels is not None else "")
 
-
-        if xtick is not None: ax.set_xticks(xtick)
-        if ytick is not None: ax.set_yticks(ytick)
+        self.set_axes(ax)
 
         ax.tick_params(axis='both', which='both', bottom=True, top=False, labelbottom=True, right=False, left=True,
                        labelleft=True)
@@ -665,16 +672,15 @@ class Plot():
 
             ax.scatter(data_x, data_y, marker='.', label=desc[col-1], color = colors[col-1])
 
-        xrange = list(ax.get_xlim()) if xrange is None else xrange
-        yrange = list(ax.get_ylim()) if yrange is None else yrange
+        xrange = list(ax.get_xlim())
+        yrange = list(ax.get_ylim())
+        print(xrange, yrange)
 
-
-
-        if xrange is not None:
+        if xrange is not None and self.x_extend is not None:
             xrange[0] -= self.x_extend
             xrange[1] += self.x_extend
             ax.set_xlim(xrange)
-        if yrange is not None:
+        if yrange is not None and self.y_extend is not None:
             yrange[0] -= self.y_extend
             yrange[1] += self.y_extend
             ax.set_ylim(yrange)
@@ -684,10 +690,8 @@ class Plot():
 
         minx = round(xtick[1], 1)
         maxx = round(xtick[-2], 1)
-        miny = round(ytick[1] ,1)
-        maxy = round(ytick[-2] ,1)
-
-        print(minx, maxx, miny, maxy)
+        miny = round(ytick[0] ,1)
+        maxy = round(ytick[-1] ,1)
 
         ax.plot([minx-0.05, maxx+0.05], [yrange[0], yrange[0]], color='k')
         ax.plot([xrange[0], xrange[0]], [miny-0.05, maxy+0.05], color='k')
@@ -784,3 +788,36 @@ class Plot():
         
     def savefig(self, filename='fig', format:str='png'):
         self.fig.savefig(f"{self.path}/{filename}.{format}", dpi=300, bbox_inches='tight')
+
+    def set_colors(self, colors:list = None):
+        self.colors = colors
+
+    def set_conf(self, conf:dict):
+        self.config_dict = conf
+
+    def set_axes(self, ax:matplotlib.pyplot.axes):
+        from matplotlib import rc
+
+        config_dict = self.config_dict
+
+        for key, value in config_dict.items():
+
+            if key == 'xrange' and value is not None:
+                ax.set_xlim(value[0], value[1])
+            if key == 'yrange' and value is not None:
+                ax.set_ylim(value[0], value[1])
+            if key == 'xticks' and value is not None:
+                ax.set_xticks(value)
+            if key == 'yticks' and value is not None:
+                ax.set_yticks(value)
+            if key == 'xlabel' and value is not None:
+                ax.set_xlabel(value)
+            if key == 'ylabel' and value is not None:
+                ax.set_ylabel(value)
+            if key == 'title' and value is not None:
+                ax.set_title(value)
+            if key == 'font' and value is not None:
+                rc('font', **{'family': 'serif', 'serif': [value]})
+                rc('text', usetex=True)
+
+
