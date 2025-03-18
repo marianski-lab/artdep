@@ -692,7 +692,7 @@ class Plot():
         self.fig = fig
         self.ax = ax
 
-    def reaction_profile(self, mol_list, labels, type=str, units='kcal', color='default'):
+    def reaction_profile(self, mol_list, labels, type=str, units='kcal'):
 
         """
         Plots a reaction coordinate diagram.
@@ -744,23 +744,12 @@ class Plot():
         fig, ax = plt.subplots(figsize=(fig_width, 6))
                   
         annotation_offset = 0.3
-
-
-        if color == 'default':
-            cmap='Blues_r'
-            cmap = plt.get_cmap(cmap)
-            color = cmap(0.25)
-        else:
-            color = color
-        
-        # color_num = 2
-        # color = self.colors[2]
         
 
         for j, energy in enumerate(relative_energies):
             # Draw Horizontal Bars at Each Energy Level
             ax.plot([(j + 1 - scale), (j + 1 + scale)], [energy, energy],
-                    color=color, linewidth=linewidth)
+                    color=self.colors[1], linewidth=linewidth)
 
             # Annotate Energy Values
             if annotate:
@@ -770,7 +759,7 @@ class Plot():
             if j < len(relative_energies) - 1:
                 ax.plot([(j + 1 + scale), (j + 2 - scale)],
                         [energy, relative_energies[j + 1]],
-                        linestyle=":", color=color, linewidth=linewidth)
+                        linestyle=":", color=self.colors[1], linewidth=linewidth)
 
         if type == 'E':
             reaction_type = '$\\Delta E$ (kcal $\\cdot$ mol${}^{-1}$)' 
@@ -780,7 +769,7 @@ class Plot():
             reaction_type = '$\\Delta H$ (kcal $\\cdot$ mol${}^{-1}$)' 
 
        # Invisible plot for the legend label
-        ax.plot([], [], color=color, linewidth=linewidth)
+        ax.plot([], [], color=self.colors[1], linewidth=linewidth)
 
         # Add X-axis Guide Line at the halfway point
         ax.axhline(0, color="black", linestyle=":", linewidth=1.5, zorder=-4)

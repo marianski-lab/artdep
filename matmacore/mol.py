@@ -452,40 +452,29 @@ class Reaction():
         return new_mol
 
 
-    def create_mol_list(directories, combinations, labels):
+    def create_mol_list(*groups):
         """
-        Creates Mol objects from user-specified directories and combinations.
+        Creates Mol objects from user-specified groups of directories and labels.
 
         Args:
-            directories (list): List of directory paths.
-            combinations (list of lists): List of lists specifying which directories to combine.
-            labels (list): List of labels for the final Mol objects.
+            *groups: Variable number of groups, where each group is a list of directories followed by a label.
 
         Returns:
             mol_list (list): List of Mol objects.
             mol_label (list): List of labels for the Mol objects.
         """
-        if len(combinations) != len(labels):
-            raise ValueError("The number of combinations must match the number of labels.")
-
         mol_list = []
         mol_label = []
 
-        # Normalize all directory paths for comparison
-        directories = [os.path.normpath(dir) for dir in directories]
+        for group in groups:
+            # The last element in the group is the label
+            label = group[-1]
+            # The rest are directories
+            directories = group[:-1]
 
-        for combo, label in zip(combinations, labels):
-            # Normalize paths in the combination
-            combo = [os.path.normpath(dir) for dir in combo]
-
-            # Validate directories in the combination
-            for dir in combo:
-                if dir not in directories:
-                    raise ValueError(f"Directory '{dir}' is not in the provided directories list.")
-
-            # Create Mol objects for the combination
+            # Create Mol objects for the directories in this group
             mol_objects = []
-            for dir in combo:
+            for dir in directories:
                 if not os.path.isdir(dir):
                     raise ValueError(f"Directory does not exist: {dir}")
 
@@ -493,7 +482,7 @@ class Reaction():
                 molecule.gaussian()  
                 mol_objects.append(molecule)
 
-            # Combine Mol objects if there are multiple in the combination
+            # Combine Mol objects if there are multiple in the group
             if len(mol_objects) > 1:
                 combined_mol = Reaction.combiner(mol_objects)
                 mol_list.append(combined_mol)
