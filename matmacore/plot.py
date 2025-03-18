@@ -117,6 +117,7 @@ class Plot():
         elif mol_list[0].software == 'gromacs':
             time_unit = 'ns'
         fig, ax = plt.subplots(1,2, figsize=(11,3), gridspec_kw={'width_ratios': [3.5, 1]})
+        
         i = 0
         if alpha == None:
             alpha = [0.8] * len(mol_list)
@@ -133,13 +134,15 @@ class Plot():
  
             if average[i] > 1:
                 array_len =  len(colvar)
-                conv_kernel = np.ones(average[i])/array_len
+                # conv_kernel = np.ones(average[i])/array_len
+                conv_kernel = np.ones(average[i])/average[i]
                 colvar = np.convolve(colvar, conv_kernel, mode='valid').tolist()
  
                 time = time[:-1*average[i] + 1]
  
             ax[0].plot(time, colvar, linewidth=0.2, color=color[i+1], alpha=alpha[i])
             ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal", color=color[i+1], alpha=alpha[i])
+        
             if len(mol_list) == 1:
                 ax[1].set_title(f"average = {np.round(np.average(colvar), 3)}", fontsize = 10)
  
