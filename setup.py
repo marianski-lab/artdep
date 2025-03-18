@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='MatmaCore',
-    version='0.1.3',
+    name='matmacore',
+    version='0.1.4',
     packages=find_packages(),
     install_requires=[
         'numpy',
         'matplotlib',
-        'colormaps '
+        'colormaps ',
         'networkx'
     ],
 )

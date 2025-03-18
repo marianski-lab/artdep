@@ -99,79 +99,74 @@ class Plot():
         else:
             self.colors = colormap_colors.tolist()
 
-    def trajectory(self, mol_list, var_name = 'colvar', col = 1, average:int = 0, title=None, hist=True):
+    def trajectory(self, mol_list, var_name = 'colvar', col = 1, average=None, title=None, hist=True, alpha=None):
         """ Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
         :param molecule: (Mol / List) Either a Mol object, or a list of moles if you want to overlay data. 
         :param var_name: (list) Name of the collective variable you are plotting on your y-axis.
         :param col: (int) Index of the column containing your colvar data, in the case that you have multiple.
         """
-        
         if not isinstance(mol_list, list):
             mol_list = [mol_list]
-        
         self.path = mol_list[0].path
-        
         # CP2K default timestep unit is in fs, Gromacs is in ps:
         # We convert these to ps and nm respectively:
-
+ 
         if mol_list[0].software == 'cp2k':
             time_unit = 'ps'
-
+ 
         elif mol_list[0].software == 'gromacs':
             time_unit = 'ns'
-        
         fig, ax = plt.subplots(1,2, figsize=(11,3), gridspec_kw={'width_ratios': [3.5, 1]})
         
-        i = 1
-        
+        i = 0
+        if alpha == None:
+            alpha = [0.8] * len(mol_list)
+        if average == None:
+            average = [0] * len(mol_list)
+        elif not isinstance(average, list):
+            average = [average] * len(mol_list)
         for mol in mol_list:
-            
             time = (mol.data[:, 0] / 1000).tolist()  # fs -> ps for CP2K, ps -> ns for GROMACS
             colvar = mol.data[:, col].tolist()
-
+ 
             timestep = np.abs(time[0] - time[1])
-            
             color = self.colors
-
-            if average > 1:
+ 
+            if average[i] > 1:
                 array_len =  len(colvar)
-                conv_kernel = np.ones(average)/array_len
+                # conv_kernel = np.ones(average[i])/array_len
+                conv_kernel = np.ones(average[i])/average[i]
                 colvar = np.convolve(colvar, conv_kernel, mode='valid').tolist()
-
-                time = time[:-1*average + 1]
-
-            ax[0].plot(time, colvar, linewidth=0.2, color=color[i], alpha=0.8)
-            ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal", color=color[i], alpha=0.5)
-            
+ 
+                time = time[:-1*average[i] + 1]
+ 
+            ax[0].plot(time, colvar, linewidth=0.2, color=color[i+1], alpha=alpha[i])
+            ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal", color=color[i+1], alpha=alpha[i])
+        
             if len(mol_list) == 1:
                 ax[1].set_title(f"average = {np.round(np.average(colvar), 3)}", fontsize = 10)
-
+ 
             else:
-                print(f"mol{i} average = {np.round(np.average(colvar), 3)}")
-
+                print(f"mol{i+1} average = {np.round(np.average(colvar), 3)}")
+ 
             i = i+1
-        
         ax[0].set_xlabel(f"time ({time_unit}); stepsize = {timestep}{time_unit}")
         ax[0].set_ylabel(var_name)
-        
         if title != None:
             ax[0].set_title(f"{title}", fontsize = 10)
-            
         if hist == False:
             fig.delaxes(ax[1])
-
+ 
         xmax = ax[0].get_xlim()[1]
         ax[0].set_xlim(0, xmax)
-        
         # midpt = int(np.round(len(colvar) / 2))
         # ax[1].hist(colvar[0:midpt], bins='rice', fc=(0, 0, 1, 0.3), orientation="horizontal") # First half shown in blue
         # ax[1].hist(colvar[midpt:-1], bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal") # Second half shown in red
         # ax2.axhline(y=np.average(colvar), color='b', linewidth=2)
-
+ 
         ax[1].set_xlabel('structures')
-
+ 
         plt.tight_layout()
-        
         self.fig = fig
         self.ax = ax
         
