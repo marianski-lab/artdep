@@ -692,7 +692,7 @@ class Plot():
         self.fig = fig
         self.ax = ax
 
-    def reaction_profile(self, mol_list, labels, type=str, color='#6BA7CC'):
+    def reaction_profile(self, mol_list, labels, type=str, color='default', cmap='Blues_r'):
         """
         Plots a reaction coordinate diagram.
         """
@@ -716,7 +716,6 @@ class Plot():
             else:
                 print("Unsupported Energy Type")
                 return  
-            print(f'Energies: {energies}') 
         if not energies:
             raise ValueError("No energies found. Check the input data.")
         
@@ -728,7 +727,17 @@ class Plot():
         fig_width = max(6, num_steps * 2)  # Adjust width based on number of steps
         fig, ax = plt.subplots(figsize=(fig_width, 6))
                   
-        annotation_offset = .1
+        annotation_offset = 0.3
+
+        if color == 'default':
+            cmap = plt.get_cmap(cmap)
+            color = cmap(0.25)
+        else:
+            color = color
+        
+        # color_num = 2
+        # color = self.colors[2]
+        
 
         for j, energy in enumerate(relative_energies):
             # Draw Horizontal Bars at Each Energy Level
@@ -778,9 +787,6 @@ class Plot():
 
         self.fig = fig;
         self.ax = ax
-
-        print(energies)
-        print(relative_energies)
 
     def savefig(self, filename='fig', format:str='png'):
         self.fig.savefig(f"{self.path}/{filename}.{format}", dpi=300, bbox_inches='tight')
