@@ -99,7 +99,7 @@ class Plot():
         else:
             self.colors = colormap_colors.tolist()
 
-    def trajectory(self, mol_list, var_name = 'colvar', col = 1, average=None, title=None, hist=True, alpha=None):
+    def trajectory(self, mol_list, var_name = 'colvar', col = 1, average=None, title=None, hist=True, alpha=None, calc_qa=False):
         """ Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
         :param molecule: (Mol / List) Either a Mol object, or a list of moles if you want to overlay data. 
         :param var_name: (list) Name of the collective variable you are plotting on your y-axis.
@@ -119,12 +119,16 @@ class Plot():
         fig, ax = plt.subplots(1,2, figsize=(11,3), gridspec_kw={'width_ratios': [3.5, 1]})
         
         i = 0
+        
         if alpha == None:
             alpha = [0.8] * len(mol_list)
+            
         if average == None:
             average = [0] * len(mol_list)
+            
         elif not isinstance(average, list):
             average = [average] * len(mol_list)
+            
         for mol in mol_list:
             time = (mol.data[:, 0] / 1000).tolist()  # fs -> ps for CP2K, ps -> ns for GROMACS
             colvar = mol.data[:, col].tolist()
@@ -143,6 +147,30 @@ class Plot():
             ax[0].plot(time, colvar, linewidth=0.2, color=color[i+1], alpha=alpha[i])
             ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal", color=color[i+1], alpha=alpha[i])
         
+            if calc_qa == True:
+                nbins = 50
+                hist = np.histogram(colvar[500:], nbins, range=(min(colvar), max(colvar)))
+                
+                dmin = np.argmin(hist[0][15:23])+15
+                bs = np.sum(hist[0][:dmin+1]) ; us = np.sum(hist[0][dmin+1:])
+
+                if us == 0: Qa = 1000.0 ; boundary = 0.0
+                
+                else:
+                    Qa =  float(bs)/float(us) ; boundary = float (dmin)/10
+                    
+                # ax[1].fill_between([0, ax[1].get_xlim()[1]], boundary, boundary+0.1, color='0.8')
+                
+                # Only annotate Qas if one trajectory is entered, otherwise print them.
+                if len(mol_list) == 1:
+                    ax[1].axhline(y=boundary, color='gray', linestyle='-', alpha=0.5, linewidth=5)
+
+                    textstr = r'$Q_a$={0:3.2f}'.format(Qa)
+                    ax[1].text(0.55 * ax[1].get_xlim()[1], 0.95 * ax[1].get_ylim()[1], textstr, fontsize=14, verticalalignment='top')
+                    
+                else:
+                    print(f"mol{i+1} Qa = {np.round(Qa, 3)}")
+
             if len(mol_list) == 1:
                 ax[1].set_title(f"average = {np.round(np.average(colvar), 3)}", fontsize = 10)
  
@@ -150,10 +178,13 @@ class Plot():
                 print(f"mol{i+1} average = {np.round(np.average(colvar), 3)}")
  
             i = i+1
+    
         ax[0].set_xlabel(f"time ({time_unit}); stepsize = {timestep}{time_unit}")
         ax[0].set_ylabel(var_name)
+        
         if title != None:
             ax[0].set_title(f"{title}", fontsize = 10)
+            
         if hist == False:
             fig.delaxes(ax[1])
  
