@@ -701,39 +701,39 @@ class Plot():
         """
         Plots a reaction coordinate diagram.
         """
+
         linewidth=3
         scale=0.32
         annotate=True
-
+        
         energies = []
-
+                        
         '''
-        type = 'delta E' or 'delta F' or 'delta H'
+        type = 'E' or 'F' or 'H'
         '''
-
         for mol in mol_list:
             if type == 'E':
                 energies.append(mol.E)
             elif type == 'F':
-                energies.append(mol.F) 
+                energies.append(mol.F)
             elif type == 'H':
-                energies.append(mol.H) 
+                energies.append(mol.H)
             else:
                 print("Unsupported Energy Type")
                 return  
-             
+            print(f'Energies: {energies}') 
         if not energies:
             raise ValueError("No energies found. Check the input data.")
+        
+        # changes absolute energies to delta energies and converts from hartree to kcal/mol
+        relative_energies = [627.905*(e - energies[0]) for e in energies]
 
         # Dynamic Figure Size Based on Number of Reaction Steps
         num_steps = len(mol_list)
         fig_width = max(6, num_steps * 2)  # Adjust width based on number of steps
         fig, ax = plt.subplots(figsize=(fig_width, 6))
-        
-
-        relative_energies = [627.5095*(e - energies[0]) for e in energies]
-
-        annotation_offset = .4
+                  
+        annotation_offset = .1
 
         for j, energy in enumerate(relative_energies):
             # Draw Horizontal Bars at Each Energy Level
@@ -742,7 +742,7 @@ class Plot():
 
             # Annotate Energy Values
             if annotate:
-                ax.text(j + 1, energy + annotation_offset, f"{energy:.2f}", fontsize=12, ha='center', color='black')
+                ax.text(j + 1, energy + annotation_offset, f"{energy:.1f}", fontsize=12, ha='center', color='black')
 
             # Draw Dashed Connecting Lines
             if j < len(relative_energies) - 1:
@@ -770,7 +770,8 @@ class Plot():
         ax.set_xticks(range(1, len(energies) + 1))
         ax.set_xticklabels(labels) 
             
-        
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
         ax.spines['bottom'].set_visible(True)
         ax.spines['left'].set_visible(True)
         ax.spines['bottom'].set_linewidth(1.5)  
@@ -782,6 +783,9 @@ class Plot():
 
         self.fig = fig;
         self.ax = ax
-        
+
+        print(energies)
+        print(relative_energies)
+
     def savefig(self, filename='fig', format:str='png'):
         self.fig.savefig(f"{self.path}/{filename}.{format}", dpi=300, bbox_inches='tight')
