@@ -692,9 +692,21 @@ class Plot():
         self.fig = fig
         self.ax = ax
 
-    def reaction_profile(self, mol_list, labels, type=str, units='kcal', color='default', cmap='Blues_r'):
+    def reaction_profile(self, mol_list, labels, type=str, units='kcal', color='default'):
+
         """
         Plots a reaction coordinate diagram.
+
+        Args:
+            mol_list (list): a list of mol objects
+            labels (list): a list of labels for the mol objects
+            type (str): the type of energy that will be plotted ('E' or 'F' or 'H')
+
+            units (str): the units of energy to be used ('kcal', 'Eh', or 'kJ'). Default is 'kcal'.
+            color (str): the color of the plot. Default uses cmap='Blues_r', cmap(0.25). Customizable.
+
+        Returns:
+            A Reaction Coordinate Diagram Energy Plot
         """
 
         linewidth=3
@@ -703,9 +715,6 @@ class Plot():
         
         energies = []
                         
-        '''
-        type = 'E' or 'F' or 'H'
-        '''
         for mol in mol_list:
             if type == 'E':
                 energies.append(mol.E)
@@ -736,7 +745,9 @@ class Plot():
                   
         annotation_offset = 0.3
 
+
         if color == 'default':
+            cmap='Blues_r'
             cmap = plt.get_cmap(cmap)
             color = cmap(0.25)
         else:
