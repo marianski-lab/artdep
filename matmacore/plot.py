@@ -692,7 +692,7 @@ class Plot():
         self.fig = fig
         self.ax = ax
 
-    def reaction_profile(self, mol_list, labels, type=str, color='default', cmap='Blues_r'):
+    def reaction_profile(self, mol_list, labels, type=str, units='kcal', color='default', cmap='Blues_r'):
         """
         Plots a reaction coordinate diagram.
         """
@@ -719,8 +719,15 @@ class Plot():
         if not energies:
             raise ValueError("No energies found. Check the input data.")
         
-        # changes absolute energies to delta energies and converts from hartree to kcal/mol
-        relative_energies = [627.905*(e - energies[0]) for e in energies]
+        # changes absolute energies to delta energies and converts to correct units
+        if units=='kcal':
+            relative_energies = [627.905*(e - energies[0]) for e in energies]     # units of kcal/mol
+        elif units=='Eh':
+            relative_energies = [(e - energies[0]) for e in energies]             # units of Hartrees
+        elif units == 'kJ':
+            relative_energies = [2625.5 *(e - energies[0]) for e in energies]     # units of kJ/mol
+        else:
+            print('Invalid units of energy. Try \'kJ\' (kilojoules per mol), \'Eh\' (Hartrees), or \'kcal\' (kilocalories per mol). The default is  \'kcal\'.')
 
         # Dynamic Figure Size Based on Number of Reaction Steps
         num_steps = len(mol_list)

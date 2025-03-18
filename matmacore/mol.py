@@ -451,6 +451,120 @@ class Reaction():
 
         return new_mol
 
+    import os
+
+    # def create_mol_list(directories, combinations, labels):
+    #     """
+    #     Creates Mol objects from user-specified directories and combinations.
+
+    #     Args:
+    #         directories (list): List of directory paths.
+    #         combinations (list of tuples): List of tuples specifying which directories to combine.
+    #         labels (list): List of labels for the final Mol objects.
+
+    #     Returns:
+    #         mol_list (list): List of Mol objects.
+    #         mol_label (list): List of labels for the Mol objects.
+    #     """
+    #     if len(combinations) != len(labels):
+    #         raise ValueError("The number of combinations must match the number of labels.")
+
+    #     mol_list = []
+    #     mol_label = []
+
+    #     # Normalize all directory paths for comparison
+    #     directories = [os.path.normpath(dir) for dir in directories]
+
+    #     for combo, label in zip(combinations, labels):
+    #         # Normalize paths in the combination
+    #         combo = [os.path.normpath(dir) for dir in combo]
+
+    #         # Validate directories in the combination
+    #         for dir in combo:
+    #             if dir not in directories:
+    #                 raise ValueError(f"Directory '{dir}' is not in the provided directories list.")
+
+    #         # Create Mol objects for the combination
+    #         mol_objects = []
+    #         for dir in combo:
+    #             if not os.path.isdir(dir):
+    #                 raise ValueError(f"Directory does not exist: {dir}")
+
+    #             molecule = Mol(dir)
+    #             molecule.gaussian()
+    #             mol_objects.append(molecule)
+
+    #         # Combine Mol objects if there are multiple in the combination
+    #         if len(mol_objects) > 1:
+    #             combined_mol = Reaction.combiner(mol_objects)
+    #             mol_list.append(combined_mol)
+    #         else:
+    #             mol_list.append(mol_objects[0])
+
+    #         mol_label.append(label)
+
+    #     return mol_list, mol_label
+
+
+    def create_mol_list(directories, combinations, labels):
+        """
+        Creates Mol objects from user-specified directories and combinations.
+
+        Args:
+            directories (list): List of directory paths.
+            combinations (list of lists): List of lists specifying which directories to combine.
+            labels (list): List of labels for the final Mol objects.
+
+        Returns:
+            mol_list (list): List of Mol objects.
+            mol_label (list): List of labels for the Mol objects.
+        """
+        if len(combinations) != len(labels):
+            raise ValueError("The number of combinations must match the number of labels.")
+
+        mol_list = []
+        mol_label = []
+
+        # Normalize all directory paths for comparison
+        directories = [os.path.normpath(dir) for dir in directories]
+
+        # # Debugging: Print directories and combinations
+        # print("Directories:", directories)
+        # print("Combinations:", combinations)
+
+        for combo, label in zip(combinations, labels):
+            # Normalize paths in the combination
+            combo = [os.path.normpath(dir) for dir in combo]
+
+            # # Debugging: Print current combination
+            # print("Processing combination:", combo)
+
+            # Validate directories in the combination
+            for dir in combo:
+                if dir not in directories:
+                    raise ValueError(f"Directory '{dir}' is not in the provided directories list.")
+
+            # Create Mol objects for the combination
+            mol_objects = []
+            for dir in combo:
+                if not os.path.isdir(dir):
+                    raise ValueError(f"Directory does not exist: {dir}")
+
+                molecule = Mol(dir)
+                molecule.gaussian()  
+                mol_objects.append(molecule)
+
+            # Combine Mol objects if there are multiple in the combination
+            if len(mol_objects) > 1:
+                combined_mol = Reaction.combiner(mol_objects)
+                mol_list.append(combined_mol)
+            else:
+                mol_list.append(mol_objects[0])
+
+            mol_label.append(label)
+
+        return mol_list, mol_label
+
     def delta(self):
 
         """
