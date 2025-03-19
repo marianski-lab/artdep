@@ -278,6 +278,10 @@ class Mol():
             self.atoms = atoms
 
         if job_type == 'md':
+            
+            self.time_unit = 'fs' # Default unit in CP2K
+            self.software = 'cp2k'
+            
             if re.search('.xyz', str(file)):
                 # Reads colvars straight from the xyz file. Requires specification of timestep and colvar coordinate.
             
@@ -292,15 +296,14 @@ class Mol():
 
                 data = np.array(list(zip(time, colvar_data)))
                 self.data = data
-                self.software = 'cp2k'
+
                 
             if re.search('.metadynLog', file):
                 # Reads colvars from the metadynLog file.
                 
                 data = np.loadtxt(f"{self.path}/{file}")
                 self.data = data
-                self.software = 'cp2k'
-            
+
     def gromacs(self, file = None):
         """ Parses information from gromacs *.xvg file
 
@@ -316,11 +319,15 @@ class Mol():
                 for line in f.readlines():
                     if re.search('#', line) or re.search('@', line):
                         i = i + 1
+                        
+                    if re.search('Time', line):
+                        time_unit = line.split()[-1].strip('()"')    
                 f.close()
 
             data = np.loadtxt(f"{self.path}/{file}", skiprows=i)
 
             self.data = data
+            self.time_unit = time_unit
             self.software = 'gromacs'
             
         if re.search('.xpm', file):
