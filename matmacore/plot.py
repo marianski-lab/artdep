@@ -111,11 +111,12 @@ class Plot():
         # CP2K default timestep unit is in fs, Gromacs is in ps:
         # We convert these to ps and nm respectively:
  
-        if mol_list[0].software == 'cp2k':
-            time_unit = 'ps'
+#         if mol_list[0].software == 'cp2k':
+#             time_unit = 'ps'
  
-        elif mol_list[0].software == 'gromacs':
-            time_unit = 'ns'
+#         elif mol_list[0].software == 'gromacs':
+#             time_unit = self.time_unit
+            
         fig, ax = plt.subplots(1,2, figsize=(11,3), gridspec_kw={'width_ratios': [3.5, 1]})
         
         i = 0
@@ -125,8 +126,21 @@ class Plot():
             average = [0] * len(mol_list)
         elif not isinstance(average, list):
             average = [average] * len(mol_list)
+            
         for mol in mol_list:
-            time = (mol.data[:, 0] / 1000).tolist()  # fs -> ps for CP2K, ps -> ns for GROMACS
+            
+            if mol.time_unit == 'fs':
+                time = (mol.data[:, 0] / 1000).tolist()  # fs -> ps for CP2K
+                time_label = 'ps'
+            
+            elif mol.time_unit == 'ps':
+                time = (mol.data[:, 0] / 1000).tolist()  # ps -> ns for GROMACS
+                time_label = 'ns'
+                
+            elif mol.time_unit == 'ns':
+                time = (mol.data[:, 0]).tolist() # if GROMACS already in ns don't convert
+                time_label = 'ns'
+                
             colvar = mol.data[:, col].tolist()
  
             timestep = np.abs(time[0] - time[1])
@@ -150,7 +164,7 @@ class Plot():
                 print(f"mol{i+1} average = {np.round(np.average(colvar), 3)}")
  
             i = i+1
-        ax[0].set_xlabel(f"time ({time_unit}); stepsize = {timestep}{time_unit}")
+        ax[0].set_xlabel(f"time ({time_label}); stepsize = {timestep}{time_label}")
         ax[0].set_ylabel(var_name)
         if title != None:
             ax[0].set_title(f"{title}", fontsize = 10)
