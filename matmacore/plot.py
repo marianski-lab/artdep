@@ -837,7 +837,8 @@ class Plot():
             if key == 'title' and value is not None:
                 ax.set_title(value)
             if key == 'font' and value is not None:
-                rc('font', **{'family': 'serif', 'serif': [value]})
-                rc('text', usetex=True)
+                mpl.rcParams['font.sans-serif'] = value
+                mpl.rcParams['font.family'] = "sans-serif"
+
 
 
