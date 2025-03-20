@@ -22,3 +22,8 @@ To install the package you can run
 ```
 pip install matmacore
 ```
+
+To update the package:
+```
+pip install matmacore --upgrade
+```
