@@ -550,6 +550,8 @@ class Plot():
         """
     
         self.path = mol.path
+        color = self.colors
+        
         data = copy.deepcopy(mol.data)
         data[:,0] = mol.data[:,0] * 10
 
@@ -571,29 +573,44 @@ class Plot():
         ax.set_xticks(xticks)
         ax.set_xticklabels([int(x) for x in xticks], fontsize=10)
         ax.set_xlim(xmin, xmax)
+        
+        ncols = np.shape(mol.data)[1]
+        
+        i = 1
+        
+        for col in range(1, ncols): # Skip first column
+        
+            div = np.amax(data[:,col]) 
+            
+            if div == 0: div = 1
 
-        #TYR
-        div = np.amax(data[:,3]) 
-        if div == 0: div = 1
+            ax.plot(data[:, 0],  np.convolve(data[:, col], np.ones(5)/5, mode='same')/div, color=color[i])
+            ax.fill_between(data[:, 0],  np.convolve(data[:, col], np.ones(5)/5, mode='same')/div, color=color[i], alpha=0.5)
+            
+            i = i + 1
 
-        ax.plot(data[:, 0],  np.convolve(data[:,3], np.ones(5)/5, mode='same')/div, color=greens[2])
-        ax.fill_between(data[:, 0],  np.convolve(data[:,3], np.ones(5)/5, mode='same')/div, color=greens[0])
+#         #TYR
+#         div = np.amax(data[:,3]) 
+#         if div == 0: div = 1
 
-        #D or E
-        div = np.amax(data[:,2]) 
-        if div == 0: div = 1
+#         ax.plot(data[:, 0],  np.convolve(data[:,3], np.ones(5)/5, mode='same')/div, color=greens[2])
+#         ax.fill_between(data[:, 0],  np.convolve(data[:,3], np.ones(5)/5, mode='same')/div, color=greens[0])
 
-        color = self.colors
+#         #D or E
+#         div = np.amax(data[:,2]) 
+#         if div == 0: div = 1
 
-        ax.plot(data[:, 0],  np.convolve(data[:,2], np.ones(5)/5, mode='same')/div, color=color[1])
-        ax.fill_between(data[:, 0],  np.convolve(data[:,2], np.ones(5)/5, mode='same')/div, color=color[2])
+#         color = self.colors
 
-        #HIS
-        div = np.amax(data[:,1]) 
-        if div == 0: div = 1
+#         ax.plot(data[:, 0],  np.convolve(data[:,2], np.ones(5)/5, mode='same')/div, color=color[1])
+#         ax.fill_between(data[:, 0],  np.convolve(data[:,2], np.ones(5)/5, mode='same')/div, color=color[2])
 
-        ax.plot(data[:, 0],  np.convolve(data[:,1], np.ones(5)/5, mode='same')/div, color=reds[2])
-        ax.fill_between(data[:, 0],  np.convolve(data[:,1], np.ones(5)/5, mode='same')/div, color=reds[0])
+#         #HIS
+#         div = np.amax(data[:,1]) 
+#         if div == 0: div = 1
+
+#         ax.plot(data[:, 0],  np.convolve(data[:,1], np.ones(5)/5, mode='same')/div, color=reds[2])
+#         ax.fill_between(data[:, 0],  np.convolve(data[:,1], np.ones(5)/5, mode='same')/div, color=reds[0])
         
         fig.tight_layout()
 

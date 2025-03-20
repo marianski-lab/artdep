@@ -321,13 +321,13 @@ class Mol():
                         i = i + 1
                         
                     if re.search('Time', line):
-                        time_unit = line.split()[-1].strip('()"')    
+                        time_unit = line.split()[-1].strip('()"')
+                        self.time_unit = time_unit
                 f.close()
 
             data = np.loadtxt(f"{self.path}/{file}", skiprows=i)
 
             self.data = data
-            self.time_unit = time_unit
             self.software = 'gromacs'
             
         if re.search('.xpm', file):
