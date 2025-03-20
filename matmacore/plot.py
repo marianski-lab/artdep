@@ -168,14 +168,14 @@ class Plot():
 
                 ax[0].plot(time, colvar_conv, linewidth=2, color=color[i+1], alpha=alpha[i])
                 ax[0].plot(time,colvar[:(len(colvar_conv))],linewidth=0.8, color = color[i+1], alpha=alpha[i]*.3)
-                ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal", color=color[i+1], alpha=alpha[i])
+                ax[1].hist(colvar, bins='rice', orientation="horizontal", color=color[i+1], alpha=alpha[i])
             
             elif overlap == False and average[i] > 1:
                 ax[0].plot(time,colvar_conv,linewidth=0.8, color=color[i+1], alpha=alpha[i])
                 
             else:
                 ax[0].plot(time,colvar,linewidth=0.8, color=color[i+1], alpha=alpha[i])
-                ax[1].hist(colvar, bins='rice', fc=(0,0,1,0.5), orientation="horizontal", color=color[i+1], alpha=alpha[i], label=np.round(np.average(colvar)))
+                ax[1].hist(colvar, bins='rice', orientation="horizontal", color=color[i+1], alpha=alpha[i], label=np.round(np.average(colvar)))
         
             if calc_qa == True:
                 nbins = 50
@@ -223,12 +223,7 @@ class Plot():
  
         xmax = ax[0].get_xlim()[1]
         xmax = xmax + 1 
-        ax[0].set_xlim(0, xmax)
-        # midpt = int(np.round(len(colvar) / 2))
-        # ax[1].hist(colvar[0:midpt], bins='rice', fc=(0, 0, 1, 0.3), orientation="horizontal") # First half shown in blue
-        # ax[1].hist(colvar[midpt:-1], bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal") # Second half shown in red
-        # ax2.axhline(y=np.average(colvar), color='b', linewidth=2)
- 
+        ax[0].set_xlim(0, xmax) 
         ax[1].set_xlabel('structures')
  
         plt.tight_layout()
