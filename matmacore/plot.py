@@ -99,7 +99,7 @@ class Plot():
         else:
             self.colors = colormap_colors.tolist()
 
-    def trajectory(self, mol_list, var_name = 'colvar', col = 1, average=None, title=None, hist=True, alpha=None):
+    def trajectory(self, mol_list, var_name = 'colvar', col = 1, average=None, title=None, hist=True, alpha=None, overlap=False):
         """ Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
         :param molecule: (Mol / List) Either a Mol object, or a list of moles if you want to overlay data. 
         :param var_name: (list) Name of the collective variable you are plotting on your y-axis.
@@ -126,28 +126,40 @@ class Plot():
         elif not isinstance(average, list):
             average = [average] * len(mol_list)
         for mol in mol_list:
-            time = (mol.data[:, 0] / 1000).tolist()  # fs -> ps for CP2K, ps -> ns for GROMACS
+            time = (mol.data[:, 0] / 1_000).tolist()  # fs -> ps for CP2K, ps -> ns for GROMACS
             colvar = mol.data[:, col].tolist()
  
             timestep = np.abs(time[0] - time[1])
             color = self.colors
- 
+            
             if average[i] > 1:
                 array_len =  len(colvar)
                 # conv_kernel = np.ones(average[i])/array_len
                 conv_kernel = np.ones(average[i])/average[i]
-                colvar = np.convolve(colvar, conv_kernel, mode='valid').tolist()
- 
+                colvar_conv = np.convolve(colvar, conv_kernel, mode='valid').tolist()
                 time = time[:-1*average[i] + 1]
- 
-            ax[0].plot(time, colvar, linewidth=0.2, color=color[i+1], alpha=alpha[i])
-            ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal", color=color[i+1], alpha=alpha[i])
+
+            if overlap == True:
+
+                ax[0].plot(time, colvar_conv, linewidth=2, color=color[i+1], alpha=alpha[i])
+                ax[0].plot(time,colvar[:(len(colvar_conv))],linewidth=0.8, color = color[i+1], alpha=alpha[i]*.3)
+                ax[1].hist(colvar, bins='rice', fc=(0, 0, 1, 0.5), orientation="horizontal", color=color[i+1], alpha=alpha[i])
+            
+            elif overlap == False and average[i] > 1:
+                ax[0].plot(time,colvar_conv,linewidth=0.8, color=color[i+1], alpha=alpha[i])
+                
+            else:
+                ax[0].plot(time,colvar,linewidth=0.8, color=color[i+1], alpha=alpha[i])
+                ax[1].hist(colvar, bins='rice', fc=(0,0,1,0.5), orientation="horizontal", color=color[i+1], alpha=alpha[i], label=np.round(np.average(colvar)))
         
             if len(mol_list) == 1:
                 ax[1].set_title(f"average = {np.round(np.average(colvar), 3)}", fontsize = 10)
  
             else:
-                print(f"mol{i+1} average = {np.round(np.average(colvar), 3)}")
+                
+                x= (np.round(np.average(colvar), 3))
+                #ax[1].legend()
+                print(x)
  
             i = i+1
         ax[0].set_xlabel(f"time ({time_unit}); stepsize = {timestep}{time_unit}")
@@ -158,6 +170,7 @@ class Plot():
             fig.delaxes(ax[1])
  
         xmax = ax[0].get_xlim()[1]
+        xmax = xmax + 1 
         ax[0].set_xlim(0, xmax)
         # midpt = int(np.round(len(colvar) / 2))
         # ax[1].hist(colvar[0:midpt], bins='rice', fc=(0, 0, 1, 0.3), orientation="horizontal") # First half shown in blue
