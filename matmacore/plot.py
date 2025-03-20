@@ -1,4 +1,6 @@
 from turtle import color
+
+import matplotlib
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -23,9 +25,7 @@ class Plot():
     Free energy plots, Scatter Plots, and SNFG Figures.
     """
 
-    def __init__(self, data=None, labels:list = None, desc:list = None,
-                 xtick = None, ytick = None, xrange:list = None, yrange:list = None,
-                 colors:list = ['b', 'r', 'g', 'c', 'm', 'y', 'k'], x_extend:float=0, y_extend:float=0) :
+    def __init__(self, data=None, desc:list = None) :
 
         """
         Constructs a plot object.
@@ -34,15 +34,22 @@ class Plot():
 
         # Constructor Attributes
         self.data = data
-        self.labels = labels
         self.desc = desc
-        self.xtick = xtick
-        self.ytick = ytick
-        self.xrange = xrange
-        self.yrange = yrange
-        self.colors = colors
-        self.x_extend = x_extend
-        self.y_extend = y_extend
+
+        config_dict = {
+            'xrange': None,
+            'yrange': None,
+            'xtick': None,
+            'ytick': None,
+            'xlabel': None,
+            'ylabel': None,
+            'title': None,
+            'font': None,
+            'xextend': None,
+            'yextend': None
+        }
+
+        self.config_dict = config_dict
 
     def cmap(self, color_num: int = None, offset: float = 0, map: str = 'ice'):
         """
@@ -99,7 +106,8 @@ class Plot():
         else:
             self.colors = colormap_colors.tolist()
 
-    def trajectory(self, mol_list, var_name = 'colvar', col = 1, average=None, title=None, hist=True, alpha=None, overlap=False):
+    def trajectory(self, mol_list, var_name = 'colvar', col = 1, average=None, title=None, hist=True, alpha=None, calc_qa=False, overlap=False):
+      
         """ Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
         :param molecule: (Mol / List) Either a Mol object, or a list of moles if you want to overlay data. 
         :param var_name: (list) Name of the collective variable you are plotting on your y-axis.
@@ -111,22 +119,39 @@ class Plot():
         # CP2K default timestep unit is in fs, Gromacs is in ps:
         # We convert these to ps and nm respectively:
  
-        if mol_list[0].software == 'cp2k':
-            time_unit = 'ps'
+#         if mol_list[0].software == 'cp2k':
+#             time_unit = 'ps'
  
-        elif mol_list[0].software == 'gromacs':
-            time_unit = 'ns'
+#         elif mol_list[0].software == 'gromacs':
+#             time_unit = self.time_unit
+            
         fig, ax = plt.subplots(1,2, figsize=(11,3), gridspec_kw={'width_ratios': [3.5, 1]})
         
         i = 0
+        
         if alpha == None:
             alpha = [0.8] * len(mol_list)
+            
         if average == None:
             average = [0] * len(mol_list)
+            
         elif not isinstance(average, list):
             average = [average] * len(mol_list)
+            
         for mol in mol_list:
-            time = (mol.data[:, 0] / 1_000).tolist()  # fs -> ps for CP2K, ps -> ns for GROMACS
+            
+            if mol.time_unit == 'fs':
+                time = (mol.data[:, 0] / 1000).tolist()  # fs -> ps for CP2K
+                time_label = 'ps'
+            
+            elif mol.time_unit == 'ps':
+                time = (mol.data[:, 0] / 1000).tolist()  # ps -> ns for GROMACS
+                time_label = 'ns'
+                
+            elif mol.time_unit == 'ns':
+                time = (mol.data[:, 0]).tolist() # if GROMACS already in ns don't convert
+                time_label = 'ns'
+
             colvar = mol.data[:, col].tolist()
  
             timestep = np.abs(time[0] - time[1])
@@ -152,6 +177,30 @@ class Plot():
                 ax[0].plot(time,colvar,linewidth=0.8, color=color[i+1], alpha=alpha[i])
                 ax[1].hist(colvar, bins='rice', fc=(0,0,1,0.5), orientation="horizontal", color=color[i+1], alpha=alpha[i], label=np.round(np.average(colvar)))
         
+            if calc_qa == True:
+                nbins = 50
+                hist = np.histogram(colvar[500:], nbins, range=(min(colvar), max(colvar)))
+                
+                dmin = np.argmin(hist[0][15:23])+15
+                bs = np.sum(hist[0][:dmin+1]) ; us = np.sum(hist[0][dmin+1:])
+
+                if us == 0: Qa = 1000.0 ; boundary = 0.0
+                
+                else:
+                    Qa =  float(bs)/float(us) ; boundary = float (dmin)/10
+                    
+                # ax[1].fill_between([0, ax[1].get_xlim()[1]], boundary, boundary+0.1, color='0.8')
+                
+                # Only annotate Qas if one trajectory is entered, otherwise print them.
+                if len(mol_list) == 1:
+                    ax[1].axhline(y=boundary, color='gray', linestyle='-', alpha=0.5, linewidth=5)
+
+                    textstr = r'$Q_a$={0:3.2f}'.format(Qa)
+                    ax[1].text(0.55 * ax[1].get_xlim()[1], 0.95 * ax[1].get_ylim()[1], textstr, fontsize=14, verticalalignment='top')
+                    
+                else:
+                    print(f"mol{i+1} Qa = {np.round(Qa, 3)}")
+
             if len(mol_list) == 1:
                 ax[1].set_title(f"average = {np.round(np.average(colvar), 3)}", fontsize = 10)
  
@@ -162,10 +211,13 @@ class Plot():
                 print(x)
  
             i = i+1
-        ax[0].set_xlabel(f"time ({time_unit}); stepsize = {timestep}{time_unit}")
+
+        ax[0].set_xlabel(f"time ({time_label}); stepsize = {timestep}{time_label}")
         ax[0].set_ylabel(var_name)
+        
         if title != None:
             ax[0].set_title(f"{title}", fontsize = 10)
+            
         if hist == False:
             fig.delaxes(ax[1])
  
@@ -632,13 +684,17 @@ class Plot():
         """
 
         data = self.data
-        xtick = self.xtick
-        ytick = self.ytick
-        xrange = self.xrange
-        yrange = self.yrange
-
-        labels = self.labels
         desc = self.desc
+
+        x_extend = 0
+        y_extend = 0
+
+        for key, val in self.config_dict.items():
+            if key == 'x extend' and val is not None:
+                x_extend = val
+
+            if key == 'y extend' and val is not None:
+                y_extend = val
 
         colors = self.colors if self.colors is not None else ['b', 'r', 'g', 'c', 'm', 'y', 'k']
 
@@ -646,13 +702,8 @@ class Plot():
         data_ys = []
 
         fig, ax = plt.subplots(1,1, figsize=(5,5))
-        ax.set_title(labels[0] if labels is not None else "Scatter Plot")
-        ax.set_xlabel(labels[1] if labels is not None else "")
-        ax.set_ylabel(labels[2] if labels is not None else "")
 
-
-        if xtick is not None: ax.set_xticks(xtick)
-        if ytick is not None: ax.set_yticks(ytick)
+        self.set_axes(ax)
 
         ax.tick_params(axis='both', which='both', bottom=True, top=False, labelbottom=True, right=False, left=True,
                        labelleft=True)
@@ -673,99 +724,128 @@ class Plot():
 
             ax.scatter(data_x, data_y, marker='.', label=desc[col-1], color = colors[col-1])
 
-        xrange = list(ax.get_xlim()) if xrange is None else xrange
-        yrange = list(ax.get_ylim()) if yrange is None else yrange
-
-
-
-        if xrange is not None:
-            xrange[0] -= self.x_extend
-            xrange[1] += self.x_extend
-            ax.set_xlim(xrange)
-        if yrange is not None:
-            yrange[0] -= self.y_extend
-            yrange[1] += self.y_extend
-            ax.set_ylim(yrange)
+        xrange = list(ax.get_xlim())
+        yrange = list(ax.get_ylim())
 
         xtick = list(ax.get_xticks())
         ytick = list(ax.get_yticks())
 
+
         minx = round(xtick[1], 1)
         maxx = round(xtick[-2], 1)
-        miny = round(ytick[1] ,1)
-        maxy = round(ytick[-2] ,1)
+        miny = round(ytick[0] ,1)
+        maxy = round(ytick[-1] ,1)
 
-        print(minx, maxx, miny, maxy)
-
-        ax.plot([minx-0.05, maxx+0.05], [yrange[0], yrange[0]], color='k')
+        if xrange is not None and x_extend is not None:
+            xrange[0] -= x_extend
+            xrange[1] += x_extend
+            ax.set_xlim(xrange)
         ax.plot([xrange[0], xrange[0]], [miny-0.05, maxy+0.05], color='k')
+
+        if yrange is not None and y_extend is not None:
+            yrange[0] -= y_extend
+            yrange[1] += y_extend
+            ax.set_ylim(yrange)
+        ax.plot([minx-0.05, maxx+0.05], [yrange[0], yrange[0]], color='k')
+
+        new_xtick = ax.get_xticks().tolist()
+        new_ytick = ax.get_yticks().tolist()
+
+        for tick in new_xtick:
+            if tick < minx or tick > maxx:
+                new_xtick.remove(tick)
+
+        for tick in new_ytick:
+            if tick < miny or tick > maxy:
+                new_ytick.remove(tick)
+
+        ax.set_xticks(new_xtick)
+        ax.set_yticks(new_ytick)
 
         fig.tight_layout()
         ax.legend(bbox_to_anchor=(-0.5, 0.5), loc='center left', borderaxespad=0, frameon=False)
+
         self.fig = fig
         self.ax = ax
 
-    def reaction_profile(self, reaction, type, linewidth=3, scale=0.32, annotate=True, color='blue'):
+    def reaction_profile(self, mol_list, labels, type=str, units='kcal'):
+
         """
         Plots a reaction coordinate diagram.
+
+        Args:
+            mol_list (list): a list of mol objects
+            labels (list): a list of labels for the mol objects
+            type (str): the type of energy that will be plotted ('E' or 'F' or 'H')
+
+            units (str): the units of energy to be used ('kcal', 'Eh', or 'kJ'). Default is 'kcal'.
+            color (str): the color of the plot. Default uses cmap='Blues_r', cmap(0.25). Customizable.
+
+        Returns:
+            A Reaction Coordinate Diagram Energy Plot
         """
-        mol_list = reaction.mol_list
-        labels = reaction.mol_label
+
+        linewidth=3
+        scale=0.32
+        annotate=True
         
         energies = []
-
-        '''
-        type = 'delta E' or 'delta F' or 'delta H'
-        '''
-
+                        
         for mol in mol_list:
-            if type == 'delta E':
-                energies.append(mol.E)   
-            elif type == 'delta F':
-                energies.append(mol.F) 
-            elif type == 'delta H':
-                energies.append(mol.H) 
+            if type == 'E':
+                energies.append(mol.E)
+            elif type == 'F':
+                energies.append(mol.F)
+            elif type == 'H':
+                energies.append(mol.H)
             else:
                 print("Unsupported Energy Type")
                 return  
-             
         if not energies:
             raise ValueError("No energies found. Check the input data.")
+        
+        # changes absolute energies to delta energies and converts to correct units
+        if units=='kcal':
+            relative_energies = [627.905*(e - energies[0]) for e in energies]     # units of kcal/mol
+        elif units=='Eh':
+            relative_energies = [(e - energies[0]) for e in energies]             # units of Hartrees
+        elif units == 'kJ':
+            relative_energies = [2625.5 *(e - energies[0]) for e in energies]     # units of kJ/mol
+        else:
+            print('Invalid units of energy. Try \'kJ\' (kilojoules per mol), \'Eh\' (Hartrees), or \'kcal\' (kilocalories per mol). The default is  \'kcal\'.')
 
         # Dynamic Figure Size Based on Number of Reaction Steps
         num_steps = len(mol_list)
         fig_width = max(6, num_steps * 2)  # Adjust width based on number of steps
         fig, ax = plt.subplots(figsize=(fig_width, 6))
+                  
+        annotation_offset = 0.3
         
-
-        relative_energies = [hartree_to_kcal(e - energies[0]) for e in energies]
-
-        annotation_offset = 0.13
 
         for j, energy in enumerate(relative_energies):
             # Draw Horizontal Bars at Each Energy Level
             ax.plot([(j + 1 - scale), (j + 1 + scale)], [energy, energy],
-                    color=color, linewidth=linewidth)
+                    color=self.colors[1], linewidth=linewidth)
 
             # Annotate Energy Values
-            if annotate and j != 0:
-                ax.text(j + 1, energy + annotation_offset, f"{energy:.2f}", fontsize=12, ha='center', color='black')
+            if annotate:
+                ax.text(j + 1, energy + annotation_offset, f"{energy:.1f}", fontsize=12, ha='center', color='black')
 
             # Draw Dashed Connecting Lines
             if j < len(relative_energies) - 1:
                 ax.plot([(j + 1 + scale), (j + 2 - scale)],
                         [energy, relative_energies[j + 1]],
-                        linestyle=":", color=color, linewidth=linewidth)
+                        linestyle=":", color=self.colors[1], linewidth=linewidth)
 
-        if type == 'delta E':
+        if type == 'E':
             reaction_type = '$\\Delta E$ (kcal $\\cdot$ mol${}^{-1}$)' 
-        elif type == 'delta F':
+        elif type == 'F':
             reaction_type = '$\\Delta F$ (kcal $\\cdot$ mol${}^{-1}$)'
-        elif type == 'delta H':
+        elif type == 'H':
             reaction_type = '$\\Delta H$ (kcal $\\cdot$ mol${}^{-1}$)' 
 
        # Invisible plot for the legend label
-        ax.plot([], [], color=color, linewidth=linewidth)
+        ax.plot([], [], color=self.colors[1], linewidth=linewidth)
 
         # Add X-axis Guide Line at the halfway point
         ax.axhline(0, color="black", linestyle=":", linewidth=1.5, zorder=-4)
@@ -777,7 +857,8 @@ class Plot():
         ax.set_xticks(range(1, len(energies) + 1))
         ax.set_xticklabels(labels) 
             
-        
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
         ax.spines['bottom'].set_visible(True)
         ax.spines['left'].set_visible(True)
         ax.spines['bottom'].set_linewidth(1.5)  
@@ -785,10 +866,49 @@ class Plot():
 
         # Final Formatting
         ax.tick_params(labelsize=14)
-        ax.legend(loc="lower left", frameon=False, fontsize=14)
+        # ax.legend(loc="lower left", frameon=False, fontsize=14)
 
         self.fig = fig;
         self.ax = ax
-        
+
     def savefig(self, filename='fig', format:str='png'):
         self.fig.savefig(f"{self.path}/{filename}.{format}", dpi=300, bbox_inches='tight')
+
+    def set_colors(self, colors:list = None):
+        self.colors = colors
+
+    def set_conf(self, conf:dict):
+        old_conf = self.config_dict
+
+        for key, value in old_conf.items():
+            if key not in conf.keys():
+                conf[key] = value
+
+        self.config_dict = conf
+
+    def set_axes(self, ax:matplotlib.pyplot.axes):
+        from matplotlib import rc
+
+        config_dict = self.config_dict
+
+        for key, value in config_dict.items():
+
+            if key == 'xrange' and value is not None:
+                ax.set_xlim(value[0], value[1])
+            if key == 'yrange' and value is not None:
+                ax.set_ylim(value[0], value[1])
+            if key == 'xticks' and value is not None:
+                ax.set_xticks(value)
+            if key == 'yticks' and value is not None:
+                ax.set_yticks(value)
+            if key == 'xlabel' and value is not None:
+                ax.set_xlabel(value)
+            if key == 'ylabel' and value is not None:
+                ax.set_ylabel(value)
+            if key == 'title' and value is not None:
+                ax.set_title(value)
+            if key == 'font' and value is not None:
+                rc('font', **{'family': 'serif', 'serif': [value]})
+                rc('text', usetex=True)
+
+

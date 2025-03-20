@@ -278,6 +278,10 @@ class Mol():
             self.atoms = atoms
 
         if job_type == 'md':
+            
+            self.time_unit = 'fs' # Default unit in CP2K
+            self.software = 'cp2k'
+            
             if re.search('.xyz', str(file)):
                 # Reads colvars straight from the xyz file. Requires specification of timestep and colvar coordinate.
             
@@ -292,15 +296,14 @@ class Mol():
 
                 data = np.array(list(zip(time, colvar_data)))
                 self.data = data
-                self.software = 'cp2k'
+
                 
             if re.search('.metadynLog', file):
                 # Reads colvars from the metadynLog file.
                 
                 data = np.loadtxt(f"{self.path}/{file}")
                 self.data = data
-                self.software = 'cp2k'
-            
+
     def gromacs(self, file = None):
         """ Parses information from gromacs *.xvg file
 
@@ -316,11 +319,15 @@ class Mol():
                 for line in f.readlines():
                     if re.search('#', line) or re.search('@', line):
                         i = i + 1
+                        
+                    if re.search('Time', line):
+                        time_unit = line.split()[-1].strip('()"')    
                 f.close()
 
             data = np.loadtxt(f"{self.path}/{file}", skiprows=i)
 
             self.data = data
+            self.time_unit = time_unit
             self.software = 'gromacs'
             
         if re.search('.xpm', file):
@@ -450,6 +457,48 @@ class Reaction():
             new_mol.F += mol.F
 
         return new_mol
+
+
+    def create_mol_list(*groups):
+        """
+        Creates Mol objects from user-specified groups of directories and labels.
+
+        Args:
+            *groups: Variable number of groups, where each group is a list of directories followed by a label.
+
+        Returns:
+            mol_list (list): List of Mol objects.
+            mol_label (list): List of labels for the Mol objects.
+        """
+        mol_list = []
+        mol_label = []
+
+        for group in groups:
+            # The last element in the group is the label
+            label = group[-1]
+            # The rest are directories
+            directories = group[:-1]
+
+            # Create Mol objects for the directories in this group
+            mol_objects = []
+            for dir in directories:
+                if not os.path.isdir(dir):
+                    raise ValueError(f"Directory does not exist: {dir}")
+
+                molecule = Mol(dir)
+                molecule.gaussian()  
+                mol_objects.append(molecule)
+
+            # Combine Mol objects if there are multiple in the group
+            if len(mol_objects) > 1:
+                combined_mol = Reaction.combiner(mol_objects)
+                mol_list.append(combined_mol)
+            else:
+                mol_list.append(mol_objects[0])
+
+            mol_label.append(label)
+
+        return mol_list, mol_label
 
     def delta(self):
 
