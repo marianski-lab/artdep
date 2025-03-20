@@ -9,7 +9,9 @@ Documentation for the colors can be found here: https://pratiman-91.github.io/co
 
 ## Dependencies
 You need the following python packages to use this package:  
-  
+
+Python >= 3.13  
+
 Numpy  
 Matplotlib  
 Colormaps  
