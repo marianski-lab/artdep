@@ -458,6 +458,48 @@ class Reaction():
 
         return new_mol
 
+
+    def create_mol_list(*groups):
+        """
+        Creates Mol objects from user-specified groups of directories and labels.
+
+        Args:
+            *groups: Variable number of groups, where each group is a list of directories followed by a label.
+
+        Returns:
+            mol_list (list): List of Mol objects.
+            mol_label (list): List of labels for the Mol objects.
+        """
+        mol_list = []
+        mol_label = []
+
+        for group in groups:
+            # The last element in the group is the label
+            label = group[-1]
+            # The rest are directories
+            directories = group[:-1]
+
+            # Create Mol objects for the directories in this group
+            mol_objects = []
+            for dir in directories:
+                if not os.path.isdir(dir):
+                    raise ValueError(f"Directory does not exist: {dir}")
+
+                molecule = Mol(dir)
+                molecule.gaussian()  
+                mol_objects.append(molecule)
+
+            # Combine Mol objects if there are multiple in the group
+            if len(mol_objects) > 1:
+                combined_mol = Reaction.combiner(mol_objects)
+                mol_list.append(combined_mol)
+            else:
+                mol_list.append(mol_objects[0])
+
+            mol_label.append(label)
+
+        return mol_list, mol_label
+
     def delta(self):
 
         """
