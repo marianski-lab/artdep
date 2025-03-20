@@ -1,4 +1,6 @@
 from turtle import color
+
+import matplotlib
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -23,9 +25,7 @@ class Plot():
     Free energy plots, Scatter Plots, and SNFG Figures.
     """
 
-    def __init__(self, data=None, labels:list = None, desc:list = None,
-                 xtick = None, ytick = None, xrange:list = None, yrange:list = None,
-                 colors:list = ['b', 'r', 'g', 'c', 'm', 'y', 'k'], x_extend:float=0, y_extend:float=0) :
+    def __init__(self, data=None, desc:list = None) :
 
         """
         Constructs a plot object.
@@ -34,15 +34,22 @@ class Plot():
 
         # Constructor Attributes
         self.data = data
-        self.labels = labels
         self.desc = desc
-        self.xtick = xtick
-        self.ytick = ytick
-        self.xrange = xrange
-        self.yrange = yrange
-        self.colors = colors
-        self.x_extend = x_extend
-        self.y_extend = y_extend
+
+        config_dict = {
+            'xrange': None,
+            'yrange': None,
+            'xtick': None,
+            'ytick': None,
+            'xlabel': None,
+            'ylabel': None,
+            'title': None,
+            'font': None,
+            'xextend': None,
+            'yextend': None
+        }
+
+        self.config_dict = config_dict
 
     def cmap(self, color_num: int = None, offset: float = 0, map: str = 'ice'):
         """
@@ -633,13 +640,17 @@ class Plot():
         """
 
         data = self.data
-        xtick = self.xtick
-        ytick = self.ytick
-        xrange = self.xrange
-        yrange = self.yrange
-
-        labels = self.labels
         desc = self.desc
+
+        x_extend = 0
+        y_extend = 0
+
+        for key, val in self.config_dict.items():
+            if key == 'x extend' and val is not None:
+                x_extend = val
+
+            if key == 'y extend' and val is not None:
+                y_extend = val
 
         colors = self.colors if self.colors is not None else ['b', 'r', 'g', 'c', 'm', 'y', 'k']
 
@@ -647,13 +658,8 @@ class Plot():
         data_ys = []
 
         fig, ax = plt.subplots(1,1, figsize=(5,5))
-        ax.set_title(labels[0] if labels is not None else "Scatter Plot")
-        ax.set_xlabel(labels[1] if labels is not None else "")
-        ax.set_ylabel(labels[2] if labels is not None else "")
 
-
-        if xtick is not None: ax.set_xticks(xtick)
-        if ytick is not None: ax.set_yticks(ytick)
+        self.set_axes(ax)
 
         ax.tick_params(axis='both', which='both', bottom=True, top=False, labelbottom=True, right=False, left=True,
                        labelleft=True)
@@ -674,35 +680,47 @@ class Plot():
 
             ax.scatter(data_x, data_y, marker='.', label=desc[col-1], color = colors[col-1])
 
-        xrange = list(ax.get_xlim()) if xrange is None else xrange
-        yrange = list(ax.get_ylim()) if yrange is None else yrange
-
-
-
-        if xrange is not None:
-            xrange[0] -= self.x_extend
-            xrange[1] += self.x_extend
-            ax.set_xlim(xrange)
-        if yrange is not None:
-            yrange[0] -= self.y_extend
-            yrange[1] += self.y_extend
-            ax.set_ylim(yrange)
+        xrange = list(ax.get_xlim())
+        yrange = list(ax.get_ylim())
 
         xtick = list(ax.get_xticks())
         ytick = list(ax.get_yticks())
 
+
         minx = round(xtick[1], 1)
         maxx = round(xtick[-2], 1)
-        miny = round(ytick[1] ,1)
-        maxy = round(ytick[-2] ,1)
+        miny = round(ytick[0] ,1)
+        maxy = round(ytick[-1] ,1)
 
-        print(minx, maxx, miny, maxy)
-
-        ax.plot([minx-0.05, maxx+0.05], [yrange[0], yrange[0]], color='k')
+        if xrange is not None and x_extend is not None:
+            xrange[0] -= x_extend
+            xrange[1] += x_extend
+            ax.set_xlim(xrange)
         ax.plot([xrange[0], xrange[0]], [miny-0.05, maxy+0.05], color='k')
+
+        if yrange is not None and y_extend is not None:
+            yrange[0] -= y_extend
+            yrange[1] += y_extend
+            ax.set_ylim(yrange)
+        ax.plot([minx-0.05, maxx+0.05], [yrange[0], yrange[0]], color='k')
+
+        new_xtick = ax.get_xticks().tolist()
+        new_ytick = ax.get_yticks().tolist()
+
+        for tick in new_xtick:
+            if tick < minx or tick > maxx:
+                new_xtick.remove(tick)
+
+        for tick in new_ytick:
+            if tick < miny or tick > maxy:
+                new_ytick.remove(tick)
+
+        ax.set_xticks(new_xtick)
+        ax.set_yticks(new_ytick)
 
         fig.tight_layout()
         ax.legend(bbox_to_anchor=(-0.5, 0.5), loc='center left', borderaxespad=0, frameon=False)
+
         self.fig = fig
         self.ax = ax
 
@@ -793,3 +811,42 @@ class Plot():
         
     def savefig(self, filename='fig', format:str='png'):
         self.fig.savefig(f"{self.path}/{filename}.{format}", dpi=300, bbox_inches='tight')
+
+    def set_colors(self, colors:list = None):
+        self.colors = colors
+
+    def set_conf(self, conf:dict):
+        old_conf = self.config_dict
+
+        for key, value in old_conf.items():
+            if key not in conf.keys():
+                conf[key] = value
+
+        self.config_dict = conf
+
+    def set_axes(self, ax:matplotlib.pyplot.axes):
+        from matplotlib import rc
+
+        config_dict = self.config_dict
+
+        for key, value in config_dict.items():
+
+            if key == 'xrange' and value is not None:
+                ax.set_xlim(value[0], value[1])
+            if key == 'yrange' and value is not None:
+                ax.set_ylim(value[0], value[1])
+            if key == 'xticks' and value is not None:
+                ax.set_xticks(value)
+            if key == 'yticks' and value is not None:
+                ax.set_yticks(value)
+            if key == 'xlabel' and value is not None:
+                ax.set_xlabel(value)
+            if key == 'ylabel' and value is not None:
+                ax.set_ylabel(value)
+            if key == 'title' and value is not None:
+                ax.set_title(value)
+            if key == 'font' and value is not None:
+                rc('font', **{'family': 'serif', 'serif': [value]})
+                rc('text', usetex=True)
+
+
