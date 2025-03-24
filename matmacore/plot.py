@@ -874,12 +874,26 @@ class Plot():
         ax.spines['bottom'].set_linewidth(1.5)  
         ax.spines['left'].set_linewidth(1.5)    
 
-        # Final Formatting
+        self.set_axes(ax)
         ax.tick_params(labelsize=14)
         # ax.legend(loc="lower left", frameon=False, fontsize=14)
 
-        self.fig = fig;
+        self.fig = fig
         self.ax = ax
+
+    def mult_profile(self, mol_list, labels, type=str, units='kcal'):
+        """
+        Plots multiple reaction profiles simultaneously as a reaction coordinate diagram.
+
+        Args:
+            mol_list (list): a list of mol objects
+            labels (list): a list of labels for the mol objects
+            type (str): the type of energy that will be plotted ('E' or 'F' or 'H')
+            units (str): the units of energy to be used ('kcal', 'Eh', or 'kJ'). Default is 'kcal'.
+            
+        Returns:
+            A Reaction Coordinate Diagram Energy Plot with multiple reactions.
+        """
 
     def savefig(self, filename='fig', format:str='png'):
         self.fig.savefig(f"{self.path}/{filename}.{format}", dpi=300, bbox_inches='tight')
