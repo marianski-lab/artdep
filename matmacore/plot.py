@@ -789,10 +789,8 @@ class Plot():
             mol_list (list): a list of mol objects
             labels (list): a list of labels for the mol objects
             type (str): the type of energy that will be plotted ('E' or 'F' or 'H')
-
             units (str): the units of energy to be used ('kcal', 'Eh', or 'kJ'). Default is 'kcal'.
-            color (str): the color of the plot. Default uses cmap='Blues_r', cmap(0.25). Customizable.
-
+            
         Returns:
             A Reaction Coordinate Diagram Energy Plot
         """
