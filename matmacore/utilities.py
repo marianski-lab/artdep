@@ -139,6 +139,10 @@ def read_coordinates(xyz_file, atom_list):
         raise ValueError('You have specified too many atoms')
 
 def hartree_to_kcal(energy):
+    """Conversion from Hartrees to kcal per mol"""
     return energy * 627.5095
+
+
 def proper_minus(value):
+    """Replaces the default minus (-) with an actual minus sign instead of a dash"""
     return f"{value:.1f}".replace("-", "−")
