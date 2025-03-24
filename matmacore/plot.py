@@ -863,7 +863,6 @@ class Plot():
         ax.set_ylabel(f'{reaction_type}', fontsize=16)
         ax.yaxis.set_major_formatter(FuncFormatter(lambda x, _: proper_minus(x)))
 
-        
         ax.set_xticks(range(1, len(energies) + 1))
         ax.set_xticklabels(labels) 
             
@@ -894,6 +893,12 @@ class Plot():
         Returns:
             A Reaction Coordinate Diagram Energy Plot with multiple reactions.
         """
+
+        linewidth=3
+        scale=0.32
+        annotate=True
+
+        
 
     def savefig(self, filename='fig', format:str='png'):
         self.fig.savefig(f"{self.path}/{filename}.{format}", dpi=300, bbox_inches='tight')

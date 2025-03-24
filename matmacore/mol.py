@@ -499,6 +499,10 @@ class Reaction():
             mol_label.append(label)
 
         return mol_list, mol_label
+    
+    def gen_mol_set(*reactions):
+        reaction_list = []
+        
 
     def delta(self):
 
