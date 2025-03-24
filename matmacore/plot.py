@@ -47,6 +47,9 @@ class Plot():
             'font': None,
             'xextend': None,
             'yextend': None
+            'title fontsize': None,
+            'axis fontsize': None,
+            'tick fontsize': None,
         }
 
         self.config_dict = config_dict
@@ -941,6 +944,12 @@ class Plot():
             if key == 'font' and value is not None:
                 mpl.rcParams['font.sans-serif'] = value
                 mpl.rcParams['font.family'] = "sans-serif"
+            if key == 'axis fontsize' and value is not None:
+                mpl.rcParams['axes.labelsize'] = value
+            if key == 'title fontsize' and value is not None:
+                ax.title.set_size(value)
+            if key == 'tick fontsize' and value is not None:
+                ax.tick_params(labelsize=value, axis='both')
 
 
 
