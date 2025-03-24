@@ -865,7 +865,8 @@ class Plot():
 
         ax.set_xticks(range(1, len(energies) + 1))
         ax.set_xticklabels(labels) 
-            
+        ax.set_xlabel(f'Reaction', fontsize=16)
+
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
         ax.spines['bottom'].set_visible(True)
