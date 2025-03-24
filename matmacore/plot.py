@@ -895,7 +895,7 @@ class Plot():
         colors.insert(0, '#ffffff')
         self.colors = colors
 
-    def set_conf(self, conf:dict):
+    def set_config(self, conf:dict):
         old_conf = self.config_dict
 
         for key, value in old_conf.items():
