@@ -9,14 +9,21 @@ Documentation for the colors can be found here: https://pratiman-91.github.io/co
 
 ## Dependencies
 You need the following python packages to use this package:  
-  
+
+Python >= 3.13  
+
 Numpy  
 Matplotlib  
-Colormaps
+Colormaps  
 Networkx
 
 ## Install Instructions
 To install the package you can run  
 ```
-pip install MatmaCore
+pip install matmacore
+```
+
+To update the package:
+```
+pip install matmacore --upgrade
 ```
