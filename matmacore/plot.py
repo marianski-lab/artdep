@@ -692,7 +692,7 @@ class Plot():
         self.fig = fig
         self.ax = axes
 
-    def scatter(self, mol=None, headers=None):
+    def scatter(self, mol=None, headers=None, format:str ='.'):
 
         """
         Generates a scatter plot from data
@@ -744,24 +744,20 @@ class Plot():
             fit = np.polyfit(data_x, data_y, 1)
             val = np.polyval(fit, data_x)
             
-            if headers != None:
-                ax.scatter(data_x, data_y, marker='.', label=desc[col-1], color = colors[col-1])
+            if headers is not None:
+                ax.scatter(data_x, data_y, marker=format, label=desc[col-1], color = colors[col-1])
                 
             else:
-                ax.scatter(data_x, data_y, marker='.', color = colors[col-1])
+                ax.scatter(data_x, data_y, marker=format, color = colors[col-1])
 
         xrange = list(ax.get_xlim())
         yrange = list(ax.get_ylim())
-
-        print(xrange)
 
         xtick = list(ax.get_xticks())
         ytick = list(ax.get_yticks())
 
         xtick = [round(tick, 1) for tick in xtick ]
         ytick = [round(tick, 1) for tick in ytick ]
-
-        print(xtick)
 
         minx = round(xtick[0], 1)
         maxx = round(xtick[-1], 1)
@@ -784,7 +780,9 @@ class Plot():
         ax.set_yticks(ytick)
 
         fig.tight_layout()
-        ax.legend(bbox_to_anchor=(-0.5, 0.5), loc='center left', borderaxespad=0, frameon=False)
+
+        if headers is not None:
+            ax.legend(bbox_to_anchor=(-0.5, 0.5), loc='center left', borderaxespad=0, frameon=False)
 
         self.fig = fig
         self.ax = ax
