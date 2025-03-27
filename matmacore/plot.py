@@ -893,31 +893,36 @@ class Plot():
         self.ax = ax
 
 
-    def multi_profile(self, mol_lists, labels, reaction_names=None, type=str, units='kcal'):
+    def multi_profile(self, reaction_data, labels=None, type=str, units='kcal'):
 
         """
-        Plots multiple reaction profiles with a legend showing reaction names and colors.
+        Plots multiple reaction profiles, accepting either:
+        - Raw mol_lists + labels, or
+        - Reaction list from create_reaction_list()
         
         Args:
-            mol_lists (list of lists): List containing multiple mol_lists
-            labels (list): Shared labels for all reactions (e.g., ['R', 'TS', 'P'])
-            reaction_names (list): Names for each reaction profile (optional)
-            type (str): Energy type to plot ('E', 'F', or 'H')
-            units (str): Energy units ('kcal', 'Eh', or 'kJ')
+            reaction_data: Either list of mol_lists OR output from create_reaction_list()
+            labels: Optional if using create_reaction_list() output
+            type: Energy type ('E', 'F', or 'H')
+            units: Energy units ('kcal', 'Eh', or 'kJ')
         """
+
+        if all(isinstance(item, tuple) and len(item) == 3 for item in reaction_data):
+            # Input from create_reaction_list() - unpack names, mol_lists, labels
+            reaction_names = [item[0] for item in reaction_data]
+            mol_lists = [item[1] for item in reaction_data]
+            labels = reaction_data[0][2]  # Use labels from first reaction
+        else:
+            # Raw mol_lists input
+            mol_lists = reaction_data
+            if labels is None:
+                raise ValueError("labels argument required when not using create_reaction_list() format")
+            reaction_names = [f'Reaction {i+1}' for i in range(len(mol_lists))]
 
         linewidth = 3
         scale = 0.32
         num_reactions = len(mol_lists)
         
-        # Set default reaction names if not provided
-        if reaction_names is None:
-            reaction_names = [f'Reaction {i+1}' for i in range(num_reactions)]
-        elif len(reaction_names) != num_reactions:
-            print("Warning: Number of reaction names doesn't match number of reactions")
-            reaction_names = [f'Reaction {i+1}' for i in range(num_reactions)]
-        
-        # Get all energies first
         all_energies = []
         for mol_list in mol_lists:
             energies = []
@@ -955,7 +960,7 @@ class Plot():
         # Plot each reaction profile and store legend handles
         legend_handles = []
         for i, (energies, name) in enumerate(zip(all_energies, reaction_names)):
-            color = self.colors[i % len(self.colors)]
+            color = self.colors[i % len(self.colors)] 
             
             # Create legend entry
             handle, = ax.plot([], [], color=color, linewidth=linewidth, label=name)
