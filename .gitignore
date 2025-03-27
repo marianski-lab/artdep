@@ -1,4 +1,5 @@
 .ipynb_checkpoints/
+__pycache__/
 # sample_data/
 !trajectories_CP2K_Gromacs.ipynb
 !gaussian.ipynb
