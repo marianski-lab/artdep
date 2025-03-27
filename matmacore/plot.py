@@ -692,14 +692,21 @@ class Plot():
         self.fig = fig
         self.ax = axes
 
-    def scatter(self):
+    def scatter(self, mol=None, headers=None):
 
         """
         Generates a scatter plot from data
         """
-
-        data = self.data
-        desc = self.desc
+        
+        if mol == None:
+            data = self.data
+            desc = self.desc
+            
+        else:
+            data = mol.data
+            
+            if headers != None:
+                desc = headers
 
         x_extend = 0
         y_extend = 0
@@ -736,8 +743,12 @@ class Plot():
 
             fit = np.polyfit(data_x, data_y, 1)
             val = np.polyval(fit, data_x)
-
-            ax.scatter(data_x, data_y, marker='.', label=desc[col-1], color = colors[col-1])
+            
+            if headers != None:
+                ax.scatter(data_x, data_y, marker='.', label=desc[col-1], color = colors[col-1])
+                
+            else:
+                ax.scatter(data_x, data_y, marker='.', color = colors[col-1])
 
         xrange = list(ax.get_xlim())
         yrange = list(ax.get_ylim())
