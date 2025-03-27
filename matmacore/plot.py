@@ -46,7 +46,7 @@ class Plot():
             'title': None,
             'font': None,
             'xextend': None,
-            'yextend': None
+            'yextend': None,
             'title fontsize': None,
             'axis fontsize': None,
             'tick fontsize': None,
