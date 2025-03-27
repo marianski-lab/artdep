@@ -723,7 +723,7 @@ class Plot():
         data_x = data[:, 0]
         data_ys = []
 
-        fig, ax = plt.subplots(1,1, figsize=(5,5))
+        fig, ax = plt.subplots(1,1)
 
         self.set_axes(ax)
 
@@ -753,12 +753,18 @@ class Plot():
         xrange = list(ax.get_xlim())
         yrange = list(ax.get_ylim())
 
+        print(xrange)
+
         xtick = list(ax.get_xticks())
         ytick = list(ax.get_yticks())
 
+        xtick = [round(tick, 1) for tick in xtick ]
+        ytick = [round(tick, 1) for tick in ytick ]
 
-        minx = round(xtick[1], 1)
-        maxx = round(xtick[-2], 1)
+        print(xtick)
+
+        minx = round(xtick[0], 1)
+        maxx = round(xtick[-1], 1)
         miny = round(ytick[0] ,1)
         maxy = round(ytick[-1] ,1)
 
@@ -766,27 +772,16 @@ class Plot():
             xrange[0] -= x_extend
             xrange[1] += x_extend
             ax.set_xlim(xrange)
-        ax.plot([xrange[0], xrange[0]], [miny-0.05, maxy+0.05], color='k')
+        ax.plot([xrange[0], xrange[0]], [miny-0.001, maxy+0.001], color='k')
 
         if yrange is not None and y_extend is not None:
             yrange[0] -= y_extend
             yrange[1] += y_extend
             ax.set_ylim(yrange)
-        ax.plot([minx-0.05, maxx+0.05], [yrange[0], yrange[0]], color='k')
+        ax.plot([minx -0.001, maxx+0.001], [yrange[0], yrange[0]], color='k')
 
-        new_xtick = ax.get_xticks().tolist()
-        new_ytick = ax.get_yticks().tolist()
-
-        for tick in new_xtick:
-            if tick < minx or tick > maxx:
-                new_xtick.remove(tick)
-
-        for tick in new_ytick:
-            if tick < miny or tick > maxy:
-                new_ytick.remove(tick)
-
-        ax.set_xticks(new_xtick)
-        ax.set_yticks(new_ytick)
+        ax.set_xticks(xtick)
+        ax.set_yticks(ytick)
 
         fig.tight_layout()
         ax.legend(bbox_to_anchor=(-0.5, 0.5), loc='center left', borderaxespad=0, frameon=False)
