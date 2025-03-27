@@ -745,9 +745,13 @@ class Plot():
         xtick = list(ax.get_xticks())
         ytick = list(ax.get_yticks())
 
+        xtick = [round(tick, 1) for tick in xtick ]
+        ytick = [round(tick, 1) for tick in ytick ]
 
-        minx = round(xtick[1], 1)
-        maxx = round(xtick[-2], 1)
+        print(xtick)
+
+        minx = round(xtick[0], 1)
+        maxx = round(xtick[-1], 1)
         miny = round(ytick[0] ,1)
         maxy = round(ytick[-1] ,1)
 
