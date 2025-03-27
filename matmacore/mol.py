@@ -499,6 +499,39 @@ class Reaction():
             mol_label.append(label)
 
         return mol_list, mol_label
+    
+    def create_reaction_list(*reaction_definitions):
+        """
+        Creates a standardized reaction list with names from input definitions.
+        
+        Args:
+            *reaction_definitions: Variable number of reaction definitions where each is:
+                (reaction_name, [dir1, dir2, 'label'], [dir3, 'label'], ...)
+                
+        Returns:
+            list: [(reaction_name, mol_list, labels), ...]
+        """
+        reaction_data = []
+        standard_labels = None
+        
+        for definition in reaction_definitions:
+            # First element is reaction name, rest are pathway components
+            reaction_name, *components = definition
+            
+            # Generate mol_list and labels
+            mol_list, labels = Reaction.create_mol_list(*components)
+            
+            # Set standard labels from first reaction
+            if standard_labels is None:
+                standard_labels = labels
+            elif labels != standard_labels:
+                print(f"Warning: {reaction_name} labels don't match standard")
+                labels = standard_labels 
+                
+            reaction_data.append((reaction_name, mol_list, labels))
+        
+        return reaction_data
+        
 
     def delta(self):
 

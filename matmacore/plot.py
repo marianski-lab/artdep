@@ -796,10 +796,8 @@ class Plot():
             mol_list (list): a list of mol objects
             labels (list): a list of labels for the mol objects
             type (str): the type of energy that will be plotted ('E' or 'F' or 'H')
-
             units (str): the units of energy to be used ('kcal', 'Eh', or 'kJ'). Default is 'kcal'.
-            color (str): the color of the plot. Default uses cmap='Blues_r', cmap(0.25). Customizable.
-
+            
         Returns:
             A Reaction Coordinate Diagram Energy Plot
         """
@@ -856,12 +854,21 @@ class Plot():
                         [energy, relative_energies[j + 1]],
                         linestyle=":", color=self.colors[1], linewidth=linewidth)
 
+         # Set energy type label
         if type == 'E':
-            reaction_type = '$\\Delta E$ (kcal $\\cdot$ mol${}^{-1}$)' 
+            reaction_type = '$\\Delta E$'
         elif type == 'F':
-            reaction_type = '$\\Delta F$ (kcal $\\cdot$ mol${}^{-1}$)'
+            reaction_type = '$\\Delta F$'
         elif type == 'H':
-            reaction_type = '$\\Delta H$ (kcal $\\cdot$ mol${}^{-1}$)' 
+            reaction_type = '$\\Delta H$'
+        
+        # Add units to label
+        if units == 'kcal':
+            reaction_type += ' (kcal $\\cdot$ mol${}^{-1}$)'
+        elif units == 'Eh':
+            reaction_type += ' (Hartrees)'
+        elif units == 'kJ':
+            reaction_type += ' (kJ $\\cdot$ mol${}^{-1}$)'
 
        # Invisible plot for the legend label
         ax.plot([], [], color=self.colors[1], linewidth=linewidth)
@@ -872,10 +879,9 @@ class Plot():
         ax.set_ylabel(f'{reaction_type}', fontsize=16)
         ax.yaxis.set_major_formatter(FuncFormatter(lambda x, _: proper_minus(x)))
 
-        
         ax.set_xticks(range(1, len(energies) + 1))
         ax.set_xticklabels(labels) 
-            
+        
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
         ax.spines['bottom'].set_visible(True)
@@ -883,12 +889,138 @@ class Plot():
         ax.spines['bottom'].set_linewidth(1.5)  
         ax.spines['left'].set_linewidth(1.5)    
 
-        # Final Formatting
+        self.set_axes(ax)
         ax.tick_params(labelsize=14)
         # ax.legend(loc="lower left", frameon=False, fontsize=14)
 
-        self.fig = fig;
+        self.fig = fig
         self.ax = ax
+
+
+    def multi_profile(self, mol_lists, labels, reaction_names=None, type=str, units='kcal'):
+
+        """
+        Plots multiple reaction profiles with a legend showing reaction names and colors.
+        
+        Args:
+            mol_lists (list of lists): List containing multiple mol_lists
+            labels (list): Shared labels for all reactions (e.g., ['R', 'TS', 'P'])
+            reaction_names (list): Names for each reaction profile (optional)
+            type (str): Energy type to plot ('E', 'F', or 'H')
+            units (str): Energy units ('kcal', 'Eh', or 'kJ')
+        """
+
+        linewidth = 3
+        scale = 0.32
+        num_reactions = len(mol_lists)
+        
+        # Set default reaction names if not provided
+        if reaction_names is None:
+            reaction_names = [f'Reaction {i+1}' for i in range(num_reactions)]
+        elif len(reaction_names) != num_reactions:
+            print("Warning: Number of reaction names doesn't match number of reactions")
+            reaction_names = [f'Reaction {i+1}' for i in range(num_reactions)]
+        
+        # Get all energies first
+        all_energies = []
+        for mol_list in mol_lists:
+            energies = []
+            for mol in mol_list:
+                if type == 'E':
+                    energies.append(mol.E)
+                elif type == 'F':
+                    energies.append(mol.F)
+                elif type == 'H':
+                    energies.append(mol.H)
+                else:
+                    print("Unsupported Energy Type")
+                    return
+            
+            if not energies:
+                raise ValueError("No energies found. Check the input data.")
+            
+            if units == 'kcal':
+                relative_energies = [627.905*(e - energies[0]) for e in energies]
+            elif units == 'Eh':
+                relative_energies = [(e - energies[0]) for e in energies]
+            elif units == 'kJ':
+                relative_energies = [2625.5*(e - energies[0]) for e in energies]
+            else:
+                print('Invalid units. Using kcal/mol')
+                relative_energies = [627.905*(e - energies[0]) for e in energies]
+                
+            all_energies.append(relative_energies)
+        
+        # Dynamic figure sizing
+        num_steps = len(labels)
+        fig_width = max(6, num_steps * 2)
+        fig, ax = plt.subplots(figsize=(fig_width, 6))
+        
+        # Plot each reaction profile and store legend handles
+        legend_handles = []
+        for i, (energies, name) in enumerate(zip(all_energies, reaction_names)):
+            color = self.colors[i % len(self.colors)]
+            
+            # Create legend entry
+            handle, = ax.plot([], [], color=color, linewidth=linewidth, label=name)
+            legend_handles.append(handle)
+            
+            for j, energy in enumerate(energies):
+                # Draw Horizontal Bars
+                ax.plot([(j + 1 - scale), (j + 1 + scale)], [energy, energy],
+                        color=color, linewidth=linewidth)
+
+                # Draw Dashed Connecting Lines
+                if j < len(energies) - 1:
+                    ax.plot([(j + 1 + scale), (j + 2 - scale)],
+                            [energy, energies[j + 1]],
+                            linestyle=":", color=color, linewidth=linewidth)
+        
+        # Add X-axis Guide Line
+        ax.axhline(0, color="black", linestyle=":", linewidth=1.5, zorder=-4)
+        
+        # Set energy type label
+        if type == 'E':
+            reaction_type = '$\\Delta E$'
+        elif type == 'F':
+            reaction_type = '$\\Delta F$'
+        elif type == 'H':
+            reaction_type = '$\\Delta H$'
+        
+        # Add units to label
+        if units == 'kcal':
+            reaction_type += ' (kcal $\\cdot$ mol${}^{-1}$)'
+        elif units == 'Eh':
+            reaction_type += ' (Hartrees)'
+        elif units == 'kJ':
+            reaction_type += ' (kJ $\\cdot$ mol${}^{-1}$)'
+        
+        ax.set_ylabel(reaction_type, fontsize=16)
+        ax.yaxis.set_major_formatter(FuncFormatter(lambda x, _: proper_minus(x)))
+        
+        # Set x-ticks and labels
+        ax.set_xticks(range(1, num_steps + 1))
+        ax.set_xticklabels(labels)
+        
+        # Format axes
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['bottom'].set_visible(True)
+        ax.spines['left'].set_visible(True)
+        ax.spines['bottom'].set_linewidth(1.5)
+        ax.spines['left'].set_linewidth(1.5)
+        
+        # Add legend
+        ax.legend(handles=legend_handles, loc='best', frameon=False, fontsize=12)
+        
+        # Final formatting
+        self.set_axes(ax)
+        ax.tick_params(labelsize=14)
+        
+        self.fig = fig
+        self.ax = ax
+
+        
 
     def savefig(self, filename='fig', format:str='png'):
         self.fig.savefig(f"{self.path}/{filename}.{format}", dpi=300, bbox_inches='tight')
