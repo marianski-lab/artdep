@@ -6,5 +6,6 @@
 test/
 test.ipynb
 docs/
+__pycache__/
 .pyc
 .idea
