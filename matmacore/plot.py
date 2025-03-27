@@ -228,6 +228,8 @@ class Plot():
         xmax = xmax + 1 
         ax[0].set_xlim(0, xmax) 
         ax[1].set_xlabel('structures')
+        
+        self.set_axes(ax[0])
  
         plt.tight_layout()
         self.fig = fig
