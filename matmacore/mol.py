@@ -372,7 +372,7 @@ class Mol():
 
     def csv(self, file, skiprows=1, dtype=float, delimiter:str=','):
         
-        self.data = np.loadtxt(f"{self.path}/{file}", skiprows=skiprows, dtype=dtype)
+        self.data = np.loadtxt(f"{self.path}/{file}", skiprows=skiprows, dtype=dtype, delimiter=delimiter)
 
 
 
