@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>matmacore.utilities &mdash; matmacore 0.1.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fd825880"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            matmacore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">matmacore</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">matmacore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">matmacore.utilities</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for matmacore.utilities</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+
+<div class="viewcode-block" id="get_distance">
+<a class="viewcode-back" href="../../matmacore.html#matmacore.utilities.get_distance">[docs]</a>
+<span class="k">def</span> <span class="nf">get_distance</span><span class="p">(</span><span class="n">at1</span><span class="p">,</span> <span class="n">at2</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Finds the distance between two atoms</span>
+<span class="sd">    :param at1: (list) a list of xyz coordinates of atom1</span>
+<span class="sd">    :param at2: (list) a list of xyz coordinates of atom2</span>
+<span class="sd">    :return: (float) the distance between 2 atoms</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">at1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">at2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">at1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">at2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">at1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">at2</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="read_coordinates">
+<a class="viewcode-back" href="../../matmacore.html#matmacore.utilities.read_coordinates">[docs]</a>
+<span class="k">def</span> <span class="nf">read_coordinates</span><span class="p">(</span><span class="n">xyz_file</span><span class="p">,</span> <span class="n">atom_list</span><span class="p">):</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Extracts collective variables from an xyz file containing an MD trajectory (CP2K).</span>
+<span class="sd">    :param xyz_file: (string) The xyz file containing your MD trajectory.</span>
+<span class="sd">    :param atom_list: (list) a list of atoms that defines your collective variable.</span>
+<span class="sd">    :return: (list) Distances / Angles / Dihedrals, corresponding with your specified colvar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">xyz_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">no_atoms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">coordinate_list</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="k">while</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+            <span class="n">segment</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">no_atoms</span><span class="o">+</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">:]</span>
+            <span class="n">segment</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">segment</span><span class="p">]</span>
+            <span class="n">coordinate_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">segment</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">))</span>
+            
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">no_atoms</span> <span class="o">+</span> <span class="mi">2</span>
+            
+        <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+    <span class="k">def</span> <span class="nf">read_distances</span><span class="p">(</span><span class="n">coordinate_list</span><span class="p">,</span> <span class="n">atom1</span><span class="p">,</span><span class="n">atom2</span><span class="p">):</span>
+
+        <span class="n">distances</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coordinate_list</span><span class="p">)):</span>
+            <span class="n">dX</span> <span class="o">=</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">dY</span> <span class="o">=</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">dZ</span> <span class="o">=</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+
+            <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dX</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dY</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dZ</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">d</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.5f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="p">))</span> <span class="c1"># Round to 5 decimal places (Matches GaussView)</span>
+
+            <span class="n">distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">distances</span>
+
+    <span class="k">def</span> <span class="nf">read_angles</span><span class="p">(</span><span class="n">coordinate_list</span><span class="p">,</span> <span class="n">atom1</span><span class="p">,</span> <span class="n">atom2</span><span class="p">,</span> <span class="n">atom3</span><span class="p">):</span>
+
+        <span class="n">rad2deg_</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coordinate_list</span><span class="p">)):</span> 
+
+            <span class="n">x1</span> <span class="o">=</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">y1</span> <span class="o">=</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">z1</span> <span class="o">=</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+
+            <span class="n">x2</span> <span class="o">=</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom3</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">y2</span> <span class="o">=</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom3</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">z2</span> <span class="o">=</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom3</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+
+            <span class="n">dot</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span> <span class="o">*</span> <span class="n">x2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">y1</span> <span class="o">*</span> <span class="n">y2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">z1</span> <span class="o">*</span> <span class="n">z2</span><span class="p">)</span>
+
+            <span class="n">mag1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">z1</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">mag2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x2</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y2</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">z2</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">dot</span> <span class="o">/</span> <span class="p">(</span><span class="n">mag1</span> <span class="o">*</span> <span class="n">mag2</span><span class="p">))</span> <span class="o">*</span> <span class="n">rad2deg_</span>
+            <span class="n">angle</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.5f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span>
+
+            <span class="n">angles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">angles</span>
+
+    <span class="k">def</span> <span class="nf">read_dihedrals</span><span class="p">(</span><span class="n">coordinate_list</span><span class="p">,</span> <span class="n">atom1</span><span class="p">,</span> <span class="n">atom2</span><span class="p">,</span> <span class="n">atom3</span><span class="p">,</span> <span class="n">atom4</span><span class="p">):</span>
+
+        <span class="n">dihedrals</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coordinate_list</span><span class="p">)):</span>     
+
+            <span class="n">A</span> <span class="o">=</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">C</span> <span class="o">=</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom3</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">D</span> <span class="o">=</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom4</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">AB</span> <span class="o">=</span> <span class="n">B</span> <span class="o">-</span> <span class="n">A</span>
+            <span class="n">BC</span> <span class="o">=</span> <span class="n">C</span> <span class="o">-</span> <span class="n">B</span>
+            <span class="n">CD</span> <span class="o">=</span> <span class="n">D</span> <span class="o">-</span> <span class="n">C</span>
+
+            <span class="n">N1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">AB</span><span class="p">,</span> <span class="n">BC</span><span class="p">)</span>
+            <span class="n">N2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">BC</span><span class="p">,</span> <span class="n">CD</span><span class="p">)</span>
+
+            <span class="n">N1</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">N1</span><span class="p">)</span>
+            <span class="n">N2</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">N2</span><span class="p">)</span>
+
+            <span class="n">cos_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">)</span>
+            <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">cos_theta</span><span class="p">)</span>
+
+            <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">)</span>
+            <span class="n">sign</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">BC</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">BC</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">sign</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">angle</span> <span class="o">=</span> <span class="o">-</span><span class="n">angle</span>
+
+            <span class="n">angle_degrees</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.5f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">angle</span><span class="p">)))</span>
+
+            <span class="n">dihedrals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">angle_degrees</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dihedrals</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">atom_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        
+        <span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coordinate_list</span><span class="p">)):</span>
+            
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordinate_list</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">atom_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]])</span>
+            <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">positions</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">atom_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">read_distances</span><span class="p">(</span><span class="n">coordinate_list</span><span class="p">,</span> <span class="n">atom_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">atom_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">atom_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">read_angles</span><span class="p">(</span><span class="n">coordinate_list</span><span class="p">,</span> <span class="n">atom_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">atom_list</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">atom_list</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">atom_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">read_dihedrals</span><span class="p">(</span><span class="n">coordinate_list</span><span class="p">,</span> <span class="n">atom_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">atom_list</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">atom_list</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">atom_list</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">atom_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;You have specified too many atoms&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="hartree_to_kcal">
+<a class="viewcode-back" href="../../matmacore.html#matmacore.utilities.hartree_to_kcal">[docs]</a>
+<span class="k">def</span> <span class="nf">hartree_to_kcal</span><span class="p">(</span><span class="n">energy</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conversion from Hartrees to kcal per mol&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">energy</span> <span class="o">*</span> <span class="mf">627.5095</span></div>
+
+
+
+<div class="viewcode-block" id="proper_minus">
+<a class="viewcode-back" href="../../matmacore.html#matmacore.utilities.proper_minus">[docs]</a>
+<span class="k">def</span> <span class="nf">proper_minus</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Replaces the default minus (-) with an actual minus sign instead of a dash&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;−&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Eugene Chung, Ryan Kwok, Murat Yaman, Hillel Lerner, Mateusz Marianski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
