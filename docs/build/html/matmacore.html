@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>matmacore package &mdash; matmacore 0.1.10 documentation</title>
@@ -14,11 +14,12 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=bafade30"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="matmacore" href="modules.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,62 +41,34 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">matmacore package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-matmacore.mol">matmacore.mol module</a><ul>
-<li><a class="reference internal" href="#matmacore.mol.Mol"><code class="docutils literal notranslate"><span class="pre">Mol</span></code></a><ul>
-<li><a class="reference internal" href="#matmacore.mol.Mol.connectivity_matrix"><code class="docutils literal notranslate"><span class="pre">Mol.connectivity_matrix()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.mol.Mol.cp2k"><code class="docutils literal notranslate"><span class="pre">Mol.cp2k()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.mol.Mol.csv"><code class="docutils literal notranslate"><span class="pre">Mol.csv()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.mol.Mol.element_symbol"><code class="docutils literal notranslate"><span class="pre">Mol.element_symbol()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.mol.Mol.gaussian"><code class="docutils literal notranslate"><span class="pre">Mol.gaussian()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.mol.Mol.gromacs"><code class="docutils literal notranslate"><span class="pre">Mol.gromacs()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.mol.Mol.orca"><code class="docutils literal notranslate"><span class="pre">Mol.orca()</span></code></a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">matmacore</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">matmacore package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-matmacore.mol">matmacore.mol module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#matmacore.mol.Mol"><code class="docutils literal notranslate"><span class="pre">Mol</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#matmacore.mol.Reaction"><code class="docutils literal notranslate"><span class="pre">Reaction</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#matmacore.mol.Reaction"><code class="docutils literal notranslate"><span class="pre">Reaction</span></code></a><ul>
-<li><a class="reference internal" href="#matmacore.mol.Reaction.combiner"><code class="docutils literal notranslate"><span class="pre">Reaction.combiner()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.mol.Reaction.create_mol_list"><code class="docutils literal notranslate"><span class="pre">Reaction.create_mol_list()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.mol.Reaction.create_reaction_list"><code class="docutils literal notranslate"><span class="pre">Reaction.create_reaction_list()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.mol.Reaction.delta"><code class="docutils literal notranslate"><span class="pre">Reaction.delta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-matmacore.plot">matmacore.plot module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#matmacore.plot.Plot"><code class="docutils literal notranslate"><span class="pre">Plot</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#module-matmacore.utilities">matmacore.utilities module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#matmacore.utilities.get_distance"><code class="docutils literal notranslate"><span class="pre">get_distance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#matmacore.utilities.hartree_to_kcal"><code class="docutils literal notranslate"><span class="pre">hartree_to_kcal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#matmacore.utilities.proper_minus"><code class="docutils literal notranslate"><span class="pre">proper_minus()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#matmacore.utilities.read_coordinates"><code class="docutils literal notranslate"><span class="pre">read_coordinates()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-matmacore.plot">matmacore.plot module</a><ul>
-<li><a class="reference internal" href="#matmacore.plot.Plot"><code class="docutils literal notranslate"><span class="pre">Plot</span></code></a><ul>
-<li><a class="reference internal" href="#matmacore.plot.Plot.cmap"><code class="docutils literal notranslate"><span class="pre">Plot.cmap()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.plot.Plot.contour"><code class="docutils literal notranslate"><span class="pre">Plot.contour()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.plot.Plot.fes"><code class="docutils literal notranslate"><span class="pre">Plot.fes()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.plot.Plot.multi_profile"><code class="docutils literal notranslate"><span class="pre">Plot.multi_profile()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.plot.Plot.puckers_hist"><code class="docutils literal notranslate"><span class="pre">Plot.puckers_hist()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.plot.Plot.puckers_scatter"><code class="docutils literal notranslate"><span class="pre">Plot.puckers_scatter()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.plot.Plot.rdf"><code class="docutils literal notranslate"><span class="pre">Plot.rdf()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.plot.Plot.reaction_profile"><code class="docutils literal notranslate"><span class="pre">Plot.reaction_profile()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.plot.Plot.savefig"><code class="docutils literal notranslate"><span class="pre">Plot.savefig()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.plot.Plot.scatter"><code class="docutils literal notranslate"><span class="pre">Plot.scatter()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.plot.Plot.set_axes"><code class="docutils literal notranslate"><span class="pre">Plot.set_axes()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.plot.Plot.set_colors"><code class="docutils literal notranslate"><span class="pre">Plot.set_colors()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.plot.Plot.set_config"><code class="docutils literal notranslate"><span class="pre">Plot.set_config()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.plot.Plot.trajectory"><code class="docutils literal notranslate"><span class="pre">Plot.trajectory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-matmacore">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-matmacore.utilities">matmacore.utilities module</a><ul>
-<li><a class="reference internal" href="#matmacore.utilities.get_distance"><code class="docutils literal notranslate"><span class="pre">get_distance()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.utilities.hartree_to_kcal"><code class="docutils literal notranslate"><span class="pre">hartree_to_kcal()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.utilities.proper_minus"><code class="docutils literal notranslate"><span class="pre">proper_minus()</span></code></a></li>
-<li><a class="reference internal" href="#matmacore.utilities.read_coordinates"><code class="docutils literal notranslate"><span class="pre">read_coordinates()</span></code></a></li>
 </ul>
-</li>
-<li><a class="reference internal" href="#module-matmacore">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -110,6 +83,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">matmacore</a></li>
       <li class="breadcrumb-item active">matmacore package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/matmacore.rst.txt" rel="nofollow"> View page source</a>
@@ -129,7 +103,7 @@
 <span id="matmacore-mol-module"></span><h2>matmacore.mol module<a class="headerlink" href="#module-matmacore.mol" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="matmacore.mol.Mol">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">matmacore.mol.</span></span><span class="sig-name descname"><span class="pre">Mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">matmacore.mol.</span></span><span class="sig-name descname"><span class="pre">Mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class that can parse log files from different Computational Software.
 It can parse log files from Gaussian 16, xvg files from Gromacs, out files from ORCA, and log files from CP2K.</p>
@@ -206,12 +180,12 @@ It can parse log files from Gaussian 16, xvg files from Gromacs, out files from 
 
 <dl class="py class">
 <dt class="sig sig-object py" id="matmacore.mol.Reaction">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">matmacore.mol.</span></span><span class="sig-name descname"><span class="pre">Reaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">matmacore.mol.</span></span><span class="sig-name descname"><span class="pre">Reaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class that organizes several molecules into a reaction</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="matmacore.mol.Reaction.combiner">
-<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">combiner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction.combiner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction.combiner" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">combiner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction.combiner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction.combiner" title="Link to this definition"></a></dt>
 <dd><p>Adds the energies for multiple molecules and returns a new mol object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -272,7 +246,7 @@ mol_label (list): List of labels for the Mol objects.</p>
 <span id="matmacore-plot-module"></span><h2>matmacore.plot module<a class="headerlink" href="#module-matmacore.plot" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="matmacore.plot.Plot">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">matmacore.plot.</span></span><span class="sig-name descname"><span class="pre">Plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">matmacore.plot.</span></span><span class="sig-name descname"><span class="pre">Plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class that creates plots from a numpy array.
 It can make reaction coordinate diagrams, RMSD and RMSF trajectory plots,
@@ -440,7 +414,9 @@ Free energy plots, Scatter Plots, and SNFG Figures.</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="matmacore" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 
