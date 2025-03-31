@@ -10,11 +10,15 @@ import os
 import sys
 
 sys.path.append(os.path.abspath('../'))
+import requests
+
+response = requests.get("https://api.github.com/repos/marianski-lab/artdep/tags")
+version_num = response.json()[0]['name']
 
 project = 'matmacore'
 copyright = '2025, Eugene Chung, Ryan Kwok, Murat Yaman, Hillel Lerner, Mateusz Marianski'
 author = 'Eugene Chung, Ryan Kwok, Murat Yaman, Hillel Lerner, Mateusz Marianski'
-release = '0.1.4'
+release = version_num
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
