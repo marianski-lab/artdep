@@ -1,0 +1,468 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>matmacore package &mdash; matmacore 0.1.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=bafade30"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            matmacore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">matmacore package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-matmacore.mol">matmacore.mol module</a><ul>
+<li><a class="reference internal" href="#matmacore.mol.Mol"><code class="docutils literal notranslate"><span class="pre">Mol</span></code></a><ul>
+<li><a class="reference internal" href="#matmacore.mol.Mol.connectivity_matrix"><code class="docutils literal notranslate"><span class="pre">Mol.connectivity_matrix()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.mol.Mol.cp2k"><code class="docutils literal notranslate"><span class="pre">Mol.cp2k()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.mol.Mol.csv"><code class="docutils literal notranslate"><span class="pre">Mol.csv()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.mol.Mol.element_symbol"><code class="docutils literal notranslate"><span class="pre">Mol.element_symbol()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.mol.Mol.gaussian"><code class="docutils literal notranslate"><span class="pre">Mol.gaussian()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.mol.Mol.gromacs"><code class="docutils literal notranslate"><span class="pre">Mol.gromacs()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.mol.Mol.orca"><code class="docutils literal notranslate"><span class="pre">Mol.orca()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#matmacore.mol.Reaction"><code class="docutils literal notranslate"><span class="pre">Reaction</span></code></a><ul>
+<li><a class="reference internal" href="#matmacore.mol.Reaction.combiner"><code class="docutils literal notranslate"><span class="pre">Reaction.combiner()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.mol.Reaction.create_mol_list"><code class="docutils literal notranslate"><span class="pre">Reaction.create_mol_list()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.mol.Reaction.create_reaction_list"><code class="docutils literal notranslate"><span class="pre">Reaction.create_reaction_list()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.mol.Reaction.delta"><code class="docutils literal notranslate"><span class="pre">Reaction.delta()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-matmacore.plot">matmacore.plot module</a><ul>
+<li><a class="reference internal" href="#matmacore.plot.Plot"><code class="docutils literal notranslate"><span class="pre">Plot</span></code></a><ul>
+<li><a class="reference internal" href="#matmacore.plot.Plot.cmap"><code class="docutils literal notranslate"><span class="pre">Plot.cmap()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.plot.Plot.contour"><code class="docutils literal notranslate"><span class="pre">Plot.contour()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.plot.Plot.fes"><code class="docutils literal notranslate"><span class="pre">Plot.fes()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.plot.Plot.multi_profile"><code class="docutils literal notranslate"><span class="pre">Plot.multi_profile()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.plot.Plot.puckers_hist"><code class="docutils literal notranslate"><span class="pre">Plot.puckers_hist()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.plot.Plot.puckers_scatter"><code class="docutils literal notranslate"><span class="pre">Plot.puckers_scatter()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.plot.Plot.rdf"><code class="docutils literal notranslate"><span class="pre">Plot.rdf()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.plot.Plot.reaction_profile"><code class="docutils literal notranslate"><span class="pre">Plot.reaction_profile()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.plot.Plot.savefig"><code class="docutils literal notranslate"><span class="pre">Plot.savefig()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.plot.Plot.scatter"><code class="docutils literal notranslate"><span class="pre">Plot.scatter()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.plot.Plot.set_axes"><code class="docutils literal notranslate"><span class="pre">Plot.set_axes()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.plot.Plot.set_colors"><code class="docutils literal notranslate"><span class="pre">Plot.set_colors()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.plot.Plot.set_config"><code class="docutils literal notranslate"><span class="pre">Plot.set_config()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.plot.Plot.trajectory"><code class="docutils literal notranslate"><span class="pre">Plot.trajectory()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-matmacore.utilities">matmacore.utilities module</a><ul>
+<li><a class="reference internal" href="#matmacore.utilities.get_distance"><code class="docutils literal notranslate"><span class="pre">get_distance()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.utilities.hartree_to_kcal"><code class="docutils literal notranslate"><span class="pre">hartree_to_kcal()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.utilities.proper_minus"><code class="docutils literal notranslate"><span class="pre">proper_minus()</span></code></a></li>
+<li><a class="reference internal" href="#matmacore.utilities.read_coordinates"><code class="docutils literal notranslate"><span class="pre">read_coordinates()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-matmacore">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">matmacore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">matmacore package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/matmacore.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="matmacore-package">
+<h1>matmacore package<a class="headerlink" href="#matmacore-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-matmacore.mol">
+<span id="matmacore-mol-module"></span><h2>matmacore.mol module<a class="headerlink" href="#module-matmacore.mol" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="matmacore.mol.Mol">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">matmacore.mol.</span></span><span class="sig-name descname"><span class="pre">Mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class that can parse log files from different Computational Software.
+It can parse log files from Gaussian 16, xvg files from Gromacs, out files from ORCA, and log files from CP2K.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.connectivity_matrix">
+<span class="sig-name descname"><span class="pre">connectivity_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distXX</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.65</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distXH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.15</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.connectivity_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.connectivity_matrix" title="Link to this definition"></a></dt>
+<dd><p>Creates a connectivity matrix of the molecule. A connectivity matrix holds the information of which atoms are bonded and to what.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distXX</strong> – The max distance between two atoms (not hydrogen) to be considered a bond</p></li>
+<li><p><strong>distXH</strong> – The max distance between any atom and a hydrogen atom to be considered a bond</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.cp2k">
+<span class="sig-name descname"><span class="pre">cp2k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'md'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colvar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.cp2k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.cp2k" title="Link to this definition"></a></dt>
+<dd><p>Parses information from CP2K. Right now only works for AIMD Trajectories, plan to implement opt compatability later.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_type</strong> – (string) Currently only md is supported. Should be manually specified.</p></li>
+<li><p><strong>colvar</strong> – (list) A list containing the atom numbers that define your collective variable.</p></li>
+<li><p><strong>timestep</strong> – (float) Timestep of your MD calculation. The function will attempt to extract this from your input file if present.</p></li>
+<li><p><strong>traj_file</strong> – (string) File containing the CP2K trajectory.</p></li>
+<li><p><strong>input_file</strong> – (string) File containing your CP2K inputs.</p></li>
+<li><p><strong>output_file</strong> – (string) File containing your CP2K output.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.csv">
+<span class="sig-name descname"><span class="pre">csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skiprows=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'float'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.csv" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.element_symbol">
+<span class="sig-name descname"><span class="pre">element_symbol</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.element_symbol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.element_symbol" title="Link to this definition"></a></dt>
+<dd><p>A dictionary for atomic number and atomic symbol
+:param A: either atomic number or atomic symbol for Hydrogen, Carbon, Nitrogen, Oxygen, Fluorine and Silicon
+:return: the corresponding atomic symbol or atomic number</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.gaussian">
+<span class="sig-name descname"><span class="pre">gaussian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.gaussian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.gaussian" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.gromacs">
+<span class="sig-name descname"><span class="pre">gromacs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.gromacs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.gromacs" title="Link to this definition"></a></dt>
+<dd><p>Parses information from gromacs <a href="#id1"><span class="problematic" id="id2">*</span></a>.xvg file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> – (string) File containing the gromacs data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.orca">
+<span class="sig-name descname"><span class="pre">orca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'input.log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'opt'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.orca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.orca" title="Link to this definition"></a></dt>
+<dd><p>Parses information from ORCA input.log file
+:param output_file: (string) File containing ORCA output file.
+:param job_type: (string) The type of calculation ORCA run.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="matmacore.mol.Reaction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">matmacore.mol.</span></span><span class="sig-name descname"><span class="pre">Reaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class that organizes several molecules into a reaction</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Reaction.combiner">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">combiner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction.combiner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction.combiner" title="Link to this definition"></a></dt>
+<dd><p>Adds the energies for multiple molecules and returns a new mol object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mol_list</strong> – (list) List of molecule objects.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Reaction.create_mol_list">
+<span class="sig-name descname"><span class="pre">create_mol_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction.create_mol_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction.create_mol_list" title="Link to this definition"></a></dt>
+<dd><p>Creates Mol objects from user-specified groups of directories and labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*groups</strong> – Variable number of groups, where each group is a list of directories followed by a label.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of Mol objects.
+mol_label (list): List of labels for the Mol objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>mol_list (list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Reaction.create_reaction_list">
+<span class="sig-name descname"><span class="pre">create_reaction_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction.create_reaction_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction.create_reaction_list" title="Link to this definition"></a></dt>
+<dd><p>Creates a standardized reaction list with names from input definitions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*reaction_definitions</strong> – Variable number of reaction definitions where each is:
+(reaction_name, [dir1, dir2, ‘label’], [dir3, ‘label’], …)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[(reaction_name, mol_list, labels), …]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Reaction.delta">
+<span class="sig-name descname"><span class="pre">delta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction.delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction.delta" title="Link to this definition"></a></dt>
+<dd><p>Calculates the energy differences for a reaction</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-matmacore.plot">
+<span id="matmacore-plot-module"></span><h2>matmacore.plot module<a class="headerlink" href="#module-matmacore.plot" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="matmacore.plot.Plot">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">matmacore.plot.</span></span><span class="sig-name descname"><span class="pre">Plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class that creates plots from a numpy array.
+It can make reaction coordinate diagrams, RMSD and RMSF trajectory plots,
+Free energy plots, Scatter Plots, and SNFG Figures.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.cmap">
+<span class="sig-name descname"><span class="pre">cmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ice'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.cmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.cmap" title="Link to this definition"></a></dt>
+<dd><p>Generates and processes a colormap with optional offsetting logic.
+:param color_num: (int) Number of discrete colors.
+:param offset: (float) Fractional offset to shift the colormap.
+:param map: (str) Name of the colormap from the colormaps library.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.contour">
+<span class="sig-name descname"><span class="pre">contour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xpm_mols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.contour"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.contour" title="Link to this definition"></a></dt>
+<dd><p>Plots contour maps for a provided list of moles from xpm files.
+:param xpm_mols: (List) List of mol objects generated from xpm files.
+:param limit: (Int) The upper limit on your energy scale</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.fes">
+<span class="sig-name descname"><span class="pre">fes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">2]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.fes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.fes" title="Link to this definition"></a></dt>
+<dd><p>Plots MD FES. Takes in data for CP2K or Gromacs via Mol.
+:param mol: (Mol) Class Mol.
+:param cols: (int) Index of the 2 columns containing your colvar data, in the case that you have more than 2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.multi_profile">
+<span class="sig-name descname"><span class="pre">multi_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reaction_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=&lt;class</span> <span class="pre">'str'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units='kcal'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.multi_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.multi_profile" title="Link to this definition"></a></dt>
+<dd><p>Plots multiple reaction profiles, accepting either:
+- Raw mol_lists + labels, or
+- Reaction list from create_reaction_list()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reaction_data</strong> – Either list of mol_lists OR output from create_reaction_list()</p></li>
+<li><p><strong>labels</strong> – Optional if using create_reaction_list() output</p></li>
+<li><p><strong>type</strong> – Energy type (‘E’, ‘F’, or ‘H’)</p></li>
+<li><p><strong>units</strong> – Energy units (‘kcal’, ‘Eh’, or ‘kJ’)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.puckers_hist">
+<span class="sig-name descname"><span class="pre">puckers_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_pucker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_fem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">puckers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['1C4',</span> <span class="pre">'1,4B']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.puckers_hist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.puckers_hist" title="Link to this definition"></a></dt>
+<dd><p>Plots ring pucker free energy surface. Requires 2 mol objects to run.
+:param mol_pucker: (Mol) Class Mol containing the .xvg file for your ring pucker determination.
+:param mol_fem: (Mol) Class Mol containing the .xvg file for your free energy surface.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.puckers_scatter">
+<span class="sig-name descname"><span class="pre">puckers_scatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">puckers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['1C4',</span> <span class="pre">'1,4B']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.puckers_scatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.puckers_scatter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.rdf">
+<span class="sig-name descname"><span class="pre">rdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.rdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.rdf" title="Link to this definition"></a></dt>
+<dd><p>Plots radial distribution function.
+:param mol: (Mol) Class Mol generated from xvg file
+:param xmin: (Int) Minimum x value for rdf plot
+:param xmax: (Int) Maximum x value for rdf plot</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.reaction_profile">
+<span class="sig-name descname"><span class="pre">reaction_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=&lt;class</span> <span class="pre">'str'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units='kcal'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.reaction_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.reaction_profile" title="Link to this definition"></a></dt>
+<dd><p>Plots a reaction coordinate diagram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol_list</strong> (<em>list</em>) – a list of mol objects</p></li>
+<li><p><strong>labels</strong> (<em>list</em>) – a list of labels for the mol objects</p></li>
+<li><p><strong>type</strong> (<em>str</em>) – the type of energy that will be plotted (‘E’ or ‘F’ or ‘H’)</p></li>
+<li><p><strong>units</strong> (<em>str</em>) – the units of energy to be used (‘kcal’, ‘Eh’, or ‘kJ’). Default is ‘kcal’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Reaction Coordinate Diagram Energy Plot</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.savefig">
+<span class="sig-name descname"><span class="pre">savefig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fig'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'png'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.savefig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.savefig" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.scatter">
+<span class="sig-name descname"><span class="pre">scatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.scatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.scatter" title="Link to this definition"></a></dt>
+<dd><p>Generates a scatter plot from data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.set_axes">
+<span class="sig-name descname"><span class="pre">set_axes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">axes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.set_axes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.set_axes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.set_colors">
+<span class="sig-name descname"><span class="pre">set_colors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.set_colors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.set_colors" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.set_config">
+<span class="sig-name descname"><span class="pre">set_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.set_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.set_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.plot.Plot.trajectory">
+<span class="sig-name descname"><span class="pre">trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'colvar'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc_qa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/plot.html#Plot.trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.plot.Plot.trajectory" title="Link to this definition"></a></dt>
+<dd><p>Plots MD trajectory with histogram. Takes in data for CP2K or Gromacs via Mol.
+:param molecule: (Mol / List) Either a Mol object, or a list of moles if you want to overlay data.
+:param var_name: (list) Name of the collective variable you are plotting on your y-axis.
+:param col: (int) Index of the column containing your colvar data, in the case that you have multiple.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-matmacore.utilities">
+<span id="matmacore-utilities-module"></span><h2>matmacore.utilities module<a class="headerlink" href="#module-matmacore.utilities" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="matmacore.utilities.get_distance">
+<span class="sig-prename descclassname"><span class="pre">matmacore.utilities.</span></span><span class="sig-name descname"><span class="pre">get_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">at1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/utilities.html#get_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.utilities.get_distance" title="Link to this definition"></a></dt>
+<dd><p>Finds the distance between two atoms
+:param at1: (list) a list of xyz coordinates of atom1
+:param at2: (list) a list of xyz coordinates of atom2
+:return: (float) the distance between 2 atoms</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="matmacore.utilities.hartree_to_kcal">
+<span class="sig-prename descclassname"><span class="pre">matmacore.utilities.</span></span><span class="sig-name descname"><span class="pre">hartree_to_kcal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/utilities.html#hartree_to_kcal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.utilities.hartree_to_kcal" title="Link to this definition"></a></dt>
+<dd><p>Conversion from Hartrees to kcal per mol</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="matmacore.utilities.proper_minus">
+<span class="sig-prename descclassname"><span class="pre">matmacore.utilities.</span></span><span class="sig-name descname"><span class="pre">proper_minus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/utilities.html#proper_minus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.utilities.proper_minus" title="Link to this definition"></a></dt>
+<dd><p>Replaces the default minus (-) with an actual minus sign instead of a dash</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="matmacore.utilities.read_coordinates">
+<span class="sig-prename descclassname"><span class="pre">matmacore.utilities.</span></span><span class="sig-name descname"><span class="pre">read_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/utilities.html#read_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.utilities.read_coordinates" title="Link to this definition"></a></dt>
+<dd><p>Extracts collective variables from an xyz file containing an MD trajectory (CP2K).
+:param xyz_file: (string) The xyz file containing your MD trajectory.
+:param atom_list: (list) a list of atoms that defines your collective variable.
+:return: (list) Distances / Angles / Dihedrals, corresponding with your specified colvar.</p>
+</dd></dl>
+
+</section>
+<section id="module-matmacore">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-matmacore" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Eugene Chung, Ryan Kwok, Murat Yaman, Hillel Lerner, Mateusz Marianski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
