@@ -24,6 +24,7 @@ jobs:
       - name: Sphinx build
         run: |
           cd docs
+          make clean
           sphinx-apidoc -o ./source ../matmacore
           make html
           touch build/html/.nojekyll
@@ -33,5 +34,5 @@ jobs:
         with:
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/build/html
+          publish_dir: ./docs/build/html
           force_orphan: true
