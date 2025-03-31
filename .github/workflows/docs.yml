@@ -16,6 +16,7 @@ jobs:
           pip install sphinx sphinx_rtd_theme myst_parser
       - name: Sphinx build
         run: |
+          pwd
           cd docs
           sphinx-apidoc -o ./source ../matmacore -f
           make html
