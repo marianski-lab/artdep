@@ -17,6 +17,7 @@ jobs:
           python-version: "3.13"
       - name: Install dependencies
         run: |
+          sudo apt install curl -y
           pip3 install -e .
           pip3 install sphinx sphinx-rtd-theme
       - name: Sphinx build
