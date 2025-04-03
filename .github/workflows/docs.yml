@@ -1,18 +1,32 @@
-name: Deploy Sphinx documentation to Pages
+name: Publish Sphinx Documentation
 
 on:
   push:
-    branches: [main] # branch to trigger deployment
+    branches:
+      - main
 
 jobs:
-  pages:
+  publish_sphinx_docs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-    - id: deployment
-      uses: sphinx-notes/pages@v3
-      with:
-        publish: false
-    - uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ${{ steps.deployment.outputs.artifact }}
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          pip install -e .
+          pip install sphinx sphinx-rtd-theme
+      - name: Sphinx build
+        run: |
+          sphinx-apidoc -o docs/source matmacore --separate
+          sphinx-build docs docs/build/html
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
+          force_orphan: true
