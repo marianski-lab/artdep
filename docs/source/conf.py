@@ -13,7 +13,7 @@ import subprocess
 for x in os.walk(os.path.abspath(os.path.join("..", "..", ".."))):
   sys.path.insert(0, x[0])
 
-version_check = subprocess.run(['./version.sh'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+version_check = subprocess.run(['version.sh'], stdout=subprocess.PIPE).stdout.decode('utf-8')
 version_num = version_check.stdout
 
 project = 'matmacore'
