@@ -8,13 +8,13 @@
 
 import os
 import sys
-import requests
+import subprocess
 
 for x in os.walk(os.path.abspath(os.path.join("..", "..", ".."))):
   sys.path.insert(0, x[0])
 
-response = requests.get("https://api.github.com/repos/marianski-lab/artdep/tags")
-version_num = response.json()[0]['name']
+result = subprocess.run(['curl -s https://api.github.com/repos/marianski-lab/artdep/tags | jq -r first(.[].name | select(test("^v?[0-9]")))'], stdout=subprocess.PIPE)
+version_num = result.stdout.decode('utf-8')
 
 project = 'matmacore'
 copyright = '2025, Eugene Chung, Ryan Kwok, Murat Yaman, Hillel Lerner, Mateusz Marianski'
