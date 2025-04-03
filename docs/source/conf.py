@@ -8,11 +8,10 @@
 
 import os
 import sys
+import requests
 
 for x in os.walk('../..'):
   sys.path.insert(0, x[0])
-
-import requests
 
 response = requests.get("https://api.github.com/repos/marianski-lab/artdep/tags")
 version_num = response.json()[0]['name']
