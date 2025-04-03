@@ -10,7 +10,7 @@ import os
 import sys
 import requests
 
-for x in os.walk('/home'):
+for x in os.walk(os.path.abspath(os.path.join("..", "..", ".."))):
   sys.path.insert(0, x[0])
 
 response = requests.get("https://api.github.com/repos/marianski-lab/artdep/tags")
