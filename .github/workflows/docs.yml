@@ -17,9 +17,9 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: |
-          pip install requests
-          pip install -e .
-          pip install sphinx sphinx-rtd-theme
+          pip3 install requests
+          pip3 install -e .
+          pip3 install sphinx sphinx-rtd-theme
       - name: Sphinx build
         run: |
           sphinx-apidoc -o docs/source matmacore --separate
