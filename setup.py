@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 import subprocess
 
-version_check = subprocess.run(['version.sh'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-version_num = version_check.stdout
+version_check = subprocess.run(['./version.sh'], stdout=subprocess.PIPE)
+version_num = version_check.stdout.decode('utf-8')
 
 setup(
     name='matmacore',

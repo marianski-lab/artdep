@@ -13,8 +13,8 @@ import subprocess
 for x in os.walk(os.path.abspath(os.path.join("..", "..", ".."))):
   sys.path.insert(0, x[0])
 
-version_check = subprocess.run(['version.sh'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-version_num = version_check.stdout
+version_check = subprocess.run(['version.sh'], stdout=subprocess.PIPE)
+version_num = version_check.stdout.decode('utf-8')
 
 project = 'matmacore'
 copyright = '2025, Eugene Chung, Ryan Kwok, Murat Yaman, Hillel Lerner, Mateusz Marianski'
