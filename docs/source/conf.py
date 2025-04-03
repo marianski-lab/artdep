@@ -13,8 +13,8 @@ import subprocess
 for x in os.walk(os.path.abspath(os.path.join("..", "..", ".."))):
   sys.path.insert(0, x[0])
 
-result = subprocess.run(['curl', '-s', 'https://api.github.com/repos/marianski-lab/artdep/tags', '|', 'jq', '-r', 'first(.[].name', '|', 'select(test("^v?[0-9]")))'], stdout=subprocess.PIPE)
-version_num = result.stdout.decode('utf-8')
+version_check = subprocess.run(['./version.sh'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+version_num = version_check.stdout
 
 project = 'matmacore'
 copyright = '2025, Eugene Chung, Ryan Kwok, Murat Yaman, Hillel Lerner, Mateusz Marianski'
