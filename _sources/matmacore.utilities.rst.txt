@@ -1,0 +1,7 @@
+matmacore.utilities module
+==========================
+
+.. automodule:: matmacore.utilities
+   :members:
+   :show-inheritance:
+   :undoc-members:
