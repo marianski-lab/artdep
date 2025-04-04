@@ -54,7 +54,7 @@ class Plot():
 
         self.config_dict = config_dict
 
-    def cmap(self, color_num: int = None, offset: float = 0, map: str = 'ice'):
+    def cmap(self, color_num: int = None, offset: float = 0, map: str = 'ice', reverse: bool = False) :
         """
         Generates and processes a colormap with optional offsetting logic.
         :param color_num: (int) Number of discrete colors.
@@ -101,6 +101,10 @@ class Plot():
                 new_colors.append(new_color)
 
             colormap_colors = new_colors
+
+
+        if reverse:
+            colormap_colors = list(reversed(colormap_colors))
 
         # Discretize the colormap to the required number of colors
         if color_num is not None:
