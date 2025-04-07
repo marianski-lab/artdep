@@ -23,7 +23,7 @@ docs = ["sphinx", "sphinx-rtd-theme", "myst-parser"]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["mymodule*"]
+include = ["matmacore*"]
 
 [tool.setuptools.dynamic]
-version = {attr = "mymodule.__version__"}
+version = {attr = "matmacore.__version__"}
