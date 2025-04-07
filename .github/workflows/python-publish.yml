@@ -33,7 +33,7 @@ jobs:
           python -m pip install build
           python -m build
 
-          piu install bump2version
+          pip install bump2version
           bump2version patch
 
       - name: Upload distributions
