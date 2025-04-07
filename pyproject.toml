@@ -17,13 +17,3 @@ dependencies = [
     ]
 requires-python = ">= 3.12"
 dynamic = ["version"]
-
-[project.optional-dependencies]
-docs = ["sphinx", "sphinx-rtd-theme", "myst-parser"]
-
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["matmacore*"]
-
-[tool.setuptools.dynamic]
-version = {attr = "matmacore.__version__"}

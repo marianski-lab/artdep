@@ -29,6 +29,9 @@ jobs:
       - name: Build release distributions
         run: |
           # NOTE: put your own distribution build steps here.
+          pip install bump2version
+          bump2version patch
+          
           python -m pip install build
           python -m build
 
