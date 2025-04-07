@@ -21,6 +21,8 @@ jobs:
           pip3 install dynamic-versioning  
           pip3 install -e .
           pip3 install sphinx sphinx-rtd-theme
+          pip install bump2version
+
       - name: Sphinx build
         run: |
           sphinx-apidoc -o docs/source matmacore --separate
