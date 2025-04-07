@@ -21,7 +21,9 @@ jobs:
           pip3 install dynamic-versioning  
           pip3 install -e .
           pip3 install sphinx sphinx-rtd-theme
+
           pip install bump2version
+          pip3 install numpy scipy matplotlib networkx colormaps
 
       - name: Sphinx build
         run: |
