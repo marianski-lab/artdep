@@ -1,9 +1,14 @@
 [build-system]
 requires = ["setuptools", "dynamic-versioning"]
-build-backend = "sddetuptools.build_meta"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "matmacore"
+authors = [
+    {name = "marianski-lab", email = "mmarians@hunter.cuny.edu"}
+]
+readme = "README.md"
+license = {text = "GPLv3"}
 dependencies = [
         "numpy",
         "matplotlib",
@@ -11,3 +16,14 @@ dependencies = [
         "networkx"
     ]
 requires-python = ">= 3.12"
+dynamic = ["version"]
+
+[project.optional-dependencies]
+docs = ["sphinx", "sphinx-rtd-theme", "myst-parser"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["mymodule*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "mymodule.__version__"}
