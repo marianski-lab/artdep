@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='matmacore',
     packages=find_packages(),
-    version='0.1.15',
+    version='0.1.17',
     install_requires=[
         'numpy',
         'matplotlib',
