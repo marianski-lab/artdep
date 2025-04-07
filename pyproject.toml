@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools", "dynamic-versioning"]
+build-backend = "sddetuptools.build_meta"
+
+[project]
+name = "matmacore"
+dependencies = [
+        "numpy",
+        "matplotlib",
+        "colormaps",
+        "networkx"
+    ]
+requires-python = ">= 3.12"
