@@ -4,7 +4,7 @@ import dynamic_versioning
 setup(
     name='matmacore',
     packages=find_packages(),
-    version="0.1.11",
+    version="0.1.12",
     install_requires=[
         'numpy',
         'matplotlib',
