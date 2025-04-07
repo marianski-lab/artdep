@@ -10,8 +10,5 @@ setup(
         'colormaps ',
         'networkx'
     ],
-    cmdclass={
-        "egg_info": dynamic_versioning.DynamicVersioningEggInfo
-    }
 )
 
