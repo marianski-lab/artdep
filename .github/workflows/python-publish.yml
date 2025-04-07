@@ -34,7 +34,7 @@ jobs:
           python -m pip install build
           python -m build
 
-          bump2version patch
+          bump2version patch --no-commit
 
       - name: Upload distributions
         uses: actions/upload-artifact@v4
