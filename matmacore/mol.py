@@ -46,6 +46,11 @@ class Mol():
 
     def gaussian(self):
 
+        """
+        Parses log files from Gaussian 16 and appends information inside the log file to the mol object.
+
+        """
+
         flags = {'freq_flag': False, 'nmr_flag': False, 'opt_flag': False, 'jcoup_flag': False, 'normal_mode': False,
                  'read_geom': False}
         job_type = None
