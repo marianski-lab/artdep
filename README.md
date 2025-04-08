@@ -10,7 +10,7 @@ Documentation for the colors can be found [here](https://pratiman-91.github.io/c
 ## Dependencies
 You need the following python packages to use this package:  
 
-Python >= 3.13  
+Python >= 3.12  
 
 Numpy  
 Matplotlib  
