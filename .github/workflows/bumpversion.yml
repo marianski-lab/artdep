@@ -12,6 +12,11 @@ on:
         - major
         - minor
         - patch
+      
+      git-token:
+        description: "Github Token"
+        required: true
+        type: String
 
 jobs:
   build:
@@ -27,7 +32,7 @@ jobs:
           BUMPVERSION_TAG: "true"
         with:
           args: ${{ inputs.bump-type }}
-          github-token: ${{ secrets.GH_TOKEN }}
+          github-token: ${{ inputs.git-token }}
 
       - name: Check
         if: steps.bump.outputs.bumped == 'true'
