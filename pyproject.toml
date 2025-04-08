@@ -3,7 +3,7 @@ name = "matmacore"
 version = "0.1.21"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 
 [tool.bumpversion]
 current_version = "0.1.21"
