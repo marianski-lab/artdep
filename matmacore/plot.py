@@ -902,7 +902,6 @@ class Plot():
         self.fig = fig
         self.ax = ax
 
-
     def multi_profile(self, reaction_data, labels=None, type=str, units='kcal'):
 
         """
