@@ -376,6 +376,14 @@ class Mol():
 #             self.data = np.genfromtxt(path, delimiter=delimiter, dtype=float)
 
     def csv(self, file, skiprows=1, dtype=float, delimiter:str=','):
+        """
+        Parses a csv file and appends the data to the mol object
+
+        :param file: (string) File containing the csv data.
+        :param skiprows: (int) Number of rows to skip
+        :dtype: (type) Data type
+        :param delimiter: (str) Delimiter
+        """
         
         self.data = np.loadtxt(f"{self.path}/{file}", skiprows=skiprows, dtype=dtype, delimiter=delimiter)
 
