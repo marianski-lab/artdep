@@ -722,7 +722,7 @@ class Plot():
             # Doctor Founder says not to transform the data, only plot the data:
             # data[line.split()[0]] = [log(float(i)*(float(i)+1)/C0,10) for i in line.split()[1:]]
             
-            data[line.split()[0]] = [i for i in line.split()[1:]]
+            data[line.split()[0]] = [float(i) for i in line.split()[1:]]
 
         fig, ax = plt.subplots(figsize=(8.0, 4.0))
 
@@ -733,19 +733,23 @@ class Plot():
         ax.xaxis.set_tick_params(direction='out')
 
         x_pos = np.arange(len(SUG))
-        xmax = len(SUG); ymin=0; ymax=6.0
+        xmax = len(SUG)
+        
         ax.set_xlim(-1,xmax)
-
+        
+        ymin=0; ymax=np.round(max(val for sublist in data.values() for val in sublist))
         ax.set_ylim(ymin, ymax+0.1)
         yticks=np.linspace(ymin,ymax,7)
         ax.set_yticks(yticks)
-        ax.set_yticklabels(yticks)
+        # ax.set_yticklabels(yticks)
 
         ax.set_xticks(x_pos)
         ax.set_xticklabels(SUG)
 
         #ax.set_xlabel(r'time [ns]')
         for i in yticks:  ax.plot([-1,xmax], [i,i], '0.75', lw=0.5)
+        
+        ax.grid(axis='y', color='grey', linestyle='-', linewidth=0.5)
 
         for n, scr in enumerate(SCR):
             for i in range(len(SUG)):
