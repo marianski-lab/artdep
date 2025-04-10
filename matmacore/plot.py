@@ -7,6 +7,7 @@ import os
 import sys
 import colormaps
 import copy
+from math import log
 
 import matplotlib as mpl
 from matplotlib.ticker import NullFormatter
@@ -173,16 +174,16 @@ class Plot():
 
             if overlap == True:
 
-                ax[0].plot(time, colvar_conv, linewidth=2, color=color[i+1], alpha=alpha[i])
-                ax[0].plot(time,colvar[:(len(colvar_conv))],linewidth=0.8, color = color[i+1], alpha=alpha[i]*.3)
-                ax[1].hist(colvar, bins='rice', orientation="horizontal", color=color[i+1], alpha=alpha[i])
+                ax[0].plot(time, colvar_conv, linewidth=2, color=color[i], alpha=alpha[i])
+                ax[0].plot(time,colvar[:(len(colvar_conv))],linewidth=0.8, color = color[i], alpha=alpha[i]*.3)
+                ax[1].hist(colvar, bins='rice', orientation="horizontal", color=color[i], alpha=alpha[i])
             
             elif overlap == False and average[i] > 1:
-                ax[0].plot(time,colvar_conv,linewidth=0.8, color=color[i+1], alpha=alpha[i])
+                ax[0].plot(time,colvar_conv,linewidth=0.8, color=color[i], alpha=alpha[i])
                 
             else:
-                ax[0].plot(time,colvar,linewidth=0.8, color=color[i+1], alpha=alpha[i])
-                ax[1].hist(colvar, bins='rice', orientation="horizontal", color=color[i+1], alpha=alpha[i], label=np.round(np.average(colvar)))
+                ax[0].plot(time,colvar,linewidth=0.8, color=color[i], alpha=alpha[i])
+                ax[1].hist(colvar, bins='rice', orientation="horizontal", color=color[i], alpha=alpha[i], label=np.round(np.average(colvar)))
         
             if calc_qa == True:
                 nbins = 50
@@ -697,6 +698,69 @@ class Plot():
         
         self.fig = fig
         self.ax = axes
+        
+    def foo_plot(self, mol, SCR = None, w = 0.5):
+        
+        """ Not a bar plot. Mostly used for SCR stuff
+        :param mol: (mol) mol objects generated from csv files.
+        :param SCR: (list) Specifies specific SCRs to plot from your data. Otherwise, default is to plot them all.
+        :param w: (float) Width of the lines in the foo plot.
+        """
+        
+        color = self.colors
+        self.path = mol.path
+
+        if SCR == None:
+
+            SCR = []
+            for line in mol.data[1:]:
+                SCR.append(line.split()[0])
+
+        SUG = mol.data[0].split(); data = {}
+
+        for line in mol.data[1:]:
+            # Doctor Founder says not to transform the data, only plot the data:
+            # data[line.split()[0]] = [log(float(i)*(float(i)+1)/C0,10) for i in line.split()[1:]]
+            
+            data[line.split()[0]] = [i for i in line.split()[1:]]
+
+        fig, ax = plt.subplots(figsize=(8.0, 4.0))
+
+        ax.tick_params(axis='both', which='both', bottom=True, top=False, labelbottom=True, right=False, left=False, labelleft=True, labelright=False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['left'].set_visible(False)
+        ax.xaxis.set_tick_params(direction='out')
+
+        x_pos = np.arange(len(SUG))
+        xmax = len(SUG); ymin=0; ymax=6.0
+        ax.set_xlim(-1,xmax)
+
+        ax.set_ylim(ymin, ymax+0.1)
+        yticks=np.linspace(ymin,ymax,7)
+        ax.set_yticks(yticks)
+        ax.set_yticklabels(yticks)
+
+        ax.set_xticks(x_pos)
+        ax.set_xticklabels(SUG)
+
+        #ax.set_xlabel(r'time [ns]')
+        for i in yticks:  ax.plot([-1,xmax], [i,i], '0.75', lw=0.5)
+
+        for n, scr in enumerate(SCR):
+            for i in range(len(SUG)):
+                ax.plot([x_pos[i]-w/2, x_pos[i]+w/2], [data[scr][i], data[scr][i]], color = color[n], lw=2)
+
+                #ax.bar ( x_pos[i], data[scr][i], align='center', color=color[n])
+
+        plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+        
+        self.set_axes(ax)
+
+        fig.tight_layout()
+        self.fig = fig
+        self.ax = ax
+
 
     def scatter(self, mol=None, headers=None, format:str ='.'):
 
@@ -792,7 +856,7 @@ class Plot():
 
         self.fig = fig
         self.ax = ax
-
+        
     def reaction_profile(self, mol_list, labels, type=str, units='kcal'):
 
         """
