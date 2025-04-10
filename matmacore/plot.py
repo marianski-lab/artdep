@@ -173,16 +173,16 @@ class Plot():
 
             if overlap == True:
 
-                ax[0].plot(time, colvar_conv, linewidth=2, color=color[i+1], alpha=alpha[i])
-                ax[0].plot(time,colvar[:(len(colvar_conv))],linewidth=0.8, color = color[i+1], alpha=alpha[i]*.3)
-                ax[1].hist(colvar, bins='rice', orientation="horizontal", color=color[i+1], alpha=alpha[i])
+                ax[0].plot(time, colvar_conv, linewidth=2, color=color[i], alpha=alpha[i])
+                ax[0].plot(time,colvar[:(len(colvar_conv))],linewidth=0.8, color = color[i], alpha=alpha[i]*.3)
+                ax[1].hist(colvar, bins='rice', orientation="horizontal", color=color[i], alpha=alpha[i])
             
             elif overlap == False and average[i] > 1:
-                ax[0].plot(time,colvar_conv,linewidth=0.8, color=color[i+1], alpha=alpha[i])
+                ax[0].plot(time,colvar_conv,linewidth=0.8, color=color[i], alpha=alpha[i])
                 
             else:
-                ax[0].plot(time,colvar,linewidth=0.8, color=color[i+1], alpha=alpha[i])
-                ax[1].hist(colvar, bins='rice', orientation="horizontal", color=color[i+1], alpha=alpha[i], label=np.round(np.average(colvar)))
+                ax[0].plot(time,colvar,linewidth=0.8, color=color[i], alpha=alpha[i])
+                ax[1].hist(colvar, bins='rice', orientation="horizontal", color=color[i], alpha=alpha[i], label=np.round(np.average(colvar)))
         
             if calc_qa == True:
                 nbins = 50
