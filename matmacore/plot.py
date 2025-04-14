@@ -1104,7 +1104,6 @@ class Plot():
         self.fig.savefig(f"{self.path}/{filename}.{format}", dpi=300, bbox_inches='tight')
 
     def set_colors(self, colors:list = None):
-        colors.insert(0, '#ffffff')
         self.colors = colors
 
     def set_config(self, conf:dict):
