@@ -13,12 +13,10 @@ import subprocess
 for x in os.walk(os.path.abspath(os.path.join("..", "..", ".."))):
   sys.path.insert(0, x[0])
 
-version_num = '0.1.19'
-
 project = 'matmacore'
 copyright = '2025, Eugene Chung, Ryan Kwok, Murat Yaman, Hillel Lerner, Mateusz Marianski'
 author = 'Eugene Chung, Ryan Kwok, Murat Yaman, Hillel Lerner, Mateusz Marianski'
-release = version_num
+release = '0.2.2'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
