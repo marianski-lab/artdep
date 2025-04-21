@@ -381,13 +381,11 @@ class Mol():
 
         :param file: (string) File containing the csv data.
         :param skiprows: (int) Number of rows to skip
-        :dtype: (type) Data type
+        :param dtype: (type) Data type
         :param delimiter: (str) Delimiter
         """
         
         self.data = np.loadtxt(f"{self.path}/{file}", skiprows=skiprows, dtype=dtype, delimiter=delimiter)
-
-
 
     def orca(self, output_file="input.log", job_type="opt"):
 
