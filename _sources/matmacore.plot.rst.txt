@@ -1,0 +1,7 @@
+matmacore.plot module
+=====================
+
+.. automodule:: matmacore.plot
+   :members:
+   :show-inheritance:
+   :undoc-members:
