@@ -5,7 +5,7 @@ __pycache__/
 !gaussian.ipynb
 !scatterplot.ipynb
 test/
-test.ipynb
+*.ipynb
 __pycache__/
 .pyc
 .idea
