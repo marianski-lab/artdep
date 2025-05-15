@@ -235,7 +235,12 @@ class Plot():
         ax[1].set_xlabel('structures')
         
         self.set_axes(ax[0])
- 
+        
+        # Hard code the y axis of the histogram to align with the trajectory:
+        for key, value in self.config_dict.items():
+            if key == 'yrange' and value is not None:
+                ax[1].set_ylim(value[0], value[1])
+                
         plt.tight_layout()
         self.fig = fig
         self.ax = ax
