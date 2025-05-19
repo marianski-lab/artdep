@@ -106,7 +106,7 @@ class Mol():
                     elif re.search('Coordinates', line) and len(geom) == 0:
                         flags['read_geom'] = True
 
-                    elif flags['read_geom'] == True and re.search('^\s*.\d', line):
+                    elif flags['read_geom'] == True and re.search(r'^\s*.\d', line):
                         geom.append([float(x) for x in line.split()[3:6]])
                         atoms.append(Mol.element_symbol(line.split()[1]))
                         if int(line.split()[0]) == self.NAtoms:
@@ -131,7 +131,7 @@ class Mol():
                         mode_3 = [];
                         # continue
 
-                    elif flags['normal_mode'] == True and re.search('^\s*\d*\s*.\d*', line) and len(line.split()) > 3:
+                    elif flags['normal_mode'] == True and re.search(r'^\s*\d*\s*.\d*', line) and len(line.split()) > 3:
                         mode_1.append([float(x) for x in line.split()[2:5]])
                         mode_2.append([float(x) for x in line.split()[5:8]])
                         mode_3.append([float(x) for x in line.split()[8:11]])
@@ -150,7 +150,7 @@ class Mol():
                     if re.search('Standard orientation:', line):
                         flags['read_geom'] = True
 
-                    elif flags['read_geom'] == True and re.search('^\s*.\d', line):
+                    elif flags['read_geom'] == True and re.search(r'^\s*.\d', line):
                         geom.append([float(x) for x in line.split()[3:6]])
                         atoms.append(Mol.element_symbol(line.split()[1]))
                         if int(line.split()[0]) == self.NAtoms:
@@ -163,7 +163,7 @@ class Mol():
                 elif re.search('Coordinates', line) and len(geom) == 0:
                     flags['read_geom'] = True
 
-                elif flags['read_geom'] == True and re.search('^\s*.\d', line):
+                elif flags['read_geom'] == True and re.search(r'^\s*.\d', line):
                     geom.append([float(x) for x in line.split()[3:6]])
                     atoms.append(Mol.element_symbol(line.split()[1]))
                     if int(line.split()[0]) == self.NAtoms:
@@ -173,7 +173,7 @@ class Mol():
                     spin = [[] for i in range(self.NAtoms)]
                     flags['jcoup_flag'] = True
 
-                elif flags['jcoup_flag'] == True and re.search('-?\d\.\d+[Dd][+\-]\d\d?', line):
+                elif flags['jcoup_flag'] == True and re.search(r'-?\d\.\d+[Dd][+\-]\d\d?', line):
                     for x in line.split()[1:]:
                         spin[int(line.split()[0]) - 1].append(float(x.replace('D', 'E')))
 
@@ -186,7 +186,7 @@ class Mol():
                     self.E = float(line.split()[4])
                 elif re.search('Standard orientation:', line):
                     flags['read_geom'] = True
-                elif flags['read_geom'] == True and re.search('^\s*.\d', line):
+                elif flags['read_geom'] == True and re.search(r'^\s*.\d', line):
                     geom.append([float(x) for x in line.split()[3:6]])
                     atoms.append(Mol.element_symbol(line.split()[1]))
                     if int(line.split()[0]) == self.NAtoms:
