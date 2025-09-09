@@ -21,10 +21,10 @@ Networkx
 ## Install Instructions
 To install the package you can run  
 ```
-pip install matmacore
+pip install artdep
 ```
 
 To update the package:
 ```
-pip install matmacore --upgrade
+pip install artdep --upgrade
 ```
