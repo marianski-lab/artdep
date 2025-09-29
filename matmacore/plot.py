@@ -147,6 +147,8 @@ class Plot():
             average = [average] * len(mol_list)
             
         for mol in mol_list:
+
+            residue = False
             
             if mol.time_unit == 'fs':
                 time = (mol.data[:, 0] / 1000).tolist()  # fs -> ps for CP2K
@@ -159,6 +161,11 @@ class Plot():
             elif mol.time_unit == 'ns':
                 time = (mol.data[:, 0]).tolist() # if GROMACS already in ns don't convert
                 time_label = 'ns'
+
+            elif mol.time_unit == 'Residue':
+                time = (mol.data[:, 0]).tolist() # if GROMACS in residue, also don't convert
+                time_label = 'residue'
+                residue = True
 
             colvar = mol.data[:, col].tolist()
  
@@ -220,7 +227,12 @@ class Plot():
  
             i = i+1
 
-        ax[0].set_xlabel(f"time ({time_label}); stepsize = {timestep}{time_label}")
+        if not residue:
+            ax[0].set_xlabel(f"time ({time_label}); stepsize = {timestep}{time_label}")
+        
+        else:
+            ax[0].set_xlabel(f"{time_label}")
+
         ax[0].set_ylabel(var_name)
         
         if title != None:
@@ -231,7 +243,13 @@ class Plot():
  
         xmax = ax[0].get_xlim()[1]
         xmax = xmax + 1 
-        ax[0].set_xlim(0, xmax) 
+
+        if not residue:
+            ax[0].set_xlim(0, xmax) 
+        
+        else: 
+            pass
+
         ax[1].set_xlabel('structures')
         
         self.set_axes(ax[0])
