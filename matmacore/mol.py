@@ -325,7 +325,7 @@ class Mol():
                     if re.search('#', line) or re.search('@', line):
                         i = i + 1
                         
-                    if re.search('Time', line):
+                    if re.search('xaxis', line):
                         time_unit = line.split()[-1].strip('()"')
                         self.time_unit = time_unit
                 f.close()
