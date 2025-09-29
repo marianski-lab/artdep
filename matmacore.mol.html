@@ -1,0 +1,256 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>matmacore.mol module &mdash; matmacore 0.2.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=000c92bf"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            matmacore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">matmacore</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">matmacore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">matmacore.mol module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/matmacore.mol.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-matmacore.mol">
+<span id="matmacore-mol-module"></span><h1>matmacore.mol module<a class="headerlink" href="#module-matmacore.mol" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="matmacore.mol.Mol">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">matmacore.mol.</span></span><span class="sig-name descname"><span class="pre">Mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class that can parse log files from different Computational Software.
+It can parse log files from Gaussian 16, xvg files from Gromacs, out files from ORCA, and log files from CP2K.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.connectivity_matrix">
+<span class="sig-name descname"><span class="pre">connectivity_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distXX</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.65</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distXH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.15</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.connectivity_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.connectivity_matrix" title="Link to this definition"></a></dt>
+<dd><p>Creates a connectivity matrix of the molecule. A connectivity matrix holds the information of which atoms are bonded and to what.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distXX</strong> – The max distance between two atoms (not hydrogen) to be considered a bond</p></li>
+<li><p><strong>distXH</strong> – The max distance between any atom and a hydrogen atom to be considered a bond</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.cp2k">
+<span class="sig-name descname"><span class="pre">cp2k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'md'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colvar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.cp2k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.cp2k" title="Link to this definition"></a></dt>
+<dd><p>Parses information from CP2K. Right now only works for AIMD Trajectories, plan to implement opt compatability later.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_type</strong> – (string) Currently only md is supported. Should be manually specified.</p></li>
+<li><p><strong>colvar</strong> – (list) A list containing the atom numbers that define your collective variable.</p></li>
+<li><p><strong>timestep</strong> – (float) Timestep of your MD calculation. The function will attempt to extract this from your input file if present.</p></li>
+<li><p><strong>traj_file</strong> – (string) File containing the CP2K trajectory.</p></li>
+<li><p><strong>input_file</strong> – (string) File containing your CP2K inputs.</p></li>
+<li><p><strong>output_file</strong> – (string) File containing your CP2K output.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.csv">
+<span class="sig-name descname"><span class="pre">csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skiprows=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'float'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.csv" title="Link to this definition"></a></dt>
+<dd><p>Parses a csv file and appends the data to the mol object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> – (string) File containing the csv data.</p></li>
+<li><p><strong>skiprows</strong> – (int) Number of rows to skip</p></li>
+<li><p><strong>dtype</strong> – (type) Data type</p></li>
+<li><p><strong>delimiter</strong> – (str) Delimiter</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.element_symbol">
+<span class="sig-name descname"><span class="pre">element_symbol</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.element_symbol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.element_symbol" title="Link to this definition"></a></dt>
+<dd><p>A dictionary for atomic number and atomic symbol
+:param A: either atomic number or atomic symbol for Hydrogen, Carbon, Nitrogen, Oxygen, Fluorine and Silicon
+:return: the corresponding atomic symbol or atomic number</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.gaussian">
+<span class="sig-name descname"><span class="pre">gaussian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.gaussian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.gaussian" title="Link to this definition"></a></dt>
+<dd><p>Parses log files from Gaussian 16 and appends information inside the log file to the mol object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.gromacs">
+<span class="sig-name descname"><span class="pre">gromacs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.gromacs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.gromacs" title="Link to this definition"></a></dt>
+<dd><p>Parses information from gromacs <a href="#id1"><span class="problematic" id="id2">*</span></a>.xvg file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> – (string) File containing the gromacs data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Mol.orca">
+<span class="sig-name descname"><span class="pre">orca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'input.log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'opt'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Mol.orca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Mol.orca" title="Link to this definition"></a></dt>
+<dd><p>Parses information from ORCA input.log file
+:param output_file: (string) File containing ORCA output file.
+:param job_type: (string) The type of calculation ORCA run.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="matmacore.mol.Reaction">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">matmacore.mol.</span></span><span class="sig-name descname"><span class="pre">Reaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class that organizes several molecules into a reaction</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Reaction.combiner">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">combiner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction.combiner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction.combiner" title="Link to this definition"></a></dt>
+<dd><p>Adds the energies for multiple molecules and returns a new mol object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mol_list</strong> – (list) List of molecule objects.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Reaction.create_mol_list">
+<span class="sig-name descname"><span class="pre">create_mol_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction.create_mol_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction.create_mol_list" title="Link to this definition"></a></dt>
+<dd><p>Creates Mol objects from user-specified groups of directories and labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*groups</strong> – Variable number of groups, where each group is a list of directories followed by a label.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of Mol objects.
+mol_label (list): List of labels for the Mol objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>mol_list (list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Reaction.create_reaction_list">
+<span class="sig-name descname"><span class="pre">create_reaction_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction.create_reaction_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction.create_reaction_list" title="Link to this definition"></a></dt>
+<dd><p>Creates a standardized reaction list with names from input definitions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*reaction_definitions</strong> – Variable number of reaction definitions where each is:
+(reaction_name, [dir1, dir2, ‘label’], [dir3, ‘label’], …)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[(reaction_name, mol_list, labels), …]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="matmacore.mol.Reaction.delta">
+<span class="sig-name descname"><span class="pre">delta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/matmacore/mol.html#Reaction.delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#matmacore.mol.Reaction.delta" title="Link to this definition"></a></dt>
+<dd><p>Calculates the energy differences for a reaction</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Eugene Chung, Ryan Kwok, Murat Yaman, Hillel Lerner, Mateusz Marianski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
